@@ -120,11 +120,13 @@
   }
 
   .glow-card {
-    @apply bg-bg-surface border border-border rounded-2xl p-6;
+    background-color: var(--bg-weak-50);
+    border: 1px solid var(--stroke-soft-200);
+    @apply rounded-2xl p-6;
     transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
   }
   .glow-card:hover {
-    @apply border-accent/40;
+    border-color: var(--primary-base);
     transform: translateY(-4px);
     box-shadow: 0 20px 40px rgba(99, 102, 241, 0.08);
   }
@@ -159,7 +161,8 @@
   }
 
   .section-label {
-    @apply text-xs font-semibold tracking-widest uppercase text-accent-light;
+    @apply text-xs font-semibold tracking-widest uppercase;
+    color: var(--primary-light);
   }
 
   .hero-bg {

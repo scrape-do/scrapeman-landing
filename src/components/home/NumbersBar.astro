@@ -8,15 +8,15 @@ const stats = [
 ];
 ---
 
-<section class="border-y border-border bg-bg-surface/50">
+<section class="border-y border-[var(--stroke-soft-200)] bg-[var(--bg-weak-50)]" style="background-color: color-mix(in srgb, var(--bg-weak-50) 50%, transparent);">
   <div class="max-w-6xl mx-auto px-6 py-12">
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-8 reveal" data-stagger>
       {stats.map(stat => (
         <div class="text-center" data-stagger-child>
-          <div class="text-3xl font-bold tracking-tighter text-ink-1 mb-1">
-            {stat.value}<span class="text-accent-light">{stat.suffix}</span>
+          <div class="text-3xl font-bold tracking-tighter text-[var(--text-strong-950)] mb-1">
+            {stat.value}<span class="text-[var(--primary-light)]">{stat.suffix}</span>
           </div>
-          <div class="text-xs text-ink-3 uppercase tracking-widest font-medium">{stat.label}</div>
+          <div class="text-xs text-[var(--text-soft-400)] uppercase tracking-widest font-medium">{stat.label}</div>
         </div>
       ))}
     </div>
