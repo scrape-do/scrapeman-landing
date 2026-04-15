@@ -158,6 +158,33 @@ const breadcrumbLd = breadcrumbs && breadcrumbs.length > 0 && {
           mockup.style.transform = `perspective(1200px) rotateY(${x}deg) rotateX(${y}deg)`;
         });
       }
+
+      // Copy-to-clipboard for [data-copy-target] buttons.
+      // Looks up the target by element id, writes its textContent to the
+      // clipboard, then shows "Copied" for 1.5s before reverting.
+      document.querySelectorAll<HTMLButtonElement>('[data-copy-target]').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          const targetId = btn.getAttribute('data-copy-target');
+          if (!targetId) return;
+          const target = document.getElementById(targetId);
+          if (!target) return;
+          const text = target.textContent ?? '';
+          try {
+            await navigator.clipboard.writeText(text);
+          } catch {
+            return;
+          }
+          const label = btn.querySelector<HTMLSpanElement>('[data-copy-label]');
+          if (!label) return;
+          const original = label.textContent ?? 'Copy';
+          label.textContent = 'Copied';
+          btn.classList.add('!opacity-100');
+          setTimeout(() => {
+            label.textContent = original;
+            btn.classList.remove('!opacity-100');
+          }, 1500);
+        });
+      });
     </script>
   </body>
 </html>

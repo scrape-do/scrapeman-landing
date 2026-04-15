@@ -37,6 +37,24 @@ import { Button } from '@/components/ui/Button';
           </Button>
         </div>
 
+        <!-- Homebrew one-liner -->
+        <div class="max-w-xl mx-auto mb-6 reveal">
+          <p class="text-xs text-[var(--text-soft-400)] uppercase tracking-widest font-semibold text-center mb-3">
+            Or install on macOS with Homebrew
+          </p>
+          <div class="relative group">
+            <pre class="px-5 py-4 rounded-xl bg-[var(--bg-soft-200)] border border-[var(--stroke-soft-200)] text-left text-sm font-mono text-[var(--text-strong-950)] overflow-x-auto"><code id="brew-install-cmd">brew install --cask scrape-do/scrapeman/scrapeman</code></pre>
+            <button
+              type="button"
+              data-copy-target="brew-install-cmd"
+              class="absolute top-2 right-2 px-2.5 py-1.5 rounded-md bg-[var(--bg-weak-50)] border border-[var(--stroke-soft-200)] text-xs text-[var(--text-sub-600)] hover:text-[var(--text-strong-950)] hover:border-[var(--primary-base)] transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
+              aria-label="Copy brew command"
+            >
+              <span data-copy-label>Copy</span>
+            </button>
+          </div>
+        </div>
+
         <!-- Version + requirements -->
         <p class="text-xs text-[var(--text-soft-400)] mb-12">
           macOS 13.0+ (Apple Silicon + Intel) · Windows 10+ (x64) · Linux (AppImage + .deb, x64) · Free forever
