@@ -4,6 +4,14 @@ import Header from '@/components/layout/Header.astro';
 import Footer from '@/components/layout/Footer.astro';
 import { Button } from '@/components/ui/Button';
 
+const honest = [
+  'Open it in any browser, no install, no download. Scrapeman needs a desktop binary.',
+  'Pre-request scripts and post-request tests in JavaScript, Postman-compatible. Scrapeman has no scripting layer today.',
+  'WebSocket, Server-Sent Events, GraphQL, MQTT, and Socket.IO out of the box. Scrapeman is HTTP/HTTPS only for now.',
+  'OIDC PKCE auth and SSO on the enterprise tier. Scrapeman ships OAuth2 client credentials, not the full code flow yet.',
+  'Five million monthly users and a wider plugin ecosystem. Scrapeman is younger and smaller.',
+];
+
 const pricingComparison = [
   { tier: 'Runtime', hoppscotch: 'Browser PWA (IndexedDB)', scrapeman: 'Native desktop (Electron)' },
   { tier: 'Collections storage', hoppscotch: 'Browser storage, wiped on clear site data', scrapeman: 'YAML files in a folder you pick' },
@@ -137,8 +145,29 @@ const differences = [
       </div>
     </section>
 
+    <!-- Honest concessions -->
+    <section class="py-20 bg-[var(--bg-weak-50)] border-y border-[var(--stroke-soft-200)]">
+      <div class="max-w-3xl mx-auto px-6 reveal">
+        <p class="section-label mb-3 text-center">Where Hoppscotch wins</p>
+        <h2 class="text-2xl font-bold tracking-tighter text-[var(--text-strong-950)] text-center mb-8">We are not better at everything</h2>
+        <ul class="space-y-3">
+          {honest.map((line) => (
+            <li class="flex gap-3 items-start p-4 rounded-xl border border-[var(--stroke-soft-200)] bg-[var(--bg-white-0)]">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-[var(--success-base)] mt-0.5 shrink-0">
+                <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span class="text-sm text-[var(--text-sub-600)] leading-relaxed">{line}</span>
+            </li>
+          ))}
+        </ul>
+        <p class="text-xs text-[var(--text-soft-400)] text-center mt-6">
+          If a JS scripting sandbox or WebSocket support is your hard requirement today, try Hoppscotch. If native proxy plus Scrape.do mode and a built-in load runner matter more, stick with Scrapeman.
+        </p>
+      </div>
+    </section>
+
     <!-- CTA -->
-    <section id="download" class="py-24 text-center bg-[var(--bg-weak-50)]">
+    <section id="download" class="py-24 text-center">
       <div class="max-w-xl mx-auto px-6 reveal">
         <h2 class="text-3xl font-bold tracking-tighter text-[var(--text-strong-950)] mb-4">
           Try it free. Keep it free.
