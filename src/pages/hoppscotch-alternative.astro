@@ -1,0 +1,161 @@
+---
+import Base from '@/layouts/Base.astro';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+import { Button } from '@/components/ui/Button';
+
+const pricingComparison = [
+  { tier: 'Runtime', hoppscotch: 'Browser PWA (IndexedDB)', scrapeman: 'Native desktop (Electron)' },
+  { tier: 'Collections storage', hoppscotch: 'Browser storage, wiped on clear site data', scrapeman: 'YAML files in a folder you pick' },
+  { tier: 'Team sync / SSO / audit log', hoppscotch: 'Hoppscotch Cloud paid plans', scrapeman: 'Use git, no plan needed' },
+  { tier: 'Account required', hoppscotch: 'Yes for sync across devices', scrapeman: 'No' },
+  { tier: 'License', hoppscotch: 'MIT (open source)', scrapeman: 'Apache 2.0 (open source)' },
+];
+
+const differences = [
+  {
+    title: 'Browser sandbox vs native process',
+    hoppscotch: 'Hoppscotch runs inside a browser tab. Requests go through the browser fetch stack, CORS rules apply on many endpoints, and auth tokens sit in page memory next to every other tab you have open.',
+    scrapeman: 'Scrapeman is an Electron desktop app. Requests leave from a native process with no CORS. Secrets stay in the app, not in a browser origin you also use for email and social media.',
+  },
+  {
+    title: 'Local files vs IndexedDB',
+    hoppscotch: 'Free collections live in the browser IndexedDB for that profile. Clearing site data, switching browsers, or using a second machine loses them unless you sign in to Hoppscotch Cloud.',
+    scrapeman: 'Every request is one .req.yaml file in a workspace folder you choose. Commit it to git, share it on a drive, diff it in review. The file is the source of truth.',
+  },
+  {
+    title: 'Native proxy and Scrape.do mode',
+    hoppscotch: 'No built-in HTTP proxy support. If your target needs residential IPs, geo routing, or a corporate proxy, you are on your own.',
+    scrapeman: 'HTTP and HTTPS proxy with basic auth ship in the box. Native Scrape.do integration rewrites the URL and injects the token with one toggle. Per-request settings, not global hacks.',
+  },
+  {
+    title: 'Load runner and full auth menu',
+    hoppscotch: 'No built-in single-request load runner. AWS SigV4 and advanced OAuth2 flows are not part of the free web client.',
+    scrapeman: 'Bounded-concurrency load runner with p50, p95, p99 latency and a response validator. Basic, Bearer, API Key, OAuth2 client credentials, and AWS Signature v4 are all free in the desktop app.',
+  },
+];
+---
+
+<Base
+  title="The desktop Hoppscotch alternative — Scrapeman"
+  description="Hoppscotch is a web-based API client. Scrapeman is a native desktop app with git-friendly YAML collections, native proxy support, a built-in load runner, and every auth flow free. Apache 2.0, no account."
+  ogTitle="Scrapeman vs Hoppscotch"
+>
+  <Header />
+  <main>
+    <!-- Hero -->
+    <section class="hero-bg noise pt-20 pb-24">
+      <div class="max-w-4xl mx-auto px-6 text-center">
+        <div class="flex items-center justify-center gap-4 mb-10" style="animation: fade-up 0.5s ease-out both;">
+          <div class="flex items-center gap-2">
+            <div class="w-10 h-10 rounded-xl bg-accent flex items-center justify-center">
+              <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
+                <circle cx="8" cy="8" r="3" fill="white" opacity="0.9"/>
+                <path d="M8 1L8 3M8 13L8 15M1 8L3 8M13 8L15 8M3.05 3.05L4.46 4.46M11.54 11.54L12.95 12.95M12.95 3.05L11.54 4.46M4.46 11.54L3.05 12.95" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+              </svg>
+            </div>
+            <span class="font-bold text-xl text-[var(--text-strong-950)]">Scrapeman</span>
+          </div>
+          <span class="text-[var(--text-soft-400)] text-2xl font-light">vs</span>
+          <div class="flex items-center gap-2">
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background-color: color-mix(in srgb, var(--success-base) 18%, transparent); border: 1px solid color-mix(in srgb, var(--success-base) 35%, transparent);">
+              <span class="font-bold text-lg" style="color: var(--success-base)">H</span>
+            </div>
+            <span class="font-bold text-xl text-[var(--text-sub-600)]">Hoppscotch</span>
+          </div>
+        </div>
+
+        <h1 class="text-4xl sm:text-5xl font-bold tracking-tighter text-[var(--text-strong-950)] mb-6" style="animation: fade-up 0.5s ease-out 0.1s both;">
+          Hoppscotch is fast.<br />
+          <span class="gradient-text">Scrapeman is on your disk.</span>
+        </h1>
+        <p class="text-lg text-[var(--text-sub-600)] max-w-2xl mx-auto leading-relaxed" style="animation: fade-up 0.5s ease-out 0.2s both;">
+          Hoppscotch lives in a browser tab. Collections sit in IndexedDB, requests go through the browser stack, and CORS gets a vote on every call. Scrapeman is a native desktop app. Your collections are YAML files in a folder you pick, your requests leave from a real HTTP client, and nothing about your workflow depends on staying signed in.
+        </p>
+      </div>
+    </section>
+
+    <!-- Pricing comparison -->
+    <section class="py-20 border-y border-[var(--stroke-soft-200)] bg-[var(--bg-weak-50)]">
+      <div class="max-w-3xl mx-auto px-6">
+        <div class="text-center mb-12 reveal">
+          <p class="section-label mb-3">At a glance</p>
+          <h2 class="text-2xl font-bold tracking-tighter text-[var(--text-strong-950)]">Web app, or app on your machine</h2>
+        </div>
+        <div class="reveal overflow-hidden rounded-2xl border border-[var(--stroke-soft-200)]">
+          <table class="w-full text-sm border-collapse">
+            <thead>
+              <tr class="bg-[var(--bg-soft-200)] border-b border-[var(--stroke-soft-200)]">
+                <th class="text-left px-6 py-4 font-semibold text-[var(--text-sub-600)]"></th>
+                <th class="px-6 py-4 font-semibold text-center text-[var(--primary-light)]">Scrapeman</th>
+                <th class="px-6 py-4 font-semibold text-center text-[var(--text-sub-600)]">Hoppscotch</th>
+              </tr>
+            </thead>
+            <tbody>
+              {pricingComparison.map((row, i) => (
+                <tr class:list={['border-b border-[var(--stroke-soft-200)] last:border-0', i % 2 === 0 ? '' : 'bg-[var(--bg-weak-50)]']}>
+                  <td class="px-6 py-3.5 text-[var(--text-sub-600)] font-medium">{row.tier}</td>
+                  <td class="px-6 py-3.5 text-center text-xs font-semibold" style="color: var(--success-base)">{row.scrapeman}</td>
+                  <td class="px-6 py-3.5 text-center text-[var(--text-soft-400)] text-xs">{row.hoppscotch}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Key differences -->
+    <section class="py-24">
+      <div class="max-w-5xl mx-auto px-6">
+        <div class="text-center mb-14 reveal">
+          <p class="section-label mb-3">Key differences</p>
+          <h2 class="text-3xl font-bold tracking-tighter text-[var(--text-strong-950)]">Different place, different powers</h2>
+        </div>
+        <div class="space-y-8">
+          {differences.map((diff) => (
+            <div class="reveal grid sm:grid-cols-2 gap-6 p-6 rounded-2xl border border-[var(--stroke-soft-200)] bg-[var(--bg-weak-50)]">
+              <div class="contents">
+                <div>
+                  <div class="flex items-center gap-2 mb-2">
+                    <span class="text-xs font-semibold text-[var(--error-base)] uppercase tracking-wide">Hoppscotch</span>
+                  </div>
+                  <p class="font-semibold text-[var(--text-strong-950)] mb-1">{diff.title}</p>
+                  <p class="text-sm text-[var(--text-soft-400)] leading-relaxed">{diff.hoppscotch}</p>
+                </div>
+                <div class="sm:border-l sm:border-[var(--stroke-soft-200)] sm:pl-6">
+                  <div class="flex items-center gap-2 mb-2">
+                    <span class="text-xs font-semibold text-[var(--success-base)] uppercase tracking-wide">Scrapeman</span>
+                  </div>
+                  <p class="font-semibold text-[var(--text-strong-950)] mb-1">How Scrapeman handles it</p>
+                  <p class="text-sm text-[var(--text-soft-400)] leading-relaxed">{diff.scrapeman}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section id="download" class="py-24 text-center bg-[var(--bg-weak-50)]">
+      <div class="max-w-xl mx-auto px-6 reveal">
+        <h2 class="text-3xl font-bold tracking-tighter text-[var(--text-strong-950)] mb-4">
+          Try it free. Keep it free.
+        </h2>
+        <p class="text-[var(--text-sub-600)] mb-8">
+          Scrapeman is free forever. No account. No trial. No browser tab required.
+        </p>
+        <Button variant="primary" size="lg" asChild>
+          <a href="https://github.com/scrape-do/scrapeman/releases/latest" class="inline-flex items-center gap-2">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Download Scrapeman
+          </a>
+        </Button>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Base>

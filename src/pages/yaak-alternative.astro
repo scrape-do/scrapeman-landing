@@ -1,0 +1,165 @@
+---
+import Base from '@/layouts/Base.astro';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+import { Button } from '@/components/ui/Button';
+
+const pricingComparison = [
+  { tier: 'Source license', yaak: 'MIT', scrapeman: 'Apache 2.0' },
+  { tier: 'Patent grant', yaak: 'No (MIT is silent on patents)', scrapeman: 'Yes (Apache 2.0 §3)' },
+  { tier: 'Commercial license tier', yaak: 'Sold separately for business use', scrapeman: 'Not applicable, single license' },
+  { tier: 'Native Scrape.do proxy', yaak: 'Generic proxy only', scrapeman: 'First-class integration' },
+  { tier: 'Single-request load runner', yaak: 'Not in the box', scrapeman: 'Built in with validator' },
+  { tier: 'Project backing', yaak: 'Solo developer + sponsorships', scrapeman: 'Funded by Scrape.do' },
+];
+
+const differences = [
+  {
+    title: 'Apache 2.0 with a patent grant',
+    yaak: 'Yaak ships its source under MIT. MIT permits everything Apache 2.0 does for the source code itself, but it is silent on patents. Yaak.app also sells separate commercial licenses for businesses that want support and extras.',
+    scrapeman: 'Scrapeman is Apache 2.0. Same freedoms as MIT to fork and ship, plus an explicit patent grant in §3 that large enterprises and procurement teams tend to prefer for compliance reviews. One license, no commercial tier on top.',
+  },
+  {
+    title: 'Native Scrape.do proxy mode',
+    yaak: 'Yaak supports generic HTTP and SOCKS proxies. There is no built-in knowledge of residential rotation, JS rendering, geo targeting, or automatic ban retry.',
+    scrapeman: 'Scrapeman has a per-request Scrape.do toggle. The main process rewrites the URL to api.scrape.do, forwards residential rotation, JS rendering, and geo targeting fields, and handles retries for you.',
+  },
+  {
+    title: 'Built-in load runner',
+    yaak: 'Yaak focuses on single requests and scripting. Stress testing a single endpoint means reaching for a separate tool like k6, vegeta, or hey.',
+    scrapeman: 'Scrapeman ships a load runner in the request view. Bounded concurrency, live p50/p95/p99, status histogram, response validator for status code and body-contains, abortable mid-run.',
+  },
+  {
+    title: 'Backed by a scraping company',
+    yaak: 'Yaak is maintained by one developer. Greg ships great software and has since the original Insomnia days, but the continuity of a solo project is tied to one person.',
+    scrapeman: 'Scrapeman is funded and maintained by Scrape.do, a profitable scraping infrastructure company. The project is part of the business, and the team writes code with AI pair programming to keep shipping fast.',
+  },
+];
+---
+
+<Base
+  title="The Apache 2.0 Yaak alternative — Scrapeman"
+  description="Yaak is a great desktop API client. Scrapeman is the Apache 2.0 alternative with native Scrape.do proxy support, a built-in load runner, and the backing of a funded company."
+  ogTitle="Scrapeman vs Yaak"
+>
+  <Header />
+  <main>
+    <!-- Hero -->
+    <section class="hero-bg noise pt-20 pb-24">
+      <div class="max-w-4xl mx-auto px-6 text-center">
+        <div class="flex items-center justify-center gap-4 mb-10" style="animation: fade-up 0.5s ease-out both;">
+          <div class="flex items-center gap-2">
+            <div class="w-10 h-10 rounded-xl bg-accent flex items-center justify-center">
+              <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
+                <circle cx="8" cy="8" r="3" fill="white" opacity="0.9"/>
+                <path d="M8 1L8 3M8 13L8 15M1 8L3 8M13 8L15 8M3.05 3.05L4.46 4.46M11.54 11.54L12.95 12.95M12.95 3.05L11.54 4.46M4.46 11.54L3.05 12.95" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+              </svg>
+            </div>
+            <span class="font-bold text-xl text-[var(--text-strong-950)]">Scrapeman</span>
+          </div>
+          <span class="text-[var(--text-soft-400)] text-2xl font-light">vs</span>
+          <div class="flex items-center gap-2">
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background-color: rgba(139, 92, 246, 0.15); border: 1px solid rgba(139, 92, 246, 0.35);">
+              <span class="font-black text-xl" style="color: #a78bfa;">Y</span>
+            </div>
+            <span class="font-bold text-xl text-[var(--text-sub-600)]">Yaak</span>
+          </div>
+        </div>
+
+        <h1 class="text-4xl sm:text-5xl font-bold tracking-tighter text-[var(--text-strong-950)] mb-6" style="animation: fade-up 0.5s ease-out 0.1s both;">
+          Yaak is great software.<br />
+          <span class="gradient-text">Scrapeman makes different tradeoffs.</span>
+        </h1>
+        <p class="text-lg text-[var(--text-sub-600)] max-w-2xl mx-auto leading-relaxed" style="animation: fade-up 0.5s ease-out 0.2s both;">
+          Yaak is the local-first desktop API client from the original creator of Insomnia. We respect the work. Scrapeman picks a different license and a different focus: fully Apache 2.0 open source, a native Scrape.do proxy mode for engineers hitting real-world sites, and a built-in load runner. Same local-first values, different center of gravity.
+        </p>
+      </div>
+    </section>
+
+    <!-- License and feature comparison -->
+    <section class="py-20 border-y border-[var(--stroke-soft-200)] bg-[var(--bg-weak-50)]">
+      <div class="max-w-3xl mx-auto px-6">
+        <div class="text-center mb-12 reveal">
+          <p class="section-label mb-3">License and availability</p>
+          <h2 class="text-2xl font-bold tracking-tighter text-[var(--text-strong-950)]">Where the tradeoffs live</h2>
+        </div>
+        <div class="reveal overflow-hidden rounded-2xl border border-[var(--stroke-soft-200)]">
+          <table class="w-full text-sm border-collapse">
+            <thead>
+              <tr class="bg-[var(--bg-soft-200)] border-b border-[var(--stroke-soft-200)]">
+                <th class="text-left px-6 py-4 font-semibold text-[var(--text-sub-600)]"></th>
+                <th class="px-6 py-4 font-semibold text-center text-[var(--primary-light)]">Scrapeman</th>
+                <th class="px-6 py-4 font-semibold text-center text-[var(--text-sub-600)]">Yaak</th>
+              </tr>
+            </thead>
+            <tbody>
+              {pricingComparison.map((row, i) => (
+                <tr class:list={['border-b border-[var(--stroke-soft-200)] last:border-0', i % 2 === 0 ? '' : 'bg-[var(--bg-weak-50)]']}>
+                  <td class="px-6 py-3.5 text-[var(--text-sub-600)] font-medium">{row.tier}</td>
+                  <td class="px-6 py-3.5 text-center text-xs font-semibold" style="color: var(--success-base)">{row.scrapeman}</td>
+                  <td class="px-6 py-3.5 text-center text-[var(--text-soft-400)] text-xs">{row.yaak}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="text-xs text-[var(--text-soft-400)] text-center mt-4 reveal">
+          Yaak wins on binary size and memory footprint thanks to Tauri. If that matters most to you, Yaak is a solid pick.
+        </p>
+      </div>
+    </section>
+
+    <!-- Key differences -->
+    <section class="py-24">
+      <div class="max-w-5xl mx-auto px-6">
+        <div class="text-center mb-14 reveal">
+          <p class="section-label mb-3">Key differences</p>
+          <h2 class="text-3xl font-bold tracking-tighter text-[var(--text-strong-950)]">Four honest distinctions</h2>
+        </div>
+        <div class="space-y-8">
+          {differences.map((diff) => (
+            <div class="reveal grid sm:grid-cols-2 gap-6 p-6 rounded-2xl border border-[var(--stroke-soft-200)] bg-[var(--bg-weak-50)]">
+              <div class="contents">
+                <div>
+                  <div class="flex items-center gap-2 mb-2">
+                    <span class="text-xs font-semibold uppercase tracking-wide" style="color: #a78bfa;">Yaak</span>
+                  </div>
+                  <p class="font-semibold text-[var(--text-strong-950)] mb-1">{diff.title}</p>
+                  <p class="text-sm text-[var(--text-soft-400)] leading-relaxed">{diff.yaak}</p>
+                </div>
+                <div class="sm:border-l sm:border-[var(--stroke-soft-200)] sm:pl-6">
+                  <div class="flex items-center gap-2 mb-2">
+                    <span class="text-xs font-semibold text-[var(--success-base)] uppercase tracking-wide">Scrapeman</span>
+                  </div>
+                  <p class="font-semibold text-[var(--text-strong-950)] mb-1">How Scrapeman handles it</p>
+                  <p class="text-sm text-[var(--text-soft-400)] leading-relaxed">{diff.scrapeman}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section id="download" class="py-24 text-center bg-[var(--bg-weak-50)]">
+      <div class="max-w-xl mx-auto px-6 reveal">
+        <h2 class="text-3xl font-bold tracking-tighter text-[var(--text-strong-950)] mb-4">
+          Try it free. Keep it free.
+        </h2>
+        <p class="text-[var(--text-sub-600)] mb-8">
+          Apache 2.0, no account, no telemetry. Use Yaak too. Pick the tool that fits the job.
+        </p>
+        <Button variant="primary" size="lg" asChild>
+          <a href="https://github.com/scrape-do/scrapeman/releases/latest" class="inline-flex items-center gap-2">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Download Scrapeman
+          </a>
+        </Button>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Base>
