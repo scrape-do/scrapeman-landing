@@ -1,0 +1,148 @@
+---
+import Base from '@/layouts/Base.astro';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+
+const sections = [
+  {
+    label: 'HTTP Engine',
+    title: 'Built on undici',
+    desc: "Scrapeman's HTTP core uses Node.js's official undici engine — the same layer used by Node's built-in fetch. Fast, spec-compliant, and battle-tested.",
+    features: [
+      { name: 'All HTTP methods', desc: 'GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS — full method support.' },
+      { name: 'Custom headers', desc: 'Set any header you need, override auto-managed ones, or disable them per request.' },
+      { name: 'Request body types', desc: 'JSON, form-urlencoded, multipart, raw text, binary — all supported.' },
+      { name: 'Query parameters', desc: 'URL query builder with encode/decode. Paste a full URL and params auto-parse.' },
+      { name: 'Proxy support', desc: 'Route requests through HTTP/HTTPS proxies.' },
+    ],
+  },
+  {
+    label: 'Response Handling',
+    title: 'Nothing hidden, nothing lost',
+    desc: 'Responses are shown fully decompressed and formatted. Large responses are captured without freezing the UI.',
+    features: [
+      { name: 'Auto-decompression', desc: 'gzip, brotli, and deflate responses are decoded automatically. No config. No encoding noise.' },
+      { name: 'SSE event streaming', desc: 'Server-Sent Events displayed in real time — event type, id, data, and timestamp per event.' },
+      { name: '2MB+ body handling', desc: 'Large responses are captured fully but displayed up to 2MB. Save any size to disk with one click.' },
+      { name: 'JSON formatting', desc: 'JSON responses are pretty-printed with syntax highlighting. Collapse/expand nodes.' },
+      { name: 'Response headers', desc: 'Full response header table with copy support.' },
+      { name: 'Timing breakdown', desc: 'DNS, connect, TLS, TTFB, and total — full request lifecycle timing.' },
+    ],
+  },
+  {
+    label: 'Authentication',
+    title: 'Every scheme. No friction.',
+    desc: 'Auth tokens are managed automatically. Set it once and Scrapeman handles the rest.',
+    features: [
+      { name: 'Basic auth', desc: 'Username and password encoded automatically.' },
+      { name: 'Bearer token', desc: 'Set a token and it is added to every request in the collection.' },
+      { name: 'API Key', desc: 'Send in header or query param, your choice.' },
+      { name: 'OAuth2 client credentials', desc: 'Token fetched automatically, cached until expiry, refreshed before it expires. Concurrent requests share one in-flight fetch.' },
+      { name: 'AWS SigV4', desc: 'Request signed with your AWS credentials. Region and service configurable per request.' },
+    ],
+  },
+  {
+    label: 'Cookie Jar',
+    title: 'Session state that survives restarts',
+    desc: 'Cookies are persisted to disk on every change. Your scraping session continues exactly where you left off.',
+    features: [
+      { name: 'Automatic persistence', desc: 'Cookies written to disk on every response — not flushed on quit.' },
+      { name: 'Domain scoping', desc: 'Cookies matched to domains following RFC 6265 rules.' },
+      { name: 'Session cookies', desc: 'Both session and persistent cookies handled correctly.' },
+      { name: 'Cookie inspector', desc: 'View all current cookies, domain by domain, with expiry and flags.' },
+      { name: 'Clear on demand', desc: 'Reset the cookie jar for a fresh session when needed.' },
+    ],
+  },
+  {
+    label: 'Auto-Headers',
+    title: 'Headers that match real browser behavior',
+    desc: 'Content-Type, Accept, and User-Agent are set automatically based on request type — just like Postman.',
+    features: [
+      { name: 'Content-Type inference', desc: 'Set from request body type automatically. JSON body → application/json.' },
+      { name: 'Accept header', desc: 'Set to match expected response format.' },
+      { name: 'User-Agent', desc: 'Scrapeman identifies itself correctly by default. Override to any value.' },
+      { name: 'Preview panel', desc: 'See exactly which headers will be sent before you fire the request.' },
+      { name: 'Per-header disable', desc: 'Turn off individual auto-managed headers without losing the others.' },
+    ],
+  },
+  {
+    label: 'Privacy',
+    title: 'Zero data ever leaves your machine',
+    desc: 'No analytics. No crash reporting. No cloud sync. No account. Your requests and responses stay on your disk.',
+    features: [
+      { name: 'Local SQLite storage', desc: 'Request history, responses, environments, and cookies in a local database file.' },
+      { name: 'No telemetry', desc: 'Zero metrics, analytics, or usage data collected or transmitted.' },
+      { name: 'No account required', desc: 'Download and use immediately — no registration, no email, no OAuth.' },
+      { name: 'No cloud sync', desc: 'Nothing is backed up to a third-party server. Your data is your responsibility.' },
+      { name: 'Open source', desc: 'Verify the claims above by reading the source code on GitHub.' },
+    ],
+  },
+];
+---
+
+<Base
+  title="Scrapeman Features — Full HTTP Client for Scraping Engineers"
+  description="Auto-decompression, SSE streaming, persistent cookies, 2MB+ response handling, OAuth2 with token caching, AWS SigV4, auto-headers, and zero telemetry. Full feature list."
+>
+  <Header />
+  <main>
+    <!-- Hero -->
+    <section class="hero-bg noise pt-20 pb-20 text-center">
+      <div class="max-w-3xl mx-auto px-6">
+        <p class="section-label mb-4" style="animation: fade-up 0.5s ease-out both;">All features</p>
+        <h1 class="text-4xl sm:text-5xl font-bold tracking-tighter text-ink-1 mb-6" style="animation: fade-up 0.5s ease-out 0.1s both;">
+          Everything.<br />
+          <span class="gradient-text">Nothing extra.</span>
+        </h1>
+        <p class="text-lg text-ink-2 leading-relaxed" style="animation: fade-up 0.5s ease-out 0.2s both;">
+          Scrapeman is purpose-built for scraping workflows. No bloat, no team features, no enterprise tiers. Just the best local HTTP client for the job.
+        </p>
+      </div>
+    </section>
+
+    <!-- Feature sections -->
+    <div class="max-w-5xl mx-auto px-6 py-16 space-y-24">
+      {sections.map((section, si) => (
+        <div class="reveal">
+          <div class="mb-8">
+            <p class="section-label mb-2">{section.label}</p>
+            <h2 class="text-2xl font-bold tracking-tighter text-ink-1 mb-3">{section.title}</h2>
+            <p class="text-ink-2 max-w-2xl">{section.desc}</p>
+          </div>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4" data-stagger>
+            {section.features.map(f => (
+              <div class="p-5 rounded-xl border border-border bg-bg-surface hover:border-border-strong transition-colors" data-stagger-child>
+                <div class="flex items-center gap-2 mb-2">
+                  <div class="w-4 h-4 rounded-full bg-positive/15 flex-shrink-0 flex items-center justify-center">
+                    <svg width="8" height="8" viewBox="0 0 12 12" fill="none">
+                      <path d="M2 6l3 3 5-5" stroke="#22c55e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                  <span class="font-semibold text-sm text-ink-1">{f.name}</span>
+                </div>
+                <p class="text-xs text-ink-3 leading-relaxed pl-6">{f.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- CTA -->
+    <section id="download" class="py-24 text-center bg-bg-surface/30">
+      <div class="max-w-xl mx-auto px-6 reveal">
+        <h2 class="text-3xl font-bold tracking-tighter text-ink-1 mb-4">
+          Ready to try it?
+        </h2>
+        <p class="text-ink-2 mb-8">Free. Local. No account. Download and run in 30 seconds.</p>
+        <a href="/#download" class="btn-primary text-base px-10 py-4">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Download Scrapeman
+        </a>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Base>

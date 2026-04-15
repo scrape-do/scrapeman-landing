@@ -1,0 +1,171 @@
+---
+import Base from '@/layouts/Base.astro';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+
+const timeline = [
+  { year: '2016', event: 'Insomnia launches as a local-first REST client' },
+  { year: '2019', event: 'Gains GraphQL support, grows in popularity' },
+  { year: '2023', event: 'Kong Inc. acquires Insomnia' },
+  { year: '2023 Q3', event: 'Version 8.0 shipped — drops local storage, forces cloud sync' },
+  { year: '2023 Q4', event: 'Mass user exodus after forced account requirement' },
+  { year: '2024', event: 'Local storage restored in response to backlash, but trust eroded' },
+];
+
+const comparisons = [
+  { feature: 'Local-first (no cloud required)', scrapeman: true, insomnia: 'Partially restored', good: true },
+  { feature: 'No account required', scrapeman: true, insomnia: false, good: false },
+  { feature: 'Auto-decompress gzip/brotli', scrapeman: true, insomnia: false, good: false },
+  { feature: 'Persistent cookie jar', scrapeman: true, insomnia: true, good: true },
+  { feature: 'SSE event streaming', scrapeman: true, insomnia: false, good: false },
+  { feature: '2MB+ response + save to disk', scrapeman: true, insomnia: false, good: false },
+  { feature: 'AWS SigV4 auth', scrapeman: true, insomnia: true, good: true },
+  { feature: 'GraphQL support', scrapeman: false, insomnia: true, good: true },
+  { feature: 'Open source', scrapeman: true, insomnia: 'Partially (core only)', good: false },
+  { feature: 'Community-owned roadmap', scrapeman: true, insomnia: false, good: false },
+  { feature: 'Free forever', scrapeman: true, insomnia: false, good: false },
+];
+---
+
+<Base
+  title="Scrapeman vs Insomnia — Local-First Alternative After Kong Acquisition"
+  description="After Kong acquired Insomnia and forced cloud sync, thousands of developers left. Scrapeman is the local-first alternative: no account, no cloud, no surprise policy changes."
+  ogTitle="Scrapeman vs Insomnia"
+>
+  <Header />
+  <main>
+    <!-- Hero -->
+    <section class="hero-bg noise pt-20 pb-24">
+      <div class="max-w-4xl mx-auto px-6 text-center">
+        <div class="flex items-center justify-center gap-4 mb-10" style="animation: fade-up 0.5s ease-out both;">
+          <div class="flex items-center gap-2">
+            <div class="w-10 h-10 rounded-xl bg-accent flex items-center justify-center">
+              <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
+                <circle cx="8" cy="8" r="3" fill="white" opacity="0.9"/>
+                <path d="M8 1L8 3M8 13L8 15M1 8L3 8M13 8L15 8M3.05 3.05L4.46 4.46M11.54 11.54L12.95 12.95M12.95 3.05L11.54 4.46M4.46 11.54L3.05 12.95" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+              </svg>
+            </div>
+            <span class="font-bold text-xl text-ink-1">Scrapeman</span>
+          </div>
+          <span class="text-ink-3 text-2xl font-light">vs</span>
+          <div class="flex items-center gap-2">
+            <div class="w-10 h-10 rounded-xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-400 font-bold text-sm">I</div>
+            <span class="font-bold text-xl text-ink-2">Insomnia</span>
+          </div>
+        </div>
+
+        <h1 class="text-4xl sm:text-5xl font-bold tracking-tighter text-ink-1 mb-6" style="animation: fade-up 0.5s ease-out 0.1s both;">
+          Insomnia was great.<br />
+          <span class="gradient-text">Until Kong changed everything.</span>
+        </h1>
+        <p class="text-lg text-ink-2 max-w-2xl mx-auto leading-relaxed" style="animation: fade-up 0.5s ease-out 0.2s both;">
+          When Kong acquired Insomnia and forced cloud sync, tens of thousands of users lost trust overnight. Local storage was eventually restored under pressure, but the message was clear: your data is not safe when a company can change the rules.
+        </p>
+      </div>
+    </section>
+
+    <!-- Acquisition timeline -->
+    <section class="py-24">
+      <div class="max-w-3xl mx-auto px-6">
+        <div class="text-center mb-14 reveal">
+          <p class="section-label mb-3">What happened</p>
+          <h2 class="text-2xl font-bold tracking-tighter text-ink-1">The Insomnia acquisition timeline</h2>
+        </div>
+        <div class="relative reveal">
+          <!-- Vertical line -->
+          <div class="absolute left-[88px] top-0 bottom-0 w-px bg-border"></div>
+
+          <div class="space-y-0">
+            {timeline.map((item, i) => (
+              <div class="flex gap-6 items-start">
+                <div class="flex-shrink-0 w-[76px] text-right">
+                  <span class:list={[
+                    'text-xs font-mono font-bold',
+                    i >= 2 ? 'text-negative' : 'text-ink-3'
+                  ]}>
+                    {item.year}
+                  </span>
+                </div>
+                <div class:list={[
+                  'flex-shrink-0 w-3 h-3 rounded-full border-2 mt-0.5 relative z-10',
+                  i >= 2
+                    ? 'bg-negative/30 border-negative'
+                    : 'bg-border-strong border-border-strong'
+                ]}></div>
+                <div class:list={[
+                  'pb-8 text-sm leading-relaxed',
+                  i >= 2 ? 'text-ink-1 font-medium' : 'text-ink-3'
+                ]}>
+                  {item.event}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div class="mt-4 p-5 rounded-xl border border-accent/20 bg-accent/5 reveal">
+          <p class="text-sm text-ink-2 leading-relaxed">
+            <span class="text-accent-light font-semibold">Scrapeman's promise:</span> No corporate acquisition can change where your data lives. It's on your disk. Period. The source code is open. If we ever did the wrong thing, you could fork it.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Feature comparison -->
+    <section class="py-16 bg-bg-surface/30">
+      <div class="max-w-3xl mx-auto px-6">
+        <div class="text-center mb-12 reveal">
+          <h2 class="text-2xl font-bold tracking-tighter text-ink-1">Feature comparison</h2>
+        </div>
+        <div class="reveal overflow-hidden rounded-2xl border border-border">
+          <table class="w-full text-sm border-collapse">
+            <thead>
+              <tr class="bg-bg-elevated border-b border-border">
+                <th class="text-left px-6 py-4 font-semibold text-ink-2">Feature</th>
+                <th class="px-6 py-4 font-semibold text-center text-accent-light">Scrapeman</th>
+                <th class="px-6 py-4 font-semibold text-center text-ink-2">Insomnia</th>
+              </tr>
+            </thead>
+            <tbody>
+              {comparisons.map((row, i) => (
+                <tr class:list={['border-b border-border last:border-0', i % 2 === 0 ? '' : 'bg-bg-surface/30']}>
+                  <td class="px-6 py-3.5 text-ink-2">{row.feature}</td>
+                  <td class="px-6 py-3.5 text-center">
+                    <span class="badge-yes"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Yes</span>
+                  </td>
+                  <td class="px-6 py-3.5 text-center">
+                    {typeof row.insomnia === 'string'
+                      ? <span class="badge-soon text-[10px]">{row.insomnia}</span>
+                      : row.insomnia
+                        ? <span class="badge-yes"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Yes</span>
+                        : <span class="badge-no"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M3 3l6 6M9 3l-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>No</span>
+                    }
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section id="download" class="py-24 text-center">
+      <div class="max-w-xl mx-auto px-6 reveal">
+        <h2 class="text-3xl font-bold tracking-tighter text-ink-1 mb-4">
+          Local-first. For real, this time.
+        </h2>
+        <p class="text-ink-2 mb-8">
+          No acquisition can take your data. It's on your machine, always.
+        </p>
+        <a href="/#download" class="btn-primary text-base px-10 py-4">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Download Scrapeman
+        </a>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Base>

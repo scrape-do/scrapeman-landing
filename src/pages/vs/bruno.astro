@@ -1,0 +1,234 @@
+---
+import Base from '@/layouts/Base.astro';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+
+const bugs = [
+  {
+    id: 'SSE #7083',
+    href: 'https://github.com/usebruno/bruno/issues/7083',
+    title: 'SSE connections hang forever',
+    severity: 'High',
+    status: 'Open',
+    desc: 'Server-Sent Events never terminate in Bruno — the response body stream is never closed, so you wait forever. Scrapeman buffers each event as it arrives and displays a live event log.',
+    scrapeman: 'Full SSE support — events stream in real time with id, event type, and data. Connection closes cleanly.',
+  },
+  {
+    id: 'Large response #7624',
+    href: 'https://github.com/usebruno/bruno/issues/7624',
+    title: 'UI freezes on large response bodies',
+    severity: 'High',
+    status: 'Open',
+    desc: 'Load a 5MB JSON response in Bruno and the app freezes or crashes. The entire body is held in memory and rendered at once. Scrapeman caps display at 2MB and lets you save the full body to disk.',
+    scrapeman: '2MB display cap + save-to-disk for any size. No freeze, no crash.',
+  },
+  {
+    id: 'Cookie persist #6903',
+    href: 'https://github.com/usebruno/bruno/issues/6903',
+    title: 'Cookies lost on restart',
+    severity: 'Medium',
+    status: 'Open',
+    desc: "Bruno's cookie jar lives in memory only. Restart the app and all your session cookies are gone — including Cloudflare clearance tokens that took multiple requests to obtain.",
+    scrapeman: 'Cookie jar is written to disk on every change. Restart Scrapeman and your session resumes exactly.',
+  },
+  {
+    id: 'OAuth2 race #7565',
+    href: 'https://github.com/usebruno/bruno/issues/7565',
+    title: 'OAuth2 concurrent token fetch race condition',
+    severity: 'Medium',
+    status: 'Open',
+    desc: 'Fire multiple requests simultaneously in Bruno with OAuth2 auth and each request races to fetch a new token — flooding your token endpoint. Scrapeman de-duplicates in-flight token fetches.',
+    scrapeman: 'One in-flight token request shared across all concurrent requests. Token endpoint never hammered.',
+  },
+];
+
+const comparisons = [
+  { feature: 'Local-first (no cloud)', scrapeman: true, bruno: true },
+  { feature: 'No account required', scrapeman: true, bruno: true },
+  { feature: 'Auto-decompress gzip/brotli', scrapeman: true, bruno: false },
+  { feature: 'Persistent cookie jar', scrapeman: true, bruno: false },
+  { feature: 'SSE event streaming', scrapeman: true, bruno: false },
+  { feature: '2MB+ body + save to disk', scrapeman: true, bruno: false },
+  { feature: 'OAuth2 token dedup', scrapeman: true, bruno: false },
+  { feature: 'Auto-set Content-Type header', scrapeman: true, bruno: false },
+  { feature: 'AWS SigV4 auth', scrapeman: true, bruno: true },
+  { feature: 'Git-friendly collection format', scrapeman: false, bruno: true },
+  { feature: 'Scripting / pre-request scripts', scrapeman: false, bruno: true },
+  { feature: 'Free forever', scrapeman: true, bruno: true },
+  { feature: 'Open source', scrapeman: true, bruno: true },
+];
+---
+
+<Base
+  title="Scrapeman vs Bruno — Honest HTTP Client Comparison"
+  description="Scrapeman fixes 4 open Bruno bugs: SSE hang (#7083), UI freeze on large responses (#7624), cookies lost on restart (#6903), OAuth2 race condition (#7565). See the full comparison."
+  ogTitle="Scrapeman vs Bruno"
+>
+  <Header />
+  <main>
+    <!-- Hero -->
+    <section class="hero-bg noise pt-20 pb-24">
+      <div class="max-w-4xl mx-auto px-6 text-center">
+        <div class="flex items-center justify-center gap-4 mb-10" style="animation: fade-up 0.5s ease-out both;">
+          <!-- Scrapeman logo -->
+          <div class="flex items-center gap-2">
+            <div class="w-10 h-10 rounded-xl bg-accent flex items-center justify-center">
+              <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
+                <circle cx="8" cy="8" r="3" fill="white" opacity="0.9"/>
+                <path d="M8 1L8 3M8 13L8 15M1 8L3 8M13 8L15 8M3.05 3.05L4.46 4.46M11.54 11.54L12.95 12.95M12.95 3.05L11.54 4.46M4.46 11.54L3.05 12.95" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+              </svg>
+            </div>
+            <span class="font-bold text-xl text-ink-1">Scrapeman</span>
+          </div>
+          <span class="text-ink-3 text-2xl font-light">vs</span>
+          <!-- Bruno placeholder -->
+          <div class="flex items-center gap-2">
+            <div class="w-10 h-10 rounded-xl bg-orange-500/20 border border-orange-500/30 flex items-center justify-center text-orange-400 font-bold text-sm">B</div>
+            <span class="font-bold text-xl text-ink-2">Bruno</span>
+          </div>
+        </div>
+
+        <h1 class="text-4xl sm:text-5xl font-bold tracking-tighter text-ink-1 mb-6" style="animation: fade-up 0.5s ease-out 0.1s both;">
+          Bruno is great.<br />
+          <span class="gradient-text">These 4 bugs aren't.</span>
+        </h1>
+        <p class="text-lg text-ink-2 max-w-2xl mx-auto leading-relaxed" style="animation: fade-up 0.5s ease-out 0.2s both;">
+          Bruno nailed the local-first, git-friendly workflow. But for scraping — where SSE streams, big payloads, persistent cookies, and concurrent auth matter daily — it has real open bugs. Scrapeman fixes all of them.
+        </p>
+      </div>
+    </section>
+
+    <!-- Bug cards -->
+    <section class="py-24">
+      <div class="max-w-5xl mx-auto px-6">
+        <div class="text-center mb-14 reveal">
+          <p class="section-label mb-3">4 Open Issues</p>
+          <h2 class="text-3xl font-bold tracking-tighter text-ink-1">
+            Bugs that block scraping workflows
+          </h2>
+        </div>
+
+        <div class="space-y-6">
+          {bugs.map((bug, i) => (
+            <div class="rounded-2xl border border-border bg-bg-surface overflow-hidden reveal">
+              <!-- Bug header -->
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-6 py-4 border-b border-border bg-bg-elevated">
+                <div class="flex items-center gap-3">
+                  <span class:list={[
+                    'px-2 py-0.5 rounded-md text-xs font-semibold',
+                    bug.severity === 'High'
+                      ? 'bg-negative-bg text-negative'
+                      : 'bg-yellow-500/10 text-yellow-400'
+                  ]}>
+                    {bug.severity}
+                  </span>
+                  <a
+                    href={bug.href}
+                    target="_blank"
+                    rel="noopener"
+                    class="font-mono text-xs text-accent-light hover:underline"
+                  >
+                    {bug.id}
+                  </a>
+                  <span class="px-2 py-0.5 rounded-md bg-negative-bg text-negative text-xs font-semibold">
+                    {bug.status}
+                  </span>
+                </div>
+                <span class="text-xs text-ink-3">Bruno issue · open in GitHub ↗</span>
+              </div>
+
+              <!-- Bug body -->
+              <div class="grid sm:grid-cols-2 gap-0">
+                <div class="p-6 border-r border-border">
+                  <div class="flex items-center gap-2 mb-3">
+                    <div class="w-5 h-5 rounded-full bg-negative/15 flex items-center justify-center">
+                      <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
+                        <path d="M3 3l6 6M9 3l-6 6" stroke="#ef4444" stroke-width="1.5" stroke-linecap="round"/>
+                      </svg>
+                    </div>
+                    <span class="text-xs font-semibold text-negative uppercase tracking-wide">Bruno</span>
+                  </div>
+                  <h3 class="font-semibold text-ink-1 mb-2">{bug.title}</h3>
+                  <p class="text-sm text-ink-3 leading-relaxed">{bug.desc}</p>
+                </div>
+                <div class="p-6">
+                  <div class="flex items-center gap-2 mb-3">
+                    <div class="w-5 h-5 rounded-full bg-positive/15 flex items-center justify-center">
+                      <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
+                        <path d="M2 6l3 3 5-5" stroke="#22c55e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </div>
+                    <span class="text-xs font-semibold text-positive uppercase tracking-wide">Scrapeman</span>
+                  </div>
+                  <h3 class="font-semibold text-ink-1 mb-2">Fixed</h3>
+                  <p class="text-sm text-ink-3 leading-relaxed">{bug.scrapeman}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Feature comparison -->
+    <section class="py-16 bg-bg-surface/30">
+      <div class="max-w-3xl mx-auto px-6">
+        <div class="text-center mb-12 reveal">
+          <h2 class="text-2xl font-bold tracking-tighter text-ink-1">Feature comparison</h2>
+        </div>
+        <div class="reveal overflow-hidden rounded-2xl border border-border">
+          <table class="w-full text-sm border-collapse">
+            <thead>
+              <tr class="bg-bg-elevated border-b border-border">
+                <th class="text-left px-6 py-4 font-semibold text-ink-2">Feature</th>
+                <th class="px-6 py-4 font-semibold text-center text-accent-light">Scrapeman</th>
+                <th class="px-6 py-4 font-semibold text-center text-ink-2">Bruno</th>
+              </tr>
+            </thead>
+            <tbody>
+              {comparisons.map((row, i) => (
+                <tr class:list={['border-b border-border last:border-0', i % 2 === 0 ? '' : 'bg-bg-surface/30']}>
+                  <td class="px-6 py-3.5 text-ink-2">{row.feature}</td>
+                  <td class="px-6 py-3.5 text-center">
+                    {row.scrapeman
+                      ? <span class="badge-yes"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Yes</span>
+                      : <span class="badge-no"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M3 3l6 6M9 3l-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>No</span>
+                    }
+                  </td>
+                  <td class="px-6 py-3.5 text-center">
+                    {row.bruno
+                      ? <span class="badge-yes"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Yes</span>
+                      : <span class="badge-no"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M3 3l6 6M9 3l-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>No</span>
+                    }
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="text-xs text-ink-3 text-center mt-4">
+          Bruno excels at git-native collections and scripting. Scrapeman focuses on scraping-specific reliability.
+        </p>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section id="download" class="py-24 text-center">
+      <div class="max-w-xl mx-auto px-6 reveal">
+        <h2 class="text-3xl font-bold tracking-tighter text-ink-1 mb-4">
+          Ready to switch?
+        </h2>
+        <p class="text-ink-2 mb-8">
+          Download Scrapeman for free. No account, no cloud, no catch.
+        </p>
+        <a href="/#download" class="btn-primary text-base px-10 py-4">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Download Scrapeman
+        </a>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Base>

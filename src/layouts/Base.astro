@@ -1,0 +1,77 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  ogTitle?: string;
+}
+
+const { title, description, ogTitle } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, 'https://scrapeman.io');
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="canonical" href={canonicalURL} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#0a0a0f" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={ogTitle ?? title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="/og/default.png" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={ogTitle ?? title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content="/og/default.png" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body class="min-h-screen">
+    <slot />
+
+    <script>
+      // Scroll-reveal: intersection observer
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              // Stagger children if data-stagger present
+              const children = entry.target.querySelectorAll('[data-stagger-child]');
+              children.forEach((child, i) => {
+                (child as HTMLElement).style.transitionDelay = `${i * 80}ms`;
+                child.classList.add('visible');
+              });
+            }
+          });
+        },
+        { threshold: 0.1 }
+      );
+
+      document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach((el) => {
+        observer.observe(el);
+      });
+
+      // Parallax on app mockup
+      const mockup = document.querySelector('[data-parallax]') as HTMLElement | null;
+      if (mockup) {
+        document.addEventListener('mousemove', (e) => {
+          const x = ((e.clientX / window.innerWidth) - 0.5) * 8;
+          const y = ((e.clientY / window.innerHeight) - 0.5) * -4;
+          mockup.style.transform = `perspective(1200px) rotateY(${x}deg) rotateX(${y}deg)`;
+        });
+      }
+    </script>
+  </body>
+</html>

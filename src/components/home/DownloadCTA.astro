@@ -1,0 +1,73 @@
+---
+---
+
+<section id="download" class="py-32">
+  <div class="max-w-4xl mx-auto px-6 text-center">
+    <!-- Glow -->
+    <div class="relative">
+      <div class="absolute inset-0 -top-16 rounded-full bg-accent/15 blur-[80px]"></div>
+      <div class="relative reveal">
+        <p class="section-label mb-4">Download</p>
+        <h2 class="text-4xl sm:text-5xl font-bold tracking-tighter text-ink-1 mb-6">
+          Start scraping<br />
+          <span class="gradient-text">without compromise.</span>
+        </h2>
+        <p class="text-ink-2 text-lg mb-12 max-w-lg mx-auto leading-relaxed">
+          Free. Local-first. No account. No subscription. No data ever leaves your machine.
+        </p>
+
+        <!-- Download buttons -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
+          <a
+            href="#"
+            class="btn-primary text-base px-10 py-4 w-full sm:w-auto justify-center"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+            </svg>
+            Download for macOS
+          </a>
+          <div class="flex flex-col items-center gap-1">
+            <span class="text-xs text-ink-3">Windows & Linux</span>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border text-xs text-ink-3">
+              <span class="w-1.5 h-1.5 rounded-full bg-accent-light"></span>
+              Coming soon
+            </span>
+          </div>
+        </div>
+
+        <!-- Version + requirements -->
+        <p class="text-xs text-ink-3 mb-12">
+          macOS 13.0+ · Apple Silicon & Intel · Free forever
+        </p>
+
+        <!-- Three promises -->
+        <div class="grid sm:grid-cols-3 gap-6 text-sm">
+          {[
+            {
+              icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+              title: 'Your data, your machine',
+              desc: 'All requests, responses, and cookies live on your disk. Nothing is uploaded anywhere.',
+            },
+            {
+              icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+              title: 'No subscription cliff',
+              desc: 'Free forever. No trial period. No premium tier that locks your history behind a paywall.',
+            },
+            {
+              icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+              title: 'Open source',
+              desc: 'Audit the code, contribute a feature, or fork it. Built in the open on GitHub.',
+            },
+          ].map(item => (
+            <div class="flex flex-col items-center gap-3 p-5 rounded-xl border border-border bg-bg-surface/50">
+              <div class="text-accent-light">{<Fragment set:html={item.icon} />}</div>
+              <p class="font-semibold text-ink-1">{item.title}</p>
+              <p class="text-ink-3 text-xs leading-relaxed">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

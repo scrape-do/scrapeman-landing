@@ -1,0 +1,27 @@
+---
+import Base from '@/layouts/Base.astro';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+import Hero from '@/components/home/Hero.astro';
+import NumbersBar from '@/components/home/NumbersBar.astro';
+import FeatureGrid from '@/components/home/FeatureGrid.astro';
+import ComparisonTable from '@/components/home/ComparisonTable.astro';
+import TerminalDemo from '@/components/home/TerminalDemo.astro';
+import DownloadCTA from '@/components/home/DownloadCTA.astro';
+---
+
+<Base
+  title="Scrapeman — HTTP Client for Scraping Engineers"
+  description="The local-first HTTP client built for scraping engineers. No account. No cloud. Auto-decodes gzip/brotli, persists cookies, streams SSE, handles 2MB+ responses. Free forever."
+>
+  <Header />
+  <main>
+    <Hero />
+    <NumbersBar />
+    <FeatureGrid />
+    <TerminalDemo />
+    <ComparisonTable />
+    <DownloadCTA />
+  </main>
+  <Footer />
+</Base>
