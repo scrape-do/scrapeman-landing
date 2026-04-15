@@ -30,12 +30,12 @@
     --stroke-sub-300: #27273a;
     --stroke-white-0: #ffffff10;
 
-    /* Primary (accent indigo) */
-    --primary-base: #6366f1;
-    --primary-light: #818cf8;
-    --primary-dark: #4f46e5;
-    --primary-alpha-10: #6366f11a;
-    --primary-alpha-20: #6366f133;
+    /* Primary (scrape-do / Scrapeman orange) */
+    --primary-base: #ff6c37;
+    --primary-light: #ff8f66;
+    --primary-dark: #e5541f;
+    --primary-alpha-10: #ff6c371a;
+    --primary-alpha-20: #ff6c3733;
 
     /* Status */
     --success-base: #22c55e;
@@ -116,7 +116,7 @@
 
   .gradient-text {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, #818cf8 0%, #a78bfa 50%, #6366f1 100%);
+    background-image: linear-gradient(135deg, #ffb388 0%, #ff8f66 40%, #ff6c37 100%);
   }
 
   .glow-card {
@@ -128,7 +128,7 @@
   .glow-card:hover {
     border-color: var(--primary-base);
     transform: translateY(-4px);
-    box-shadow: 0 20px 40px rgba(99, 102, 241, 0.08);
+    box-shadow: 0 20px 40px rgba(255, 108, 55, 0.1);
   }
 
   .btn-primary {
@@ -138,7 +138,7 @@
   }
   .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.35);
+    box-shadow: 0 8px 24px rgba(255, 108, 55, 0.35);
   }
 
   .btn-ghost {
@@ -167,9 +167,9 @@
 
   .hero-bg {
     background:
-      radial-gradient(ellipse at 20% 50%, rgba(99, 102, 241, 0.12) 0%, transparent 55%),
-      radial-gradient(ellipse at 80% 20%, rgba(167, 139, 250, 0.08) 0%, transparent 55%),
-      radial-gradient(ellipse at 50% 100%, rgba(99, 102, 241, 0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 20% 50%, rgba(255, 108, 55, 0.14) 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 20%, rgba(255, 143, 102, 0.08) 0%, transparent 55%),
+      radial-gradient(ellipse at 50% 100%, rgba(255, 108, 55, 0.06) 0%, transparent 50%),
       #0a0a0f;
   }
 

@@ -1,24 +1,18 @@
 ---
-import { Badge } from '@/components/ui/Badge';
-
 const rows = [
-  { feature: 'Local storage (no cloud)', scrapeman: true, postman: false, bruno: true, insomnia: false },
-  { feature: 'No account required', scrapeman: true, postman: false, bruno: true, insomnia: false },
-  { feature: 'Auto-decompress gzip/brotli', scrapeman: true, postman: false, bruno: false, insomnia: false },
-  { feature: 'Persistent cookie jar', scrapeman: true, postman: true, bruno: false, insomnia: true },
-  { feature: 'SSE event streaming', scrapeman: true, postman: false, bruno: false, insomnia: false },
-  { feature: '2MB+ body + save to disk', scrapeman: true, postman: false, bruno: false, insomnia: false },
-  { feature: 'AWS SigV4 auth', scrapeman: true, postman: true, bruno: true, insomnia: true },
-  { feature: 'OAuth2 client credentials', scrapeman: true, postman: true, bruno: true, insomnia: true },
-  { feature: 'Auto-set Content-Type', scrapeman: true, postman: true, bruno: false, insomnia: true },
+  { feature: 'Unlimited request history', scrapeman: true, postman: false, bruno: true, insomnia: false },
+  { feature: 'Unlimited environment variables', scrapeman: true, postman: false, bruno: true, insomnia: true },
+  { feature: 'Unlimited collection runs', scrapeman: true, postman: false, bruno: true, insomnia: false },
+  { feature: 'Single-request load runner', scrapeman: true, postman: false, bruno: false, insomnia: false },
+  { feature: 'Git-friendly file format', scrapeman: true, postman: false, bruno: true, insomnia: false },
+  { feature: 'Native scrape.do proxy mode', scrapeman: true, postman: false, bruno: false, insomnia: false },
+  { feature: 'HTTP/2 toggle (undici allowH2)', scrapeman: true, postman: true, bruno: false, insomnia: false },
+  { feature: 'OAuth2 all flows', scrapeman: true, postman: false, bruno: true, insomnia: true },
+  { feature: 'AWS Signature v4 auth', scrapeman: true, postman: false, bruno: true, insomnia: true },
+  { feature: 'Local-first (no cloud sync)', scrapeman: true, postman: false, bruno: true, insomnia: false },
   { feature: 'Free forever', scrapeman: true, postman: false, bruno: true, insomnia: false },
   { feature: 'Open source', scrapeman: true, postman: false, bruno: true, insomnia: false },
 ];
-
-// Check icon SVG for "Yes" badges
-const checkIcon = `<svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-// Cross icon SVG for "No" badges
-const crossIcon = `<svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M3 3l6 6M9 3l-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 ---
 
 <section class="py-28" style="background-color: color-mix(in srgb, var(--bg-weak-50) 30%, transparent);">
@@ -29,8 +23,8 @@ const crossIcon = `<svg width="10" height="10" viewBox="0 0 12 12" fill="none"><
       <h2 class="text-3xl sm:text-4xl font-bold tracking-tighter text-[var(--text-strong-950)] mb-4">
         How Scrapeman stacks up
       </h2>
-      <p class="text-[var(--text-sub-600)] max-w-lg mx-auto">
-        We picked the features that actually matter for scraping workflows.
+      <p class="text-[var(--text-sub-600)] max-w-xl mx-auto">
+        The Postman column reflects the free tier. Any feature locked behind a paid seat counts as unavailable.
       </p>
     </div>
 
@@ -62,26 +56,26 @@ const crossIcon = `<svg width="10" height="10" viewBox="0 0 12 12" fill="none"><
               <td class="px-6 py-3.5 text-[var(--text-sub-600)]">{row.feature}</td>
               <td class="px-6 py-3.5 text-center">
                 {row.scrapeman
-                  ? <Badge variant="success" client:load><Fragment set:html={checkIcon} />Yes</Badge>
-                  : <Badge variant="error" client:load><Fragment set:html={crossIcon} />No</Badge>
+                  ? <span class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold bg-[var(--success-alpha-10)] text-[var(--success-base)]">Yes</span>
+                  : <span class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold bg-[var(--error-alpha-10)] text-[var(--error-base)]">No</span>
                 }
               </td>
               <td class="px-6 py-3.5 text-center">
                 {row.postman
-                  ? <Badge variant="success" client:load><Fragment set:html={checkIcon} />Yes</Badge>
-                  : <Badge variant="error" client:load><Fragment set:html={crossIcon} />No</Badge>
+                  ? <span class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold bg-[var(--success-alpha-10)] text-[var(--success-base)]">Yes</span>
+                  : <span class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold bg-[var(--error-alpha-10)] text-[var(--error-base)]">No</span>
                 }
               </td>
               <td class="px-6 py-3.5 text-center">
                 {row.bruno
-                  ? <Badge variant="success" client:load><Fragment set:html={checkIcon} />Yes</Badge>
-                  : <Badge variant="error" client:load><Fragment set:html={crossIcon} />No</Badge>
+                  ? <span class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold bg-[var(--success-alpha-10)] text-[var(--success-base)]">Yes</span>
+                  : <span class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold bg-[var(--error-alpha-10)] text-[var(--error-base)]">No</span>
                 }
               </td>
               <td class="px-6 py-3.5 text-center">
                 {row.insomnia
-                  ? <Badge variant="success" client:load><Fragment set:html={checkIcon} />Yes</Badge>
-                  : <Badge variant="error" client:load><Fragment set:html={crossIcon} />No</Badge>
+                  ? <span class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold bg-[var(--success-alpha-10)] text-[var(--success-base)]">Yes</span>
+                  : <span class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold bg-[var(--error-alpha-10)] text-[var(--error-base)]">No</span>
                 }
               </td>
             </tr>

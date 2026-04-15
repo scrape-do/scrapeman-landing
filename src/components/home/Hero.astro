@@ -12,38 +12,41 @@ import { Badge } from '@/components/ui/Badge';
 
   <div class="relative max-w-6xl mx-auto px-6">
     <!-- Badge -->
-    <div class="flex justify-center mb-8 animate-fade-in">
-      <Badge variant="primary" client:load>
+    <div class="flex flex-col items-center gap-3 mb-8 animate-fade-in">
+      <Badge variant="primary" >
         <span class="w-1.5 h-1.5 rounded-full bg-[var(--success-base)] animate-pulse-green inline-block"></span>
-        Built for scraping engineers
+        Postman's paid features, free forever
       </Badge>
+      <span class="text-xs text-[var(--text-soft-400)] font-medium tracking-wide">
+        Apache 2.0 · Vibe-coded by humans and AI · Built by <a href="https://scrape.do" target="_blank" rel="noopener" class="text-[var(--primary-light)] hover:underline">scrape.do</a>
+      </span>
     </div>
 
     <!-- Headline -->
     <h1 class="text-center font-bold tracking-tighter leading-[1.05] mb-6" style="animation: fade-up 0.6s ease-out 0.1s both;">
-      <span class="block text-5xl sm:text-6xl lg:text-7xl text-[var(--text-strong-950)] mb-2">The HTTP client that</span>
-      <span class="block text-5xl sm:text-6xl lg:text-7xl gradient-text">doesn't slow you down.</span>
+      <span class="block text-5xl sm:text-6xl lg:text-7xl text-[var(--text-strong-950)] mb-2">An API client with</span>
+      <span class="block text-5xl sm:text-6xl lg:text-7xl gradient-text">nothing behind a paywall.</span>
     </h1>
 
     <!-- Subheadline -->
-    <p class="text-center text-lg sm:text-xl text-[var(--text-sub-600)] max-w-2xl mx-auto leading-relaxed mb-10" style="animation: fade-up 0.6s ease-out 0.2s both;">
-      Send requests, inspect responses, replay scraping sessions.
+    <p class="text-center text-lg sm:text-xl text-[var(--text-sub-600)] max-w-3xl mx-auto leading-relaxed mb-10" style="animation: fade-up 0.6s ease-out 0.2s both;">
+      Unlimited history, unlimited environment variables, unlimited collection runs, built-in load testing, and <code class="font-mono text-[var(--primary-light)] text-base">{'{{var}}'}</code> autocomplete everywhere.
       <br class="hidden sm:block" />
-      No account. No cloud. No subscription. Local-first. Always yours.
+      Everything Postman locks behind $19 a seat, shipped free in an Electron app you can read on GitHub. Plus a first-class <a href="https://scrape.do" target="_blank" rel="noopener" class="text-[var(--primary-light)] hover:underline">scrape.do</a> proxy mode for when you are hitting real-world sites.
     </p>
 
     <!-- CTAs -->
     <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20" style="animation: fade-up 0.6s ease-out 0.3s both;">
-      <Button variant="primary" size="lg" asChild client:load>
-        <a href="#download">
+      <Button variant="primary" size="lg" asChild >
+        <a href="#download" class="inline-flex items-center gap-2">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
           </svg>
           Download for Mac
         </a>
       </Button>
-      <Button variant="neutral" size="lg" asChild client:load>
-        <a href="https://github.com/scrapeman" target="_blank" rel="noopener">
+      <Button variant="neutral" size="lg" asChild >
+        <a href="https://github.com/scrape-do/scrapeman" target="_blank" rel="noopener" class="inline-flex items-center gap-2">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
           </svg>
@@ -72,7 +75,7 @@ import { Badge } from '@/components/ui/Badge';
             <div class="flex items-center gap-2 px-3 py-1 rounded-md bg-[var(--bg-white-0)] text-xs text-[var(--text-soft-400)] font-mono">
               <span class="text-[var(--success-base)] text-xs">●</span>
               GET
-              <span class="text-[var(--primary-light)]">https://api.scrape.do/v1/scrape</span>
+              <span class="text-[var(--primary-light)] truncate max-w-[420px]">{'http://api.scrape.do/?url=https%3A%2F%2Fhttpbin.co%2Fanything&token={{token}}'}</span>
             </div>
           </div>
           <div class="w-16"></div>
@@ -85,19 +88,23 @@ import { Badge } from '@/components/ui/Badge';
             <div class="px-2 py-1 text-[var(--text-soft-400)] text-[10px] font-sans font-semibold tracking-widest uppercase mb-2">Requests</div>
             <div class="flex items-center gap-2 px-2 py-1.5 rounded-md bg-[var(--primary-alpha-10)] border border-[var(--stroke-soft-200)]">
               <span class="text-[var(--success-base)] font-semibold text-[10px]">GET</span>
-              <span class="text-[var(--text-strong-950)] truncate">Scrape Target</span>
+              <span class="text-[var(--text-strong-950)] truncate">Repo details</span>
             </div>
             <div class="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-[var(--bg-weak-50)]">
               <span class="text-blue-400 font-semibold text-[10px]">POST</span>
-              <span class="text-[var(--text-sub-600)] truncate">Auth Token</span>
+              <span class="text-[var(--text-sub-600)] truncate">OAuth2 token</span>
             </div>
             <div class="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-[var(--bg-weak-50)]">
               <span class="text-[var(--success-base)] font-semibold text-[10px]">GET</span>
-              <span class="text-[var(--text-sub-600)] truncate">Product List</span>
+              <span class="text-[var(--text-sub-600)] truncate">List issues</span>
             </div>
             <div class="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-[var(--bg-weak-50)]">
-              <span class="text-[var(--success-base)] font-semibold text-[10px]">GET</span>
-              <span class="text-[var(--text-sub-600)] truncate">Price History</span>
+              <span class="text-yellow-500 font-semibold text-[10px]">PUT</span>
+              <span class="text-[var(--text-sub-600)] truncate">Update file</span>
+            </div>
+            <div class="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-[var(--bg-weak-50)]">
+              <span class="text-[var(--primary-light)] font-semibold text-[10px]">PROXY</span>
+              <span class="text-[var(--text-sub-600)] truncate">scrape.do · JS render</span>
             </div>
           </div>
 
@@ -124,13 +131,13 @@ import { Badge } from '@/components/ui/Badge';
             <!-- Response body -->
             <div class="flex-1 p-4 overflow-auto">
               <pre class="text-[11px] leading-relaxed"><code><span class="text-[var(--stroke-strong-950)]">{'{'}</span>
-  <span class="text-[var(--primary-light)]">"status"</span><span class="text-[var(--text-soft-400)]">:</span> <span class="text-[var(--success-base)]">"success"</span><span class="text-[var(--text-soft-400)]">,</span>
-  <span class="text-[var(--primary-light)]">"url"</span><span class="text-[var(--text-soft-400)]">:</span> <span class="text-[var(--success-base)]">"https://shop.example.com/products"</span><span class="text-[var(--text-soft-400)]">,</span>
-  <span class="text-[var(--primary-light)]">"content"</span><span class="text-[var(--text-soft-400)]">:</span> <span class="text-[var(--success-base)]">"&lt;!DOCTYPE html&gt;..."</span><span class="text-[var(--text-soft-400)]">,</span>
-  <span class="text-[var(--primary-light)]">"resolvedUrl"</span><span class="text-[var(--text-soft-400)]">:</span> <span class="text-[var(--success-base)]">"https://shop.example.com/products?page=1"</span><span class="text-[var(--text-soft-400)]">,</span>
-  <span class="text-[var(--primary-light)]">"cookies"</span><span class="text-[var(--text-soft-400)]">:</span> <span class="text-[var(--stroke-strong-950)]">{'['}</span>
-    <span class="text-[var(--stroke-strong-950)]">{'{'}</span> <span class="text-[var(--primary-light)]">"name"</span><span class="text-[var(--text-soft-400)]">:</span> <span class="text-[var(--success-base)]">"session_id"</span><span class="text-[var(--text-soft-400)]">,</span> <span class="text-[var(--primary-light)]">"value"</span><span class="text-[var(--text-soft-400)]">:</span> <span class="text-[var(--success-base)]">"abc123"</span> <span class="text-[var(--stroke-strong-950)]">{'}'}</span>
-  <span class="text-[var(--stroke-strong-950)]">{']'}</span>
+  <span class="text-[var(--primary-light)]">"id"</span><span class="text-[var(--text-soft-400)]">:</span> <span class="text-[var(--success-base)]">904212041</span><span class="text-[var(--text-soft-400)]">,</span>
+  <span class="text-[var(--primary-light)]">"name"</span><span class="text-[var(--text-soft-400)]">:</span> <span class="text-[var(--success-base)]">"scrapeman"</span><span class="text-[var(--text-soft-400)]">,</span>
+  <span class="text-[var(--primary-light)]">"full_name"</span><span class="text-[var(--text-soft-400)]">:</span> <span class="text-[var(--success-base)]">"scrape-do/scrapeman"</span><span class="text-[var(--text-soft-400)]">,</span>
+  <span class="text-[var(--primary-light)]">"description"</span><span class="text-[var(--text-soft-400)]">:</span> <span class="text-[var(--success-base)]">"The unlimited API client"</span><span class="text-[var(--text-soft-400)]">,</span>
+  <span class="text-[var(--primary-light)]">"license"</span><span class="text-[var(--text-soft-400)]">:</span> <span class="text-[var(--stroke-strong-950)]">{'{'}</span> <span class="text-[var(--primary-light)]">"spdx_id"</span><span class="text-[var(--text-soft-400)]">:</span> <span class="text-[var(--success-base)]">"Apache-2.0"</span> <span class="text-[var(--stroke-strong-950)]">{'}'}</span><span class="text-[var(--text-soft-400)]">,</span>
+  <span class="text-[var(--primary-light)]">"stargazers_count"</span><span class="text-[var(--text-soft-400)]">:</span> <span class="text-[var(--success-base)]">1337</span><span class="text-[var(--text-soft-400)]">,</span>
+  <span class="text-[var(--primary-light)]">"open_issues"</span><span class="text-[var(--text-soft-400)]">:</span> <span class="text-[var(--success-base)]">0</span>
 <span class="text-[var(--stroke-strong-950)]">{'}'}</span></code></pre>
             </div>
           </div>
@@ -141,10 +148,10 @@ import { Badge } from '@/components/ui/Badge';
     <!-- Trust signals -->
     <div class="flex flex-wrap justify-center gap-6 mt-12 text-xs text-[var(--text-soft-400)]" style="animation: fade-in 0.6s ease-out 0.8s both;">
       {[
+        'Unlimited history',
         'No account required',
-        'No telemetry',
-        'Stores data locally',
-        'Free & open source',
+        'Local YAML + SQLite',
+        'Apache 2.0 on GitHub',
       ].map(label => (
         <span class="flex items-center gap-1.5">
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none">

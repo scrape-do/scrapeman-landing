@@ -4,3 +4,9 @@ dist/
 .env
 .env.*
 !.env.example
+
+# Claude Code agent state (local-only)
+.claude/worktrees/
+
+# Scratch review notes from agent runs
+REVIEW_*.md

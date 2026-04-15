@@ -10,62 +10,68 @@ import { Button } from '@/components/ui/Button';
       <div class="relative reveal">
         <p class="section-label mb-4">Download</p>
         <h2 class="text-4xl sm:text-5xl font-bold tracking-tighter text-[var(--text-strong-950)] mb-6">
-          Start scraping<br />
-          <span class="gradient-text">without compromise.</span>
+          Grab the binary.<br />
+          <span class="gradient-text">Keep it forever.</span>
         </h2>
-        <p class="text-[var(--text-sub-600)] text-lg mb-12 max-w-lg mx-auto leading-relaxed">
-          Free. Local-first. No account. No subscription. No data ever leaves your machine.
+        <p class="text-[var(--text-sub-600)] text-lg mb-12 max-w-xl mx-auto leading-relaxed">
+          Pre-built installers for macOS, Windows, and Linux. Apache 2.0. Every release is on GitHub, ad-hoc signed, ready to run offline.
         </p>
 
         <!-- Download buttons -->
         <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
-          <Button variant="primary" size="lg" asChild client:load>
-            <a href="#" class="w-full sm:w-auto justify-center">
+          <Button variant="primary" size="lg" asChild >
+            <a href="https://github.com/scrape-do/scrapeman/releases/latest" target="_blank" rel="noopener" class="inline-flex items-center gap-2 w-full sm:w-auto justify-center">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
               </svg>
-              Download for macOS
+              macOS, Windows, Linux
             </a>
           </Button>
-          <div class="flex flex-col items-center gap-1">
-            <span class="text-xs text-[var(--text-soft-400)]">Windows &amp; Linux</span>
-            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--stroke-soft-200)] text-xs text-[var(--text-soft-400)]">
-              <span class="w-1.5 h-1.5 rounded-full bg-[var(--primary-light)]"></span>
-              Coming soon
-            </span>
-          </div>
+          <Button variant="neutral" size="lg" asChild >
+            <a href="https://github.com/scrape-do/scrapeman" target="_blank" rel="noopener" class="inline-flex items-center gap-2 w-full sm:w-auto justify-center">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+              </svg>
+              View source on GitHub
+            </a>
+          </Button>
         </div>
 
         <!-- Version + requirements -->
         <p class="text-xs text-[var(--text-soft-400)] mb-12">
-          macOS 13.0+ · Apple Silicon &amp; Intel · Free forever
+          macOS 13.0+ (Apple Silicon + Intel) · Windows 10+ (x64) · Linux (AppImage + .deb, x64) · Free forever
         </p>
 
         <!-- Three promises -->
         <div class="grid sm:grid-cols-3 gap-6 text-sm">
-          {[
-            {
-              icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-              title: 'Your data, your machine',
-              desc: 'All requests, responses, and cookies live on your disk. Nothing is uploaded anywhere.',
-            },
-            {
-              icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-              title: 'No subscription cliff',
-              desc: 'Free forever. No trial period. No premium tier that locks your history behind a paywall.',
-            },
-            {
-              icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-              title: 'Open source',
-              desc: 'Audit the code, contribute a feature, or fork it. Built in the open on GitHub.',
-            },
-          ].map(item => (
-            <div class="flex flex-col items-center gap-3 p-5 rounded-xl border border-[var(--stroke-soft-200)] bg-[var(--bg-weak-50)]" style="background-color: color-mix(in srgb, var(--bg-weak-50) 50%, transparent);">
-              <div class="text-[var(--primary-light)]"><Fragment set:html={item.icon} /></div>
-              <p class="font-semibold text-[var(--text-strong-950)]">{item.title}</p>
-              <p class="text-[var(--text-soft-400)] text-xs leading-relaxed">{item.desc}</p>
+          <div class="flex flex-col items-center gap-3 p-5 rounded-xl border border-[var(--stroke-soft-200)] bg-[var(--bg-weak-50)]">
+            <div class="text-[var(--primary-light)]">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
             </div>
-          ))}
+            <p class="font-semibold text-[var(--text-strong-950)]">Your data, your disk</p>
+            <p class="text-[var(--text-soft-400)] text-xs leading-relaxed">Collections live as YAML in your chosen workspace folder. History, cookies, and state live in app data. Nothing ever leaves your machine.</p>
+          </div>
+          <div class="flex flex-col items-center gap-3 p-5 rounded-xl border border-[var(--stroke-soft-200)] bg-[var(--bg-weak-50)]">
+            <div class="text-[var(--primary-light)]">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 8v4l3 3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <p class="font-semibold text-[var(--text-strong-950)]">No paywall, ever</p>
+            <p class="text-[var(--text-soft-400)] text-xs leading-relaxed">Postman free caps history at 25 requests and locks OAuth2 behind $19 a seat. Scrapeman has no tiers because the whole thing is free.</p>
+          </div>
+          <div class="flex flex-col items-center gap-3 p-5 rounded-xl border border-[var(--stroke-soft-200)] bg-[var(--bg-weak-50)]">
+            <div class="text-[var(--primary-light)]">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <p class="font-semibold text-[var(--text-strong-950)]">Apache 2.0</p>
+            <p class="text-[var(--text-soft-400)] text-xs leading-relaxed">The whole codebase is on GitHub under Apache 2.0. Read it, file an issue, or fork it. Trademarks excluded, everything else is yours.</p>
+          </div>
         </div>
       </div>
     </div>

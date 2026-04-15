@@ -6,10 +6,10 @@
     <div class="grid lg:grid-cols-2 gap-16 items-center">
       <!-- Left: text -->
       <div class="reveal-left">
-        <p class="section-label mb-3">Scraping-native</p>
+        <p class="section-label mb-3">How it works</p>
         <h2 class="text-3xl sm:text-4xl font-bold tracking-tighter text-[var(--text-strong-950)] mb-6">
-          Designed around the<br />
-          <span class="gradient-text">scraping workflow.</span>
+          Build, send,<br />
+          <span class="gradient-text">and load-test.</span>
         </h2>
         <div class="space-y-5 text-[var(--text-sub-600)]">
           <div class="flex gap-3">
@@ -17,8 +17,8 @@
               <span class="text-[var(--primary-light)] text-xs font-bold">1</span>
             </div>
             <div>
-              <p class="font-semibold text-[var(--text-strong-950)] mb-1">Fire your first request</p>
-              <p class="text-sm text-[var(--text-soft-400)] leading-relaxed">Paste a URL, pick a method, hit send. Scrapeman sets Content-Type, Accept, and User-Agent automatically — exactly like a real browser would.</p>
+              <p class="font-semibold text-[var(--text-strong-950)] mb-1">Build the request</p>
+              <p class="text-sm text-[var(--text-soft-400)] leading-relaxed">URL bar with <code class="font-mono text-[var(--primary-light)]">{'{{var}}'}</code> autocomplete. Environment vars resolve across URL, headers, body, auth, and proxy. Params tab stays two-way synced with the query string.</p>
             </div>
           </div>
           <div class="flex gap-3">
@@ -26,8 +26,8 @@
               <span class="text-[var(--primary-light)] text-xs font-bold">2</span>
             </div>
             <div>
-              <p class="font-semibold text-[var(--text-strong-950)] mb-1">Inspect the response</p>
-              <p class="text-sm text-[var(--text-soft-400)] leading-relaxed">Gzip, Brotli, Deflate — all decoded automatically. Large responses don't choke the UI. Save multi-MB payloads straight to disk.</p>
+              <p class="font-semibold text-[var(--text-strong-950)] mb-1">Send with any config</p>
+              <p class="text-sm text-[var(--text-soft-400)] leading-relaxed">Any auth scheme, any HTTP version, any proxy. Per-request timeouts and redirect rules. Flip the scrape.do toggle when you need residential rotation or JS rendering.</p>
             </div>
           </div>
           <div class="flex gap-3">
@@ -35,8 +35,8 @@
               <span class="text-[var(--primary-light)] text-xs font-bold">3</span>
             </div>
             <div>
-              <p class="font-semibold text-[var(--text-strong-950)] mb-1">Replay with state</p>
-              <p class="text-sm text-[var(--text-soft-400)] leading-relaxed">Cookies persist between restarts. OAuth2 tokens are cached. Your scraping session survives a reboot — pick up exactly where you left off.</p>
+              <p class="font-semibold text-[var(--text-strong-950)] mb-1">Replay, diff, or load-test</p>
+              <p class="text-sm text-[var(--text-soft-400)] leading-relaxed">Every send writes to local JSONL history, template-preserving so <code class="font-mono text-[var(--primary-light)]">{'{{token}}'}</code> stays <code class="font-mono text-[var(--primary-light)]">{'{{token}}'}</code> on disk. Restore in one click, or run 1000 iterations through the load runner with a response validator.</p>
             </div>
           </div>
         </div>

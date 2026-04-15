@@ -74,10 +74,10 @@ const differences = [
 
         <h1 class="text-4xl sm:text-5xl font-bold tracking-tighter text-[var(--text-strong-950)] mb-6" style="animation: fade-up 0.5s ease-out 0.1s both;">
           Postman is powerful.<br />
-          <span class="gradient-text">You shouldn't need an account to use it.</span>
+          <span class="gradient-text">Postman also wants your account.</span>
         </h1>
         <p class="text-lg text-[var(--text-sub-600)] max-w-2xl mx-auto leading-relaxed" style="animation: fade-up 0.5s ease-out 0.2s both;">
-          Postman built the category. But it evolved into a cloud-first team platform that requires an account, syncs your requests to their servers, and locks history behind a paywall. Scrapeman is the opposite.
+          Postman built the category. Then the subscription arrived. A free account caps history at 25 requests. A team seat is $19 a month. Collections sync to their cloud by default. Scrapeman does the opposite of all three, and the whole codebase was written by Claude Opus in public.
         </p>
       </div>
     </section>
@@ -122,11 +122,8 @@ const differences = [
         </div>
         <div class="space-y-8">
           {differences.map((diff) => (
-            <div class="reveal grid sm:grid-cols-[auto_1fr_1fr] gap-6 items-start p-6 rounded-2xl border border-[var(--stroke-soft-200)] bg-[var(--bg-weak-50)]">
-              <div class="text-[var(--primary-light)] hidden sm:block mt-1">
-                <Fragment set:html={diff.icon} />
-              </div>
-              <div class="sm:col-span-2 grid sm:grid-cols-2 gap-6">
+            <div class="reveal grid sm:grid-cols-2 gap-6 p-6 rounded-2xl border border-[var(--stroke-soft-200)] bg-[var(--bg-weak-50)]">
+              <div class="contents">
                 <div>
                   <div class="flex items-center gap-2 mb-2">
                     <span class="text-xs font-semibold text-[var(--error-base)] uppercase tracking-wide">Postman</span>
@@ -158,7 +155,7 @@ const differences = [
           Scrapeman is free forever. No account. No trial. No surprise billing.
         </p>
         <Button variant="primary" size="lg" asChild>
-          <a href="/#download">
+          <a href="/#download" class="inline-flex items-center gap-2">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
               <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
