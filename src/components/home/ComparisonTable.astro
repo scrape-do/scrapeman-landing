@@ -1,44 +1,42 @@
 ---
 const rows = [
-  { feature: 'Local storage (no cloud)', scrapeman: true, postman: false, bruno: true, insomnia: false },
-  { feature: 'No account required', scrapeman: true, postman: false, bruno: true, insomnia: false },
-  { feature: 'Auto-decompress gzip/brotli', scrapeman: true, postman: false, bruno: false, insomnia: false },
-  { feature: 'Persistent cookie jar', scrapeman: true, postman: true, bruno: false, insomnia: true },
-  { feature: 'SSE event streaming', scrapeman: true, postman: false, bruno: false, insomnia: false },
-  { feature: '2MB+ body + save to disk', scrapeman: true, postman: false, bruno: false, insomnia: false },
-  { feature: 'AWS SigV4 auth', scrapeman: true, postman: true, bruno: true, insomnia: true },
-  { feature: 'OAuth2 client credentials', scrapeman: true, postman: true, bruno: true, insomnia: true },
-  { feature: 'Auto-set Content-Type', scrapeman: true, postman: true, bruno: false, insomnia: true },
+  { feature: 'Unlimited request history', scrapeman: true, postman: false, bruno: true, insomnia: false },
+  { feature: 'Unlimited environment variables', scrapeman: true, postman: false, bruno: true, insomnia: true },
+  { feature: 'Unlimited collection runs', scrapeman: true, postman: false, bruno: true, insomnia: false },
+  { feature: 'Single-request load runner', scrapeman: true, postman: false, bruno: false, insomnia: false },
+  { feature: 'Git-friendly file format', scrapeman: true, postman: false, bruno: true, insomnia: false },
+  { feature: 'Native scrape.do proxy mode', scrapeman: true, postman: false, bruno: false, insomnia: false },
+  { feature: 'HTTP/2 toggle (undici allowH2)', scrapeman: true, postman: true, bruno: false, insomnia: false },
+  { feature: 'OAuth2 all flows', scrapeman: true, postman: false, bruno: true, insomnia: true },
+  { feature: 'AWS Signature v4 auth', scrapeman: true, postman: false, bruno: true, insomnia: true },
+  { feature: 'Local-first (no cloud sync)', scrapeman: true, postman: false, bruno: true, insomnia: false },
   { feature: 'Free forever', scrapeman: true, postman: false, bruno: true, insomnia: false },
   { feature: 'Open source', scrapeman: true, postman: false, bruno: true, insomnia: false },
 ];
-
-const Yes = () => '<span class="badge-yes"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Yes</span>';
-const No = () => '<span class="badge-no"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M3 3l6 6M9 3l-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>No</span>';
 ---
 
-<section class="py-28 bg-bg-surface/30">
+<section class="py-28" style="background-color: color-mix(in srgb, var(--bg-weak-50) 30%, transparent);">
   <div class="max-w-6xl mx-auto px-6">
     <!-- Section header -->
     <div class="text-center mb-14 reveal">
       <p class="section-label mb-3">Comparison</p>
-      <h2 class="text-3xl sm:text-4xl font-bold tracking-tighter text-ink-1 mb-4">
+      <h2 class="text-3xl sm:text-4xl font-bold tracking-tighter text-[var(--text-strong-950)] mb-4">
         How Scrapeman stacks up
       </h2>
-      <p class="text-ink-2 max-w-lg mx-auto">
-        We picked the features that actually matter for scraping workflows.
+      <p class="text-[var(--text-sub-600)] max-w-xl mx-auto">
+        The Postman column reflects the free tier. Any feature locked behind a paid seat counts as unavailable.
       </p>
     </div>
 
     <!-- Table -->
-    <div class="reveal overflow-x-auto rounded-2xl border border-border">
+    <div class="reveal overflow-x-auto rounded-2xl border border-[var(--stroke-soft-200)]">
       <table class="w-full text-sm border-collapse">
         <thead>
-          <tr class="bg-bg-elevated border-b border-border">
-            <th class="text-left px-6 py-4 font-semibold text-ink-2 w-1/2">Feature</th>
+          <tr class="bg-[var(--bg-soft-200)] border-b border-[var(--stroke-soft-200)]">
+            <th class="text-left px-6 py-4 font-semibold text-[var(--text-sub-600)] w-1/2">Feature</th>
             <th class="px-6 py-4 font-semibold text-center">
-              <span class="inline-flex items-center gap-1.5 text-accent-light">
-                <span class="w-5 h-5 rounded bg-accent flex items-center justify-center">
+              <span class="inline-flex items-center gap-1.5 text-[var(--primary-light)]">
+                <span class="w-5 h-5 rounded bg-[var(--primary-base)] flex items-center justify-center">
                   <svg width="10" height="10" viewBox="0 0 16 16" fill="none">
                     <circle cx="8" cy="8" r="3" fill="white" opacity="0.9"/>
                     <path d="M8 1L8 3M8 13L8 15M1 8L3 8M13 8L15 8" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
@@ -47,26 +45,38 @@ const No = () => '<span class="badge-no"><svg width="10" height="10" viewBox="0 
                 Scrapeman
               </span>
             </th>
-            <th class="px-6 py-4 font-semibold text-center text-ink-2">Postman</th>
-            <th class="px-6 py-4 font-semibold text-center text-ink-2">Bruno</th>
-            <th class="px-6 py-4 font-semibold text-center text-ink-2">Insomnia</th>
+            <th class="px-6 py-4 font-semibold text-center text-[var(--text-sub-600)]">Postman</th>
+            <th class="px-6 py-4 font-semibold text-center text-[var(--text-sub-600)]">Bruno</th>
+            <th class="px-6 py-4 font-semibold text-center text-[var(--text-sub-600)]">Insomnia</th>
           </tr>
         </thead>
         <tbody>
           {rows.map((row, i) => (
-            <tr class:list={['border-b border-border last:border-0 transition-colors hover:bg-bg-surface/50', i % 2 === 0 ? 'bg-transparent' : 'bg-bg-surface/20']}>
-              <td class="px-6 py-3.5 text-ink-2">{row.feature}</td>
+            <tr class:list={['border-b border-[var(--stroke-soft-200)] last:border-0 transition-colors hover:bg-[var(--bg-weak-50)]', i % 2 !== 0 && 'bg-[var(--bg-white-0)]']}>
+              <td class="px-6 py-3.5 text-[var(--text-sub-600)]">{row.feature}</td>
               <td class="px-6 py-3.5 text-center">
-                <Fragment set:html={row.scrapeman ? Yes() : No()} />
+                {row.scrapeman
+                  ? <span class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold bg-[var(--success-alpha-10)] text-[var(--success-base)]">Yes</span>
+                  : <span class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold bg-[var(--error-alpha-10)] text-[var(--error-base)]">No</span>
+                }
               </td>
               <td class="px-6 py-3.5 text-center">
-                <Fragment set:html={row.postman ? Yes() : No()} />
+                {row.postman
+                  ? <span class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold bg-[var(--success-alpha-10)] text-[var(--success-base)]">Yes</span>
+                  : <span class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold bg-[var(--error-alpha-10)] text-[var(--error-base)]">No</span>
+                }
               </td>
               <td class="px-6 py-3.5 text-center">
-                <Fragment set:html={row.bruno ? Yes() : No()} />
+                {row.bruno
+                  ? <span class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold bg-[var(--success-alpha-10)] text-[var(--success-base)]">Yes</span>
+                  : <span class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold bg-[var(--error-alpha-10)] text-[var(--error-base)]">No</span>
+                }
               </td>
               <td class="px-6 py-3.5 text-center">
-                <Fragment set:html={row.insomnia ? Yes() : No()} />
+                {row.insomnia
+                  ? <span class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold bg-[var(--success-alpha-10)] text-[var(--success-base)]">Yes</span>
+                  : <span class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold bg-[var(--error-alpha-10)] text-[var(--error-base)]">No</span>
+                }
               </td>
             </tr>
           ))}
@@ -81,7 +91,7 @@ const No = () => '<span class="badge-no"><svg width="10" height="10" viewBox="0 
         { label: 'Full breakdown vs Bruno', href: '/vs/bruno' },
         { label: 'Full breakdown vs Insomnia', href: '/vs/insomnia' },
       ].map(link => (
-        <a href={link.href} class="inline-flex items-center gap-1.5 text-sm text-accent-light hover:text-ink-1 transition-colors group">
+        <a href={link.href} class="inline-flex items-center gap-1.5 text-sm text-[var(--primary-light)] hover:text-[var(--text-strong-950)] transition-colors group">
           {link.label}
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover:translate-x-0.5 transition-transform">
             <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>

@@ -14,10 +14,10 @@ export default {
           strong: '#2d2d3d',
         },
         accent: {
-          DEFAULT: '#6366f1',
-          light: '#818cf8',
-          dark: '#4f46e5',
-          violet: '#a78bfa',
+          DEFAULT: '#ff6c37',
+          light: '#ff8f66',
+          dark: '#e5541f',
+          warm: '#ffb388',
         },
         ink: {
           1: '#f8f8ff',

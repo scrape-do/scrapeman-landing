@@ -1,40 +1,42 @@
 ---
+import FeatureCard from './FeatureCard.astro';
+
 const features = [
   {
-    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-    title: 'Gzip · Brotli · Deflate',
-    desc: 'Response bodies are automatically decompressed. No manual Accept-Encoding juggling — just readable content, always.',
-    tag: 'Zero config',
+    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 8v4l3 3" stroke-linecap="round"/><circle cx="12" cy="12" r="9"/></svg>`,
+    title: 'Unlimited history',
+    desc: 'Every request you have ever sent writes to a local JSONL file, template-preserving so secrets stay as {{var}} on disk. Postman caps free history at 25 requests. Scrapeman has no cap and no tier.',
+    tag: 'Postman paid → free',
   },
   {
-    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-    title: 'SSE Streaming',
-    desc: 'Watch Server-Sent Events arrive in real time. Full event log with data, id, and event type — perfect for debugging AI APIs.',
-    tag: 'Real-time',
+    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3v18h18" stroke-linecap="round"/><path d="M7 14l4-4 4 3 5-6" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+    title: 'Single-request load runner',
+    desc: 'Bounded concurrency, live p50/p95/p99 latency, status histogram, and a built-in response validator. Run 1000 hits at an endpoint without buying a Postman Cloud seat.',
+    tag: 'Nobody else ships this',
   },
   {
-    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>`,
-    title: 'Persistent Cookie Jar',
-    desc: 'Cookies survive restarts. Your scraping session state is saved to disk automatically — no re-login on every run.',
-    tag: 'Persists restarts',
+    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3v12M6 21a3 3 0 100-6 3 3 0 000 6zM18 9a3 3 0 100-6 3 3 0 000 6zM18 9a6 6 0 01-6 6H9" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+    title: 'Git-friendly YAML collections',
+    desc: 'One .req.yaml file per request with stable key order. Merge conflicts look like real diffs, not JSON soup. Share collections through git instead of a Postman workspace.',
+    tag: 'One file per request',
   },
   {
-    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4" stroke-linecap="round"/></svg>`,
-    title: 'Auto-Headers Engine',
-    desc: 'Content-Type, Accept, and User-Agent are set automatically based on request type. Override or disable per-request.',
-    tag: 'Postman parity',
-  },
-  {
-    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-    title: 'Large Response Handling',
-    desc: '2MB+ response bodies are captured and can be saved directly to disk. No more browser tab crashes on big payloads.',
-    tag: '2MB+ bodies',
+    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 7h16M4 12h16M4 17h10" stroke-linecap="round"/><circle cx="18" cy="17" r="2"/></svg>`,
+    title: '{{var}} with autocomplete',
+    desc: 'Environment variables resolve across URL, headers, body, auth, proxy, and scrape-do fields. Dynamic built-ins like {{uuid}}, {{timestamp}}, and {{randomInt}} re-roll each send.',
+    tag: 'With dynamics',
   },
   {
     icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4" stroke-linecap="round"/></svg>`,
-    title: 'Every Auth Scheme',
-    desc: 'Basic, Bearer, API Key, OAuth2 client credentials, and AWS SigV4. Tokens are cached and auto-refreshed before expiry.',
-    tag: '5 schemes',
+    title: 'Every auth scheme, free',
+    desc: 'Basic, Bearer, API Key, OAuth2 client credentials, and AWS SigV4. Tokens cache, refresh before expiry, and share across concurrent sends so you do not double-fetch. Postman gates OAuth2 behind a paid plan.',
+    tag: '5 schemes, no paywall',
+  },
+  {
+    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+    title: 'Native scrape.do proxy',
+    desc: 'Flip one toggle to route through scrape.do: residential rotation, JS rendering, geo targeting, ban retry. No side plugin, no config juggling. The only API client that ships this first-class.',
+    tag: 'First-class proxy',
   },
 ];
 ---
@@ -44,30 +46,19 @@ const features = [
     <!-- Section header -->
     <div class="text-center mb-16 reveal">
       <p class="section-label mb-3">Features</p>
-      <h2 class="text-3xl sm:text-4xl font-bold tracking-tighter text-ink-1 mb-4">
-        Everything a scraping engineer needs.<br />
-        <span class="gradient-text">Nothing you don't.</span>
+      <h2 class="text-3xl sm:text-4xl font-bold tracking-tighter text-[var(--text-strong-950)] mb-4">
+        The features Postman charges for.<br />
+        <span class="gradient-text">Plus one Postman does not have.</span>
       </h2>
-      <p class="text-ink-2 max-w-xl mx-auto">
-        Built from real pain points. Every feature exists because a scraping engineer hit a wall with every other client.
+      <p class="text-[var(--text-sub-600)] max-w-2xl mx-auto">
+        Scrapeman was built by scrape.do to give every API developer Postman's paid features for free, with first-class proxy support on top. Every row below maps to a line on the Postman pricing page you have to pay for.
       </p>
     </div>
 
     <!-- Feature grid -->
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 reveal" data-stagger>
       {features.map(f => (
-        <div class="glow-card group" data-stagger-child>
-          <!-- Icon -->
-          <div class="w-10 h-10 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center text-accent-light mb-4 group-hover:bg-accent/15 transition-colors">
-            <Fragment set:html={f.icon} />
-          </div>
-          <!-- Tag -->
-          <span class="inline-block px-2 py-0.5 rounded-md bg-bg text-[10px] font-semibold text-ink-3 uppercase tracking-widest border border-border mb-3">
-            {f.tag}
-          </span>
-          <h3 class="font-semibold text-ink-1 mb-2">{f.title}</h3>
-          <p class="text-sm text-ink-3 leading-relaxed">{f.desc}</p>
-        </div>
+        <FeatureCard icon={f.icon} tag={f.tag} title={f.title} desc={f.desc} />
       ))}
     </div>
   </div>

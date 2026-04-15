@@ -1,0 +1,68 @@
+---
+---
+
+<section class="py-28 border-y border-[var(--stroke-soft-200)] relative overflow-hidden">
+  <!-- subtle background accent -->
+  <div class="pointer-events-none absolute inset-0">
+    <div class="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full bg-[var(--primary-alpha-10)] blur-[120px] opacity-60"></div>
+  </div>
+
+  <div class="relative max-w-4xl mx-auto px-6 text-center reveal">
+    <p class="section-label mb-4">Built in the open</p>
+    <h2 class="text-3xl sm:text-5xl font-bold tracking-tighter text-[var(--text-strong-950)] mb-6 leading-[1.1]">
+      Vibe-coded by<br />
+      <span class="gradient-text">humans and AI.</span>
+    </h2>
+    <p class="text-[var(--text-sub-600)] text-lg leading-relaxed max-w-2xl mx-auto mb-6">
+      Every feature on this page was designed by a human engineer at scrape.do and typed by Claude. The HTTP engine, the undici proxy wiring, the OAuth2 token refresh, the YAML serializer, the load runner, this landing page. All of it lives on GitHub under Apache 2.0.
+    </p>
+    <p class="text-[var(--text-soft-400)] text-base leading-relaxed max-w-2xl mx-auto mb-10">
+      Postman is a venture-backed company with offices in San Francisco and Bangalore. Bruno has a maintainer team. Scrapeman is a small scrape.do crew guiding an LLM, shipping a feature a day because the tooling finally caught up.
+    </p>
+
+    <!-- Three callouts -->
+    <div class="grid sm:grid-cols-3 gap-4 max-w-3xl mx-auto text-left">
+      <div class="p-5 rounded-xl border border-[var(--stroke-soft-200)] bg-[var(--bg-weak-50)]">
+        <div class="flex items-center gap-2 mb-2">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-[var(--primary-light)]">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 8v4M12 16h.01"/>
+          </svg>
+          <p class="text-[var(--primary-light)] text-xs font-semibold tracking-wide uppercase">Public</p>
+        </div>
+        <p class="text-sm text-[var(--text-sub-600)] leading-relaxed">Public from commit one. No private fork, no delayed drop, no staging repo.</p>
+      </div>
+      <div class="p-5 rounded-xl border border-[var(--stroke-soft-200)] bg-[var(--bg-weak-50)]">
+        <div class="flex items-center gap-2 mb-2">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-[var(--primary-light)]">
+            <path d="M2 12h4l3 9 4-18 3 9h6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <p class="text-[var(--primary-light)] text-xs font-semibold tracking-wide uppercase">Reviewable</p>
+        </div>
+        <p class="text-sm text-[var(--text-sub-600)] leading-relaxed">Each commit message names the human who reviewed the diff before it landed. The LLM does not merge itself.</p>
+      </div>
+      <div class="p-5 rounded-xl border border-[var(--stroke-soft-200)] bg-[var(--bg-weak-50)]">
+        <div class="flex items-center gap-2 mb-2">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-[var(--primary-light)]">
+            <path d="M6 3v12M6 21a3 3 0 100-6 3 3 0 000 6zM18 9a3 3 0 100-6 3 3 0 000 6zM18 9a6 6 0 01-6 6H9" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <p class="text-[var(--primary-light)] text-xs font-semibold tracking-wide uppercase">Forkable</p>
+        </div>
+        <p class="text-sm text-[var(--text-sub-600)] leading-relaxed">Apache 2.0. Copy the parts you like, rename the binary, ship your own. No CLA, no contributor gate, no trademark trap.</p>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap items-center justify-center gap-6 mt-10 text-sm">
+      <a href="https://github.com/scrape-do/scrapeman/commits/main" target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-[var(--primary-light)] hover:text-[var(--text-strong-950)] transition-colors">
+        Read the commit history
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+      <span class="text-[var(--text-soft-400)]">·</span>
+      <a href="https://github.com/scrape-do/scrapeman" target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-[var(--text-sub-600)] hover:text-[var(--text-strong-950)] transition-colors">
+        Star the repo on GitHub
+      </a>
+    </div>
+  </div>
+</section>

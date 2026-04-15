@@ -1,0 +1,23 @@
+---
+import { Badge } from '@/components/ui/Badge';
+
+interface Props {
+  icon: string;
+  tag: string;
+  title: string;
+  desc: string;
+}
+
+const { icon, tag, title, desc } = Astro.props;
+---
+
+<div class="glow-card group" data-stagger-child>
+  <div class="w-10 h-10 rounded-xl bg-[var(--primary-alpha-10)] border border-[var(--stroke-soft-200)] flex items-center justify-center text-[var(--primary-light)] mb-4 group-hover:bg-[var(--primary-alpha-20)] transition-colors">
+    <Fragment set:html={icon} />
+  </div>
+  <div class="mb-3">
+    <Badge variant="neutral">{tag}</Badge>
+  </div>
+  <h3 class="font-semibold text-[var(--text-strong-950)] mb-2">{title}</h3>
+  <p class="text-sm text-[var(--text-soft-400)] leading-relaxed">{desc}</p>
+</div>
