@@ -2,21 +2,21 @@
 const year = new Date().getFullYear();
 ---
 
-<footer class="border-t border-border mt-32">
+<footer class="border-t border-[var(--stroke-soft-200)] mt-32">
   <div class="max-w-6xl mx-auto px-6 py-16">
     <div class="flex flex-col md:flex-row justify-between gap-12">
       <!-- Brand -->
       <div class="max-w-xs">
         <a href="/" class="flex items-center gap-2.5 mb-4">
-          <div class="w-7 h-7 rounded-lg bg-accent flex items-center justify-center">
+          <div class="w-7 h-7 rounded-lg bg-[var(--primary-base)] flex items-center justify-center">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
               <circle cx="8" cy="8" r="3" fill="white" opacity="0.9"/>
               <path d="M8 1L8 3M8 13L8 15M1 8L3 8M13 8L15 8M3.05 3.05L4.46 4.46M11.54 11.54L12.95 12.95M12.95 3.05L11.54 4.46M4.46 11.54L3.05 12.95" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
             </svg>
           </div>
-          <span class="font-bold text-ink-1 tracking-tight">Scrapeman</span>
+          <span class="font-bold text-[var(--text-strong-950)] tracking-tight">Scrapeman</span>
         </a>
-        <p class="text-sm text-ink-3 leading-relaxed">
+        <p class="text-sm text-[var(--text-soft-400)] leading-relaxed">
           The HTTP client built for scraping engineers.<br />
           Local-first. No account. No cloud. No catch.
         </p>
@@ -25,25 +25,25 @@ const year = new Date().getFullYear();
       <!-- Links -->
       <div class="grid grid-cols-2 sm:grid-cols-3 gap-8 text-sm">
         <div>
-          <p class="font-semibold text-ink-1 mb-3">Compare</p>
-          <ul class="space-y-2 text-ink-3">
-            <li><a href="/vs/postman" class="hover:text-ink-1 transition-colors">vs Postman</a></li>
-            <li><a href="/vs/bruno" class="hover:text-ink-1 transition-colors">vs Bruno</a></li>
-            <li><a href="/vs/insomnia" class="hover:text-ink-1 transition-colors">vs Insomnia</a></li>
+          <p class="font-semibold text-[var(--text-strong-950)] mb-3">Compare</p>
+          <ul class="space-y-2 text-[var(--text-soft-400)]">
+            <li><a href="/vs/postman" class="hover:text-[var(--text-strong-950)] transition-colors">vs Postman</a></li>
+            <li><a href="/vs/bruno" class="hover:text-[var(--text-strong-950)] transition-colors">vs Bruno</a></li>
+            <li><a href="/vs/insomnia" class="hover:text-[var(--text-strong-950)] transition-colors">vs Insomnia</a></li>
           </ul>
         </div>
         <div>
-          <p class="font-semibold text-ink-1 mb-3">Product</p>
-          <ul class="space-y-2 text-ink-3">
-            <li><a href="/features" class="hover:text-ink-1 transition-colors">Features</a></li>
-            <li><a href="#download" class="hover:text-ink-1 transition-colors">Download</a></li>
+          <p class="font-semibold text-[var(--text-strong-950)] mb-3">Product</p>
+          <ul class="space-y-2 text-[var(--text-soft-400)]">
+            <li><a href="/features" class="hover:text-[var(--text-strong-950)] transition-colors">Features</a></li>
+            <li><a href="#download" class="hover:text-[var(--text-strong-950)] transition-colors">Download</a></li>
           </ul>
         </div>
         <div>
-          <p class="font-semibold text-ink-1 mb-3">Open Source</p>
-          <ul class="space-y-2 text-ink-3">
+          <p class="font-semibold text-[var(--text-strong-950)] mb-3">Open Source</p>
+          <ul class="space-y-2 text-[var(--text-soft-400)]">
             <li>
-              <a href="https://github.com/scrapeman" target="_blank" rel="noopener" class="hover:text-ink-1 transition-colors">
+              <a href="https://github.com/scrapeman" target="_blank" rel="noopener" class="hover:text-[var(--text-strong-950)] transition-colors">
                 GitHub
               </a>
             </li>
@@ -52,9 +52,9 @@ const year = new Date().getFullYear();
       </div>
     </div>
 
-    <div class="mt-12 pt-8 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-ink-3">
+    <div class="mt-12 pt-8 border-t border-[var(--stroke-soft-200)] flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-[var(--text-soft-400)]">
       <p>© {year} Scrapeman. No tracking. No telemetry. No account required.</p>
-      <p>Built for <a href="https://scrape.do" target="_blank" rel="noopener" class="text-accent-light hover:underline">scrape.do</a> engineers.</p>
+      <p>Built for <a href="https://scrape.do" target="_blank" rel="noopener" class="text-[var(--primary-light)] hover:underline">scrape.do</a> engineers.</p>
     </div>
   </div>
 </footer>
