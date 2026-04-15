@@ -1,4 +1,6 @@
 ---
+import { Badge } from '@/components/ui/Badge';
+
 const features = [
   {
     icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
@@ -44,11 +46,11 @@ const features = [
     <!-- Section header -->
     <div class="text-center mb-16 reveal">
       <p class="section-label mb-3">Features</p>
-      <h2 class="text-3xl sm:text-4xl font-bold tracking-tighter text-ink-1 mb-4">
+      <h2 class="text-3xl sm:text-4xl font-bold tracking-tighter text-[var(--text-strong-950)] mb-4">
         Everything a scraping engineer needs.<br />
         <span class="gradient-text">Nothing you don't.</span>
       </h2>
-      <p class="text-ink-2 max-w-xl mx-auto">
+      <p class="text-[var(--text-sub-600)] max-w-xl mx-auto">
         Built from real pain points. Every feature exists because a scraping engineer hit a wall with every other client.
       </p>
     </div>
@@ -57,16 +59,16 @@ const features = [
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 reveal" data-stagger>
       {features.map(f => (
         <div class="glow-card group" data-stagger-child>
-          <!-- Icon -->
-          <div class="w-10 h-10 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center text-accent-light mb-4 group-hover:bg-accent/15 transition-colors">
+          <!-- Icon container -->
+          <div class="w-10 h-10 rounded-xl bg-[var(--primary-alpha-10)] border border-[var(--stroke-soft-200)] flex items-center justify-center text-[var(--primary-light)] mb-4 group-hover:bg-[var(--primary-alpha-20)] transition-colors">
             <Fragment set:html={f.icon} />
           </div>
-          <!-- Tag -->
-          <span class="inline-block px-2 py-0.5 rounded-md bg-bg text-[10px] font-semibold text-ink-3 uppercase tracking-widest border border-border mb-3">
-            {f.tag}
-          </span>
-          <h3 class="font-semibold text-ink-1 mb-2">{f.title}</h3>
-          <p class="text-sm text-ink-3 leading-relaxed">{f.desc}</p>
+          <!-- Tag badge -->
+          <div class="mb-3">
+            <Badge variant="neutral" client:load>{f.tag}</Badge>
+          </div>
+          <h3 class="font-semibold text-[var(--text-strong-950)] mb-2">{f.title}</h3>
+          <p class="text-sm text-[var(--text-soft-400)] leading-relaxed">{f.desc}</p>
         </div>
       ))}
     </div>
