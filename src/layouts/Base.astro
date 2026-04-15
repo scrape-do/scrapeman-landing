@@ -1,6 +1,12 @@
 ---
 import '../styles/global.css';
 
+interface BreadcrumbItem {
+  name: string;
+  /** Path on scrapeman.io, e.g. "/postman-alternative" */
+  path: string;
+}
+
 interface Props {
   title: string;
   description: string;
@@ -10,9 +16,14 @@ interface Props {
    * Set true on the home page only (one canonical entity per site).
    */
   jsonLdSoftware?: boolean;
+  /**
+   * BreadcrumbList trail for non-home pages. Home is implicit at position 1
+   * and prepended automatically; pass the trail starting from the next level.
+   */
+  breadcrumbs?: BreadcrumbItem[];
 }
 
-const { title, description, ogTitle, jsonLdSoftware = false } = Astro.props;
+const { title, description, ogTitle, jsonLdSoftware = false, breadcrumbs } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, 'https://scrapeman.io');
 const ogImageURL = new URL('/icon.png', 'https://scrapeman.io').toString();
 
@@ -46,6 +57,25 @@ const softwareLd = {
     price: '0',
     priceCurrency: 'USD',
   },
+};
+
+const breadcrumbLd = breadcrumbs && breadcrumbs.length > 0 && {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Home',
+      item: 'https://scrapeman.io',
+    },
+    ...breadcrumbs.map((b, i) => ({
+      '@type': 'ListItem',
+      position: i + 2,
+      name: b.name,
+      item: new URL(b.path, 'https://scrapeman.io').toString(),
+    })),
+  ],
 };
 ---
 
@@ -88,6 +118,9 @@ const softwareLd = {
     <script type="application/ld+json" set:html={JSON.stringify(organizationLd)} />
     {jsonLdSoftware && (
       <script type="application/ld+json" set:html={JSON.stringify(softwareLd)} />
+    )}
+    {breadcrumbLd && (
+      <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
     )}
   </head>
   <body class="min-h-screen">

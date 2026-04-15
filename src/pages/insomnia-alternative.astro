@@ -27,12 +27,20 @@ const comparisons = [
   { feature: 'Community-owned roadmap', scrapeman: true, insomnia: false, good: false },
   { feature: 'Free forever', scrapeman: true, insomnia: false, good: false },
 ];
+
+const honest = [
+  'Insomnia ships GraphQL and gRPC out of the box. Scrapeman is HTTP/HTTPS only today (GraphQL is on the M12 roadmap).',
+  'Plugin ecosystem with community-built plugins for custom auth, response transforms, and integrations. Scrapeman has no plugin layer yet.',
+  'Built-in code generation in many languages via insomnia-codegen. Scrapeman ships hand-written generators for curl, JS fetch, Python, and Go only.',
+  'Insomnia has years of polish behind it, originally designed by Greg Schier (who now builds Yaak). Scrapeman is younger and smaller.',
+];
 ---
 
 <Base
   title="The local-first Insomnia alternative — Scrapeman"
   description="Kong acquired Insomnia in 2023 and forced cloud sync, breaking trust for thousands of users. Scrapeman is the Apache 2.0 alternative no acquisition can change: every byte of your data lives on your disk, forever."
   ogTitle="Scrapeman vs Insomnia"
+  breadcrumbs={[{ name: 'Insomnia alternative', path: '/insomnia-alternative' }]}
 >
   <Header />
   <main>
@@ -150,6 +158,27 @@ const comparisons = [
             </tbody>
           </table>
         </div>
+      </div>
+    </section>
+
+    <!-- Honest concessions -->
+    <section class="py-20 bg-[var(--bg-weak-50)] border-y border-[var(--stroke-soft-200)]">
+      <div class="max-w-3xl mx-auto px-6 reveal">
+        <p class="section-label mb-3 text-center">Where Insomnia wins</p>
+        <h2 class="text-2xl font-bold tracking-tighter text-[var(--text-strong-950)] text-center mb-8">We are not better at everything</h2>
+        <ul class="space-y-3">
+          {honest.map((line) => (
+            <li class="flex gap-3 items-start p-4 rounded-xl border border-[var(--stroke-soft-200)] bg-[var(--bg-white-0)]">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-[var(--success-base)] mt-0.5 shrink-0">
+                <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span class="text-sm text-[var(--text-sub-600)] leading-relaxed">{line}</span>
+            </li>
+          ))}
+        </ul>
+        <p class="text-xs text-[var(--text-soft-400)] text-center mt-6">
+          If GraphQL or gRPC is your hard requirement today, look at Insomnia (or Yaak). If you want a local-first client that no acquisition can take away, try Scrapeman.
+        </p>
       </div>
     </section>
 

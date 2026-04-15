@@ -9,8 +9,16 @@ const pricingComparison = [
   { tier: 'Basic / Solo use', postman: 'Free (limited)', scrapeman: 'Free (unlimited)' },
   { tier: 'History / Collections', postman: '25 requests max (free)', scrapeman: 'Unlimited, local' },
   { tier: 'Team collaboration', postman: '$19/user/month', scrapeman: 'Not applicable (local-first)' },
-  { tier: 'Cloud sync', postman: 'Required for some features', scrapeman: 'Never — all local' },
+  { tier: 'Cloud sync', postman: 'Required for some features', scrapeman: 'Never, all local' },
   { tier: 'Account required', postman: 'Yes', scrapeman: 'No' },
+];
+
+const honest = [
+  '30+ million users and a public API directory. Almost every commercial API has an official Postman collection you can import in one click.',
+  'Built-in API monitoring, mock servers, and hosted documentation publishing. Scrapeman is request-and-response focused, no monitoring layer.',
+  'Pre-request and post-response test scripts in JavaScript, plus the Newman CLI for running collections in CI. Scrapeman has no scripting sandbox today.',
+  'Team workspaces with real-time collaboration, role-based access control, SSO. Scrapeman is local-first by design, so collaboration goes through git.',
+  'Code generation in 20+ languages via postman-code-generators. Scrapeman ships hand-written generators for curl, JS fetch, Python requests, and Go only.',
 ];
 
 const differences = [
@@ -45,6 +53,7 @@ const differences = [
   title="The free open source Postman alternative — Scrapeman"
   description="Postman caps free history at 25 requests, locks OAuth2 behind $19/seat, and syncs collections to its cloud. Scrapeman ships every paid feature for free in an Apache 2.0 desktop app you can run offline."
   ogTitle="Scrapeman vs Postman"
+  breadcrumbs={[{ name: 'Postman alternative', path: '/postman-alternative' }]}
 >
   <Header />
   <main>
@@ -145,8 +154,29 @@ const differences = [
       </div>
     </section>
 
+    <!-- Honest concessions -->
+    <section class="py-20 bg-[var(--bg-weak-50)] border-y border-[var(--stroke-soft-200)]">
+      <div class="max-w-3xl mx-auto px-6 reveal">
+        <p class="section-label mb-3 text-center">Where Postman wins</p>
+        <h2 class="text-2xl font-bold tracking-tighter text-[var(--text-strong-950)] text-center mb-8">We are not better at everything</h2>
+        <ul class="space-y-3">
+          {honest.map((line) => (
+            <li class="flex gap-3 items-start p-4 rounded-xl border border-[var(--stroke-soft-200)] bg-[var(--bg-white-0)]">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-[var(--success-base)] mt-0.5 shrink-0">
+                <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span class="text-sm text-[var(--text-sub-600)] leading-relaxed">{line}</span>
+            </li>
+          ))}
+        </ul>
+        <p class="text-xs text-[var(--text-soft-400)] text-center mt-6">
+          If a hosted mock server, JS test scripts, or 20+ language code generation is your hard requirement today, stay with Postman. If unlimited history, native proxy, and a free OAuth2 flow matter more, try Scrapeman.
+        </p>
+      </div>
+    </section>
+
     <!-- CTA -->
-    <section id="download" class="py-24 text-center bg-[var(--bg-weak-50)]">
+    <section id="download" class="py-24 text-center">
       <div class="max-w-xl mx-auto px-6 reveal">
         <h2 class="text-3xl font-bold tracking-tighter text-[var(--text-strong-950)] mb-4">
           Try it free. Keep it free.

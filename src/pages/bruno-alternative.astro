@@ -47,6 +47,9 @@ const bugs = [
 const comparisons = [
   { feature: 'Local-first (no cloud)', scrapeman: true, bruno: true },
   { feature: 'No account required', scrapeman: true, bruno: true },
+  { feature: 'Git-friendly collection format', scrapeman: true, bruno: true },
+  { feature: 'Single-request load runner', scrapeman: true, bruno: false },
+  { feature: 'Native Scrape.do proxy', scrapeman: true, bruno: false },
   { feature: 'Auto-decompress gzip/brotli', scrapeman: true, bruno: false },
   { feature: 'Persistent cookie jar', scrapeman: true, bruno: false },
   { feature: 'SSE event streaming', scrapeman: true, bruno: false },
@@ -54,10 +57,17 @@ const comparisons = [
   { feature: 'OAuth2 token dedup', scrapeman: true, bruno: false },
   { feature: 'Auto-set Content-Type header', scrapeman: true, bruno: false },
   { feature: 'AWS SigV4 auth', scrapeman: true, bruno: true },
-  { feature: 'Git-friendly collection format', scrapeman: false, bruno: true },
-  { feature: 'Scripting / pre-request scripts', scrapeman: false, bruno: true },
+  { feature: 'Pre-request scripts (JS)', scrapeman: false, bruno: true },
+  { feature: 'GraphQL editor', scrapeman: false, bruno: true },
   { feature: 'Free forever', scrapeman: true, bruno: true },
   { feature: 'Open source', scrapeman: true, bruno: true },
+];
+
+const honest = [
+  'Bruno started the local-first, git-friendly API client niche. The .bru file format has years of community adoption and tutorials.',
+  'Pre-request and post-request scripts in JavaScript, plus the Bruno CLI for CI runners. Scrapeman has no scripting sandbox today.',
+  'Built-in GraphQL editor with introspection. Scrapeman is HTTP/HTTPS only for now — GraphQL is on the roadmap (M12).',
+  'Pure community open source, MIT, no company-backed angle to worry about. Some teams prefer that funding model.',
 ];
 ---
 
@@ -65,6 +75,7 @@ const comparisons = [
   title="The Bruno alternative that fixes 4 open issues — Scrapeman"
   description="Bruno is great for git-friendly collections but has open bugs blocking real work: SSE hangs (#7083), large-response crashes (#7624), cookies dropping between runs (#6903), OAuth2 race conditions (#7565). Scrapeman fixes all four."
   ogTitle="Scrapeman vs Bruno"
+  breadcrumbs={[{ name: 'Bruno alternative', path: '/bruno-alternative' }]}
 >
   <Header />
   <main>
@@ -207,6 +218,27 @@ const comparisons = [
         </div>
         <p class="text-xs text-[var(--text-soft-400)] text-center mt-4">
           Bruno excels at git-native collections and scripting. Scrapeman focuses on scraping-specific reliability.
+        </p>
+      </div>
+    </section>
+
+    <!-- Honest concessions -->
+    <section class="py-20 bg-[var(--bg-weak-50)] border-y border-[var(--stroke-soft-200)]">
+      <div class="max-w-3xl mx-auto px-6 reveal">
+        <p class="section-label mb-3 text-center">Where Bruno wins</p>
+        <h2 class="text-2xl font-bold tracking-tighter text-[var(--text-strong-950)] text-center mb-8">We are not better at everything</h2>
+        <ul class="space-y-3">
+          {honest.map((line) => (
+            <li class="flex gap-3 items-start p-4 rounded-xl border border-[var(--stroke-soft-200)] bg-[var(--bg-white-0)]">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-[var(--success-base)] mt-0.5 shrink-0">
+                <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span class="text-sm text-[var(--text-sub-600)] leading-relaxed">{line}</span>
+            </li>
+          ))}
+        </ul>
+        <p class="text-xs text-[var(--text-soft-400)] text-center mt-6">
+          If JS scripting or GraphQL is your hard requirement today, stay with Bruno. If you also need SSE that does not hang, large responses without crashes, persistent cookies, and a load runner, try Scrapeman.
         </p>
       </div>
     </section>
