@@ -1,0 +1,7 @@
+# 301 redirects from old /vs/* paths to /:product-alternative
+# Renamed in v0.3.0 for SEO (target the "<product> alternative" search query).
+# Cloudflare Pages reads this file from the build output root.
+
+/vs/postman    /postman-alternative    301
+/vs/bruno      /bruno-alternative      301
+/vs/insomnia   /insomnia-alternative   301

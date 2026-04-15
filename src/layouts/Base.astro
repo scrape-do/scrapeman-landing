@@ -5,10 +5,48 @@ interface Props {
   title: string;
   description: string;
   ogTitle?: string;
+  /**
+   * Whether to emit the SoftwareApplication JSON-LD block.
+   * Set true on the home page only (one canonical entity per site).
+   */
+  jsonLdSoftware?: boolean;
 }
 
-const { title, description, ogTitle } = Astro.props;
+const { title, description, ogTitle, jsonLdSoftware = false } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, 'https://scrapeman.io');
+const ogImageURL = new URL('/icon.png', 'https://scrapeman.io').toString();
+
+const organizationLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Scrape.do',
+  url: 'https://scrape.do',
+  logo: 'https://scrapeman.io/icon.png',
+  sameAs: ['https://github.com/scrape-do'],
+};
+
+const softwareLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Scrapeman',
+  description:
+    'An open source API client with nothing behind a paywall. Unlimited history, env vars, collection runs, load testing. Git-friendly YAML collections. Native Scrape.do proxy support.',
+  applicationCategory: 'DeveloperApplication',
+  operatingSystem: 'macOS, Windows, Linux',
+  url: 'https://scrapeman.io',
+  downloadUrl: 'https://github.com/scrape-do/scrapeman/releases/latest',
+  license: 'https://www.apache.org/licenses/LICENSE-2.0',
+  author: {
+    '@type': 'Organization',
+    name: 'Scrape.do',
+    url: 'https://scrape.do',
+  },
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+};
 ---
 
 <!doctype html>
@@ -24,21 +62,33 @@ const canonicalURL = new URL(Astro.url.pathname, 'https://scrapeman.io');
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Scrapeman" />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:title" content={ogTitle ?? title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content="/og/default.png" />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:locale" content="en_US" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@scrapedo" />
     <meta name="twitter:title" content={ogTitle ?? title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content="/og/default.png" />
+    <meta name="twitter:image" content={ogImageURL} />
+
+    <!-- Robots -->
+    <meta name="robots" content="index, follow, max-image-preview:large" />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="512x512" href="/icon.png" />
     <link rel="apple-touch-icon" href="/icon.png" />
     <link rel="mask-icon" href="/favicon.svg" color="#ff6c37" />
+
+    <!-- JSON-LD: Organization (every page) -->
+    <script type="application/ld+json" set:html={JSON.stringify(organizationLd)} />
+    {jsonLdSoftware && (
+      <script type="application/ld+json" set:html={JSON.stringify(softwareLd)} />
+    )}
   </head>
   <body class="min-h-screen">
     <slot />

@@ -5,7 +5,7 @@ const rows = [
   { feature: 'Unlimited collection runs', scrapeman: true, postman: false, bruno: true, insomnia: false },
   { feature: 'Single-request load runner', scrapeman: true, postman: false, bruno: false, insomnia: false },
   { feature: 'Git-friendly file format', scrapeman: true, postman: false, bruno: true, insomnia: false },
-  { feature: 'Native scrape.do proxy mode', scrapeman: true, postman: false, bruno: false, insomnia: false },
+  { feature: 'Native Scrape.do proxy mode', scrapeman: true, postman: false, bruno: false, insomnia: false },
   { feature: 'HTTP/2 toggle (undici allowH2)', scrapeman: true, postman: true, bruno: false, insomnia: false },
   { feature: 'OAuth2 all flows', scrapeman: true, postman: false, bruno: true, insomnia: true },
   { feature: 'AWS Signature v4 auth', scrapeman: true, postman: false, bruno: true, insomnia: true },
@@ -87,9 +87,9 @@ const rows = [
     <!-- Deep dive links -->
     <div class="flex flex-wrap justify-center gap-4 mt-8 reveal">
       {[
-        { label: 'Full breakdown vs Postman', href: '/vs/postman' },
-        { label: 'Full breakdown vs Bruno', href: '/vs/bruno' },
-        { label: 'Full breakdown vs Insomnia', href: '/vs/insomnia' },
+        { label: 'Full breakdown vs Postman', href: '/postman-alternative' },
+        { label: 'Full breakdown vs Bruno', href: '/bruno-alternative' },
+        { label: 'Full breakdown vs Insomnia', href: '/insomnia-alternative' },
       ].map(link => (
         <a href={link.href} class="inline-flex items-center gap-1.5 text-sm text-[var(--primary-light)] hover:text-[var(--text-strong-950)] transition-colors group">
           {link.label}
