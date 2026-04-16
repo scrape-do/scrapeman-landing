@@ -3,7 +3,7 @@ import '../styles/global.css';
 
 interface BreadcrumbItem {
   name: string;
-  /** Path on scrapeman.io, e.g. "/postman-alternative" */
+  /** Path on scrapeman.app, e.g. "/postman-alternative" */
   path: string;
 }
 
@@ -24,15 +24,15 @@ interface Props {
 }
 
 const { title, description, ogTitle, jsonLdSoftware = false, breadcrumbs } = Astro.props;
-const canonicalURL = new URL(Astro.url.pathname, 'https://scrapeman.io');
-const ogImageURL = new URL('/icon.png', 'https://scrapeman.io').toString();
+const canonicalURL = new URL(Astro.url.pathname, 'https://scrapeman.app');
+const ogImageURL = new URL('/icon.png', 'https://scrapeman.app').toString();
 
 const organizationLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'Scrape.do',
   url: 'https://scrape.do',
-  logo: 'https://scrapeman.io/icon.png',
+  logo: 'https://scrapeman.app/icon.png',
   sameAs: ['https://github.com/scrape-do'],
 };
 
@@ -44,7 +44,7 @@ const softwareLd = {
     'Scrapeman is a free API client with nothing behind a paywall. Unlimited history, env vars, collection runs, and load testing. Git-friendly YAML collections. Native Scrape.do proxy support. Apache 2.0, runs offline on macOS, Windows, and Linux.',
   applicationCategory: 'DeveloperApplication',
   operatingSystem: 'macOS, Windows, Linux',
-  url: 'https://scrapeman.io',
+  url: 'https://scrapeman.app',
   downloadUrl: 'https://github.com/scrape-do/scrapeman/releases/latest',
   license: 'https://www.apache.org/licenses/LICENSE-2.0',
   author: {
@@ -67,13 +67,13 @@ const breadcrumbLd = breadcrumbs && breadcrumbs.length > 0 && {
       '@type': 'ListItem',
       position: 1,
       name: 'Home',
-      item: 'https://scrapeman.io',
+      item: 'https://scrapeman.app',
     },
     ...breadcrumbs.map((b, i) => ({
       '@type': 'ListItem',
       position: i + 2,
       name: b.name,
-      item: new URL(b.path, 'https://scrapeman.io').toString(),
+      item: new URL(b.path, 'https://scrapeman.app').toString(),
     })),
   ],
 };

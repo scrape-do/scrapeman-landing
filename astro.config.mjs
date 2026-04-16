@@ -4,7 +4,7 @@ import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://scrapeman.io',
+  site: 'https://scrapeman.app',
   integrations: [tailwind(), react(), sitemap()],
   output: 'static',
   trailingSlash: 'never',

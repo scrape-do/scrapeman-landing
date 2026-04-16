@@ -1,8 +1,8 @@
 # Scrapeman Landing Page
 
-Marketing site for [Scrapeman](https://scrapeman.io), the unlimited API client built by [scrape.do](https://scrape.do). An API client with nothing behind a paywall: unlimited history, unlimited env vars, unlimited collection runs, single-request load testing, git-friendly YAML collections, and native scrape.do proxy. Apache 2.0 on GitHub.
+Marketing site for [Scrapeman](https://scrapeman.app), the unlimited API client built by [scrape.do](https://scrape.do). An API client with nothing behind a paywall: unlimited history, unlimited env vars, unlimited collection runs, single-request load testing, git-friendly YAML collections, and native scrape.do proxy. Apache 2.0 on GitHub.
 
-**Live:** https://scrapeman.io
+**Live:** https://scrapeman.app
 **App repo:** [scrape-do/scrapeman](https://github.com/scrape-do/scrapeman)
 
 ---
@@ -21,9 +21,9 @@ Old `/vs/postman`, `/vs/bruno`, `/vs/insomnia` paths 301-redirect to the new URL
 
 ## SEO
 
-- `astro.config.mjs` sets `site: 'https://scrapeman.io'` and `trailingSlash: 'never'` — required for canonical URLs and the sitemap integration.
+- `astro.config.mjs` sets `site: 'https://scrapeman.app'` and `trailingSlash: 'never'` — required for canonical URLs and the sitemap integration.
 - **Sitemap**: `@astrojs/sitemap@3.2.x` (must be 3.2.x, not 3.7+; the newer release uses an Astro 5 internal hook and crashes on Astro 4). Generates `dist/sitemap-index.xml` + `sitemap-0.xml` on every build.
-- **`public/robots.txt`**: allows everything, points crawlers at `https://scrapeman.io/sitemap-index.xml`.
+- **`public/robots.txt`**: allows everything, points crawlers at `https://scrapeman.app/sitemap-index.xml`.
 - **Per-page meta**: every page sets a unique title + description in `<Base>` props; alternative pages target the `<product> alternative` query directly.
 - **JSON-LD**: `Base.astro` emits an `Organization` schema on every page; the home page additionally emits a `SoftwareApplication` schema (with `offers.price=0`, `operatingSystem`, `downloadUrl`, `license`) when `jsonLdSoftware={true}` is set.
 - **OG image**: served from `/icon.png` (the 512×512 brand mark). Both `og:image` and `twitter:image` use the absolute URL so social cards work.

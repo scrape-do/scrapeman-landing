@@ -10,3 +10,6 @@ dist/
 
 # Scratch review notes from agent runs
 REVIEW_*.md
+
+# Blog drafts (not part of the site)
+content/
