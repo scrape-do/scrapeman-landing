@@ -1,0 +1,38 @@
+---
+import DocsLayout from '@/layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Git Integration" description="VS Code-style in-app git panel for staging, committing, pushing, pulling, and diffing your request collection." section="Git Integration">
+  <h2>In-App Git Integration</h2>
+  <p>Scrapeman includes a VS Code-style git panel built on <code>simple-git</code>. Because every request is a plain <code>.req.yaml</code> file in your workspace folder, your entire collection is a git repository — no export step needed.</p>
+
+  <h2>Status Bar</h2>
+  <p>The current branch name is shown in the status bar at the bottom of the window at all times. Click it to open the Source Control panel.</p>
+
+  <h2>Source Control Panel</h2>
+  <p>The sidebar Source Control panel shows two sections:</p>
+  <ul>
+    <li><strong>Staged changes</strong> — files ready to be committed</li>
+    <li><strong>Unstaged changes</strong> — modified or untracked files not yet staged</li>
+  </ul>
+
+  <h2>Stage and Unstage</h2>
+  <p>Stage or unstage files individually by clicking the <code>+</code> / <code>-</code> icon next to each file. Use <strong>Stage All</strong> or <strong>Unstage All</strong> to act on all files at once.</p>
+
+  <h2>Commit</h2>
+  <p>Type a commit message in the input at the top of the panel and press <strong>Commit</strong>. The commit is created immediately using the identity configured in your global <code>.gitconfig</code>.</p>
+
+  <h2>Push and Pull</h2>
+  <p>Push and Pull buttons appear in the panel header. Both operations use the OS credential store (Keychain on macOS, Windows Credential Manager on Windows), so there is no SSH key management UI inside Scrapeman.</p>
+
+  <h2>Diff Viewer</h2>
+  <p>Click any changed file in the Source Control panel to open a line-by-line diff view. Added lines are highlighted green, removed lines red — the same visual style as VS Code's built-in diff editor.</p>
+
+  <h2>Per-Request Sync Toggle</h2>
+  <p>Exclude a specific request from git tracking without adding it to <code>.gitignore</code>:</p>
+  <ul>
+    <li>Press <strong><code>Cmd+Shift+H</code></strong> on the active tab, or</li>
+    <li>Right-click the request in the sidebar and select <strong>Stop syncing to git</strong></li>
+  </ul>
+  <p>The exclusion is written to <code>.git/info/exclude</code> — a local-only file that is never pushed to the remote. A crossed-eye icon appears on the tab and in the sidebar tree to mark unsynced requests.</p>
+</DocsLayout>

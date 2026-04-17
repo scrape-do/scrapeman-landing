@@ -1,0 +1,41 @@
+---
+import DocsLayout from '@/layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Collections &amp; File Format" description="Understand the .req.yaml file structure, body sidecars, workspace layout, and per-request git sync in Scrapeman." section="Collections & File Format">
+  <h2>File structure</h2>
+  <p>Every request is one <code>.req.yaml</code> file:</p>
+  <pre><code># products/list.req.yaml
+method: GET
+url: "https://api.example.com/products?page=&#123;&#123;page&#125;&#125;"
+headers:
+  - key: Accept
+    value: application/json
+    enabled: true
+auth:
+  type: bearer
+  token: "&#123;&#123;token&#125;&#125;"</code></pre>
+  <p>
+    Key order is stable (deterministic serializer), so git diffs are clean and human-readable.
+  </p>
+
+  <h2>Body sidecars</h2>
+  <p>
+    Payloads 4 KB or larger are automatically promoted to a sidecar file under
+    <code>files/&lt;slug&gt;.body.&lt;ext&gt;</code>. The <code>.req.yaml</code> references the sidecar by path.
+    This keeps YAML files small and diffs focused on metadata changes.
+  </p>
+
+  <h2>Workspace folder</h2>
+  <p>
+    Scrapeman writes only inside the workspace folder you choose. History, cookies, and state live in the app data
+    directory, never the workspace. The workspace is safe to commit to git.
+  </p>
+
+  <h2>Per-request git sync toggle</h2>
+  <p>
+    Right-click a request in the sidebar and select <strong>"Stop syncing to git"</strong> to exclude it from
+    version control. Backed by <code>.git/info/exclude</code> (never pushed to remote). Shortcut:
+    <code>Cmd+Shift+H</code> on the active tab. A crossed-eye icon marks unsynced requests.
+  </p>
+</DocsLayout>

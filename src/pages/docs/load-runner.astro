@@ -1,0 +1,46 @@
+---
+import DocsLayout from '@/layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Load Runner" description="Stress-test any request with bounded concurrency. Configure runs, watch live metrics, and validate responses." section="Load Runner">
+  <h2>Load Runner</h2>
+  <p>Stress-test any request with bounded concurrency. The Load Runner sends the same request N times, controls how many are in-flight at once, and surfaces live performance metrics as it runs.</p>
+
+  <h2>Configuration</h2>
+  <ul>
+    <li><strong>Total requests</strong> — how many times to send the request in total.</li>
+    <li><strong>Concurrency</strong> — how many requests can be in-flight simultaneously.</li>
+    <li><strong>Per-iteration delay</strong> (optional) — milliseconds to wait between dispatching each request.</li>
+  </ul>
+  <p>Each iteration re-resolves <code>&#123;&#123;random&#125;&#125;</code>, <code>&#123;&#123;timestamp&#125;&#125;</code>, and all other dynamic variables, so every request in the run is unique.</p>
+
+  <h2>Live Metrics</h2>
+  <p>While a run is in progress the metrics panel updates in real time:</p>
+  <ul>
+    <li>Sent count, remaining count, and requests per second (RPS)</li>
+    <li>Latency percentiles: <strong>p50</strong>, <strong>p95</strong>, <strong>p99</strong></li>
+    <li>Overall success rate (percentage)</li>
+    <li>Status code histogram — e.g. 200, 201, 400, 500, and any other codes encountered</li>
+    <li>Error kind breakdown — timeout, connection refused, TLS error, etc.</li>
+  </ul>
+
+  <h2>Response Validator</h2>
+  <p>Optionally configure pass/fail criteria before starting a run:</p>
+  <ul>
+    <li><strong>Expected status codes</strong> — a comma-separated list such as <code>200, 201</code>. Any response outside this set is flagged as a validation failure.</li>
+    <li><strong>Body contains</strong> — an optional substring that must appear in the response body. Requests where the body does not contain this string are flagged.</li>
+  </ul>
+  <p>Validation failures appear in the console log as yellow rows, distinct from network errors (red) and successes (green).</p>
+
+  <h2>Controls</h2>
+  <ul>
+    <li><strong>Start</strong> — begins the run with the configured parameters.</li>
+    <li><strong>Stop</strong> — halts the run mid-way. Partial results and metrics collected so far are preserved and remain visible.</li>
+  </ul>
+  <p>The console log at the bottom of the panel shows one row per completed request, color-coded:</p>
+  <ul>
+    <li><strong>Green</strong> — request succeeded and passed validation.</li>
+    <li><strong>Yellow</strong> — request completed but failed the response validator check.</li>
+    <li><strong>Red</strong> — network-level error (timeout, refused, TLS failure, etc.).</li>
+  </ul>
+</DocsLayout>

@@ -1,0 +1,73 @@
+---
+import DocsLayout from '@/layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Request Building" description="Build HTTP requests with the URL bar, tabs, key-value shortcuts, and automatic headers in Scrapeman." section="Request Building">
+  <h2>URL bar</h2>
+  <p>
+    The URL bar supports <code>{"{{var}}"}</code> syntax with live highlighting. Variables resolve from the active
+    environment, collection variables, and built-in dynamics.
+  </p>
+  <p>
+    An autocomplete popover appears when you type <code>{"{{" }</code> showing all available variables with their
+    current resolved values.
+  </p>
+
+  <h2>Tabs</h2>
+  <ul>
+    <li>
+      <strong>Params</strong> — key-value table with two-way URL sync. Editing a param updates the URL query string
+      and vice versa.
+    </li>
+    <li>
+      <strong>Headers</strong> — key-value table. Auto-headers (Content-Type, Accept-Encoding, User-Agent) are shown
+      with a toggle to disable or override each one.
+    </li>
+    <li>
+      <strong>Body</strong> — modes: none, raw (JSON, XML, HTML, text, JavaScript), form-urlencoded, multipart
+      form-data, binary file, GraphQL (planned).
+    </li>
+    <li>
+      <strong>Auth</strong> — see <a href="/docs/auth-schemes">Auth Schemes</a>.
+    </li>
+    <li>
+      <strong>Settings</strong> — per-request proxy, timeout, redirect, TLS, HTTP version, and Scrape.do native
+      mode.
+    </li>
+    <li>
+      <strong>Code</strong> — see <a href="/docs/code-export">Code Export</a>.
+    </li>
+  </ul>
+
+  <h2>Key-value table keyboard shortcuts</h2>
+  <p>In both Headers and Params tables:</p>
+  <ul>
+    <li>
+      <strong>Shift+Enter</strong> — insert a new empty row below the current one; focus moves to the new Key cell.
+    </li>
+    <li>
+      <strong>Tab from the last row's Key cell</strong> — if the Key cell is non-empty, a new empty row is appended
+      automatically. No need to click "Add row."
+    </li>
+  </ul>
+
+  <h2>Auto-headers</h2>
+  <p>Scrapeman automatically sets three headers based on the request:</p>
+  <ul>
+    <li>
+      <strong>Content-Type</strong> — derived from the body mode (<code>application/json</code> for JSON body,
+      <code>application/x-www-form-urlencoded</code> for form, etc.)
+    </li>
+    <li>
+      <strong>Accept-Encoding</strong> — <code>gzip, br, deflate</code> so the response is auto-decompressed by
+      undici.
+    </li>
+    <li>
+      <strong>User-Agent</strong> — <code>Scrapeman/&lt;version&gt;</code>.
+    </li>
+  </ul>
+  <p>
+    Each auto-header can be disabled or overridden per-request from the Headers tab. If you manually set the same
+    header, your value wins.
+  </p>
+</DocsLayout>

@@ -1,0 +1,140 @@
+---
+import Base from './Base.astro';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  section: string;
+}
+
+const { title, description, section } = Astro.props;
+
+const nav = [
+  { label: 'Getting Started', href: '/docs' },
+  { label: 'Request Building', href: '/docs/request-building' },
+  { label: 'Environment Variables', href: '/docs/environment-variables' },
+  { label: 'Auth Schemes', href: '/docs/auth-schemes' },
+  { label: 'Collections & File Format', href: '/docs/collections' },
+  { label: 'Local History', href: '/docs/history' },
+  { label: 'Response Viewer', href: '/docs/response-viewer' },
+  { label: 'Code Export', href: '/docs/code-export' },
+  { label: 'Load Runner', href: '/docs/load-runner' },
+  { label: 'Import & Export', href: '/docs/import-export' },
+  { label: 'Proxy & Scrape.do', href: '/docs/proxy' },
+  { label: 'Cookie Jar', href: '/docs/cookies' },
+  { label: 'Git Integration', href: '/docs/git' },
+  { label: 'Keyboard Shortcuts', href: '/docs/keyboard-shortcuts' },
+];
+---
+
+<Base
+  title={`${title} — Scrapeman Docs`}
+  description={description}
+  breadcrumbs={[
+    { name: 'Docs', path: '/docs' },
+    ...(section !== 'Getting Started' ? [{ name: section, path: Astro.url.pathname }] : []),
+  ]}
+>
+  <Header />
+  <main class="max-w-7xl mx-auto px-6 py-12">
+    <div class="flex gap-12">
+      <!-- Sidebar nav -->
+      <aside class="hidden lg:block w-56 shrink-0 sticky top-24 self-start max-h-[calc(100vh-8rem)] overflow-y-auto">
+        <p class="text-xs font-semibold tracking-widest uppercase text-[var(--primary-light)] mb-4">Documentation</p>
+        <nav class="space-y-1">
+          {nav.map((item) => (
+            <a
+              href={item.href}
+              class:list={[
+                'block px-3 py-2 rounded-lg text-sm transition-colors',
+                Astro.url.pathname === item.href || Astro.url.pathname === item.href + '/'
+                  ? 'bg-[var(--primary-alpha-10)] text-[var(--primary-light)] font-medium'
+                  : 'text-[var(--text-sub-600)] hover:text-[var(--text-strong-950)] hover:bg-[var(--bg-soft-200)]'
+              ]}
+            >
+              {item.label}
+            </a>
+          ))}
+        </nav>
+      </aside>
+
+      <!-- Mobile nav -->
+      <details class="lg:hidden mb-8 w-full">
+        <summary class="px-4 py-3 rounded-xl border border-[var(--stroke-soft-200)] bg-[var(--bg-weak-50)] text-sm text-[var(--text-sub-600)] cursor-pointer">
+          Docs: {section}
+        </summary>
+        <nav class="mt-2 p-2 rounded-xl border border-[var(--stroke-soft-200)] bg-[var(--bg-weak-50)] space-y-1">
+          {nav.map((item) => (
+            <a
+              href={item.href}
+              class:list={[
+                'block px-3 py-2 rounded-lg text-sm',
+                Astro.url.pathname === item.href
+                  ? 'bg-[var(--primary-alpha-10)] text-[var(--primary-light)] font-medium'
+                  : 'text-[var(--text-sub-600)]'
+              ]}
+            >
+              {item.label}
+            </a>
+          ))}
+        </nav>
+      </details>
+
+      <!-- Content -->
+      <article class="flex-1 min-w-0 prose-docs">
+        <slot />
+      </article>
+    </div>
+  </main>
+  <Footer />
+</Base>
+
+<style is:global>
+  .prose-docs h2 {
+    @apply text-2xl font-bold tracking-tighter text-[var(--text-strong-950)] mt-12 mb-4 pb-2 border-b border-[var(--stroke-soft-200)];
+  }
+  .prose-docs h3 {
+    @apply text-lg font-semibold text-[var(--text-strong-950)] mt-8 mb-3;
+  }
+  .prose-docs p {
+    @apply text-[var(--text-sub-600)] leading-relaxed mb-4;
+  }
+  .prose-docs ul, .prose-docs ol {
+    @apply text-[var(--text-sub-600)] leading-relaxed mb-4 pl-6;
+  }
+  .prose-docs ul { @apply list-disc; }
+  .prose-docs ol { @apply list-decimal; }
+  .prose-docs li { @apply mb-1.5; }
+  .prose-docs code {
+    @apply font-mono text-[var(--primary-light)] text-sm bg-[var(--bg-soft-200)] px-1.5 py-0.5 rounded;
+  }
+  .prose-docs pre {
+    @apply bg-[var(--bg-soft-200)] border border-[var(--stroke-soft-200)] rounded-xl p-5 mb-6 overflow-x-auto;
+  }
+  .prose-docs pre code {
+    @apply bg-transparent px-0 py-0 text-[var(--text-sub-600)];
+  }
+  .prose-docs table {
+    @apply w-full text-sm border-collapse mb-6;
+  }
+  .prose-docs thead tr {
+    @apply bg-[var(--bg-soft-200)] border-b border-[var(--stroke-soft-200)];
+  }
+  .prose-docs th {
+    @apply px-4 py-3 text-left font-semibold text-[var(--text-sub-600)];
+  }
+  .prose-docs td {
+    @apply px-4 py-3 border-b border-[var(--stroke-soft-200)] text-[var(--text-soft-400)];
+  }
+  .prose-docs strong {
+    @apply text-[var(--text-strong-950)] font-semibold;
+  }
+  .prose-docs a {
+    @apply text-[var(--primary-light)] hover:underline;
+  }
+  .prose-docs blockquote {
+    @apply border-l-2 border-[var(--primary-base)] pl-4 my-4 text-[var(--text-soft-400)] italic;
+  }
+</style>

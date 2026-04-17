@@ -1,0 +1,48 @@
+---
+import DocsLayout from '@/layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Code Export" description="Generate ready-to-run code from any request in curl, JavaScript fetch, Python requests, or Go net/http with one click." section="Code Export">
+  <h2>Overview</h2>
+  <p>Generate code from the current request in four languages:</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Language</th>
+        <th>Library</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>curl</td>
+        <td>curl CLI</td>
+      </tr>
+      <tr>
+        <td>JavaScript</td>
+        <td>fetch API</td>
+      </tr>
+      <tr>
+        <td>Python</td>
+        <td>requests</td>
+      </tr>
+      <tr>
+        <td>Go</td>
+        <td>net/http</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>Each generator respects method, URL, params, headers, body, and Basic/Bearer auth.</p>
+
+  <h2>Variable toggle</h2>
+  <p>
+    Switch between <strong>"inline resolved values"</strong> and <strong>"keep <code>{"{{var}}"}</code> templates"</strong>
+    in the generated code. Use the template mode when sharing snippets that others will run against their own
+    environments.
+  </p>
+
+  <h2>Copy to clipboard</h2>
+  <p>
+    Copy the generated code to clipboard with one click. The <strong>Code</strong> tab in the request builder
+    shows a read-only preview that updates live as you edit the request.
+  </p>
+</DocsLayout>

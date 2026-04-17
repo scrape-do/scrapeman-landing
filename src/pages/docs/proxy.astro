@@ -1,0 +1,33 @@
+---
+import DocsLayout from '@/layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Proxy & Scrape.do" description="Configure per-request HTTP/HTTPS proxies or enable Scrape.do native mode for residential rotation, JS rendering, and geo targeting." section="Proxy & Scrape.do">
+  <h2>Proxy and Scrape.do Mode</h2>
+  <p>Every request in Scrapeman can route through a proxy. You can use any standard HTTP/HTTPS proxy, or flip into Scrape.do native mode to access residential rotation, JS rendering, geo targeting, and automatic ban retry — all from the Settings tab.</p>
+
+  <h2>Standard Proxy</h2>
+  <p>Configure per-request in the <strong>Settings</strong> tab of the request builder.</p>
+  <ul>
+    <li><strong>Protocol</strong> — <code>HTTP</code> or <code>HTTPS</code></li>
+    <li><strong>Host</strong> and <strong>Port</strong></li>
+    <li><strong>Auth</strong> — username and password for proxy basic authentication</li>
+  </ul>
+  <p>The proxy is applied via undici's <code>ProxyAgent</code>. All fields support <code>&#123;&#123;var&#125;&#125;</code> variable interpolation, so you can store proxy credentials in environment variables.</p>
+
+  <h2>Scrape.do Native Mode</h2>
+  <p>Flip the <strong>Scrape.do</strong> toggle in the Settings tab to route the request through Scrape.do's infrastructure instead of sending it directly.</p>
+  <p>When enabled, the main process rewrites the target URL to <code>api.scrape.do</code> and injects the configured parameters. Your Scrape.do token is stored as a secret environment variable and never appears in history on disk.</p>
+
+  <h3>Residential Rotation</h3>
+  <p>Automatically rotates the outgoing IP address from Scrape.do's residential pool on every request. No manual proxy list management required.</p>
+
+  <h3>JS Rendering</h3>
+  <p>Spins up a headless browser on Scrape.do's infrastructure to fully render the target page before returning the response. Useful for SPAs, lazy-loaded content, and anti-bot pages that check for browser fingerprints.</p>
+
+  <h3>Geo Targeting</h3>
+  <p>Route the request through a specific country by selecting a country code. The outgoing IP will appear to originate from that country.</p>
+
+  <h3>Ban Retry</h3>
+  <p>When enabled, Scrape.do automatically retries the request if it detects a block or detection response from the target server. Retries are handled server-side and transparent to Scrapeman — you receive the final successful response.</p>
+</DocsLayout>

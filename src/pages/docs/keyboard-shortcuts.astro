@@ -1,0 +1,101 @@
+---
+import DocsLayout from '@/layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Keyboard Shortcuts" description="Complete keyboard shortcut reference for Scrapeman: global actions, tab management, header and param tables, and the dirty tab guard." section="Keyboard Shortcuts">
+  <h2>Keyboard Shortcuts</h2>
+  <p>All shortcuts use <code>Cmd</code> on macOS and <code>Ctrl</code> on Windows and Linux.</p>
+
+  <h2>Global</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Shortcut</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>Cmd+N</code></td>
+        <td>New tab — auto-focuses the URL bar</td>
+      </tr>
+      <tr>
+        <td><code>Cmd+T</code></td>
+        <td>New tab</td>
+      </tr>
+      <tr>
+        <td><code>Cmd+W</code></td>
+        <td>Close active tab (with dirty guard)</td>
+      </tr>
+      <tr>
+        <td><code>Cmd+Shift+W</code></td>
+        <td>Close all tabs (with dirty guard)</td>
+      </tr>
+      <tr>
+        <td><code>Cmd+Enter</code></td>
+        <td>Send request</td>
+      </tr>
+      <tr>
+        <td><code>Cmd+S</code></td>
+        <td>Save request</td>
+      </tr>
+      <tr>
+        <td><code>Cmd+Shift+F</code></td>
+        <td>Focus collection search</td>
+      </tr>
+      <tr>
+        <td><code>Cmd+Shift+H</code></td>
+        <td>Toggle git sync on active request</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Tab Management</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Shortcut</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Middle-click on tab</td>
+        <td>Close tab (with dirty guard)</td>
+      </tr>
+      <tr>
+        <td><code>Cmd+1</code> through <code>Cmd+9</code></td>
+        <td>Switch to tab N</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Headers / Params Table</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Shortcut</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>Shift+Enter</code></td>
+        <td>Insert new row below current row, focus moves to the new Key cell</td>
+      </tr>
+      <tr>
+        <td><code>Tab</code> (from last row Key cell, when non-empty)</td>
+        <td>Auto-append a new empty row</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Dirty Tab Guard</h2>
+  <p>When you attempt to close a tab that has unsaved changes — via any close method (<code>Cmd+W</code>, middle-click, the close button, the context menu, or <code>Cmd+Shift+W</code>) — a confirmation dialog appears showing the tab name and three options:</p>
+  <ul>
+    <li><strong>Save</strong> — saves the request then closes the tab</li>
+    <li><strong>Discard</strong> — closes the tab without saving</li>
+    <li><strong>Cancel</strong> — dismisses the dialog and returns to the tab</li>
+  </ul>
+  <p>The dialog includes a <strong>"Don't ask again for this session"</strong> checkbox. When checked, subsequent dirty tab closes during the same session will discard changes immediately without showing the dialog again. This setting resets when the app restarts.</p>
+</DocsLayout>

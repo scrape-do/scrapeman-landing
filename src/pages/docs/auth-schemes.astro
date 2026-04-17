@@ -1,0 +1,58 @@
+---
+import DocsLayout from '@/layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Auth Schemes" description="Configure authentication for your requests using one of six built-in schemes: None, Basic, Bearer, API Key, OAuth 2.0, or AWS SigV4." section="Auth Schemes">
+  <h2>Overview</h2>
+  <p>
+    Six auth types are built in. Select from the <strong>Auth</strong> tab in the request builder.
+  </p>
+
+  <h2>None</h2>
+  <p>No auth headers are sent. This is the default.</p>
+
+  <h2>Basic</h2>
+  <p>
+    Provide <code>username</code> and <code>password</code>. Scrapeman encodes them as
+    <code>Authorization: Basic &lt;base64(user:pass)&gt;</code> at send time.
+  </p>
+
+  <h2>Bearer</h2>
+  <p>
+    Provide a <code>token</code> string. Sent as <code>Authorization: Bearer &lt;token&gt;</code>. The token can
+    be a <code>{"{{var}}"}</code> reference.
+  </p>
+
+  <h2>API Key</h2>
+  <p>
+    Provide <code>key</code>, <code>value</code>, and <code>placement</code> (<code>header</code> or
+    <code>query</code>). If placement is <code>header</code>, the key-value pair is injected as a request header.
+    If <code>query</code>, it is appended to the URL as a query parameter.
+  </p>
+
+  <h2>OAuth 2.0 Client Credentials</h2>
+  <p>Configure:</p>
+  <ul>
+    <li><strong>Token URL</strong> — the authorization server endpoint</li>
+    <li><strong>Client ID</strong> and <strong>Client Secret</strong></li>
+    <li><strong>Scope</strong> (optional)</li>
+  </ul>
+  <p>
+    Scrapeman fetches the token automatically before sending the request. Tokens are cached until they expire, then
+    refreshed in the background. Concurrent requests share one in-flight token fetch — no hammering the token
+    endpoint.
+  </p>
+
+  <h2>AWS Signature v4</h2>
+  <p>Configure:</p>
+  <ul>
+    <li><strong>Access Key ID</strong> and <strong>Secret Access Key</strong></li>
+    <li><strong>Session Token</strong> (optional, for temporary credentials)</li>
+    <li><strong>Region</strong> (e.g., <code>us-east-1</code>)</li>
+    <li><strong>Service</strong> (e.g., <code>s3</code>, <code>execute-api</code>)</li>
+  </ul>
+  <p>
+    Scrapeman signs the request using the <code>aws4</code> library. The signature covers method, URL, headers,
+    and body.
+  </p>
+</DocsLayout>

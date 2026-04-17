@@ -1,0 +1,37 @@
+---
+import DocsLayout from '@/layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Local History" description="Scrapeman captures every sent request in a compressed, template-preserving local history so secrets never touch disk." section="Local History">
+  <h2>Overview</h2>
+  <p>
+    Every sent request is captured to a per-workspace JSONL file under the app data directory (never the workspace
+    folder).
+  </p>
+  <ul>
+    <li>
+      <strong>Template-preserving</strong> — <code>{"{{token}}"}</code> stays as <code>{"{{token}}"}</code> on disk.
+      Secrets are never baked into history.
+    </li>
+    <li>
+      <strong>Compressed</strong> — body preview fields are gzipped on disk when 256 bytes or larger (5–10x
+      smaller).
+    </li>
+  </ul>
+
+  <h2>History panel</h2>
+  <p>The sidebar History panel shows recent requests with:</p>
+  <ul>
+    <li>Method badge (<code>GET</code> / <code>POST</code> / <code>PUT</code> / etc.)</li>
+    <li>Status pill (200 green, 4xx red, etc.)</li>
+    <li>Relative time ("2 min ago")</li>
+  </ul>
+  <p>
+    Click any entry to restore it into a new tab. Duplicate restores are detected and skipped.
+  </p>
+
+  <h2>Search and filter</h2>
+  <p>
+    The history panel has a search bar that filters by request name and URL.
+  </p>
+</DocsLayout>

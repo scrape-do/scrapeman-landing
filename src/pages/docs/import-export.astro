@@ -1,0 +1,74 @@
+---
+import DocsLayout from '@/layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Import & Export" description="Import collections from Postman, Bruno, Insomnia, HAR, and curl. Export history as HAR." section="Import & Export">
+  <h2>Import and Export</h2>
+  <p>Scrapeman reads collections from four external formats and exports history as HAR. Two more export targets are planned.</p>
+
+  <h2>Import Formats</h2>
+
+  <h3>Postman Collection v2.1</h3>
+  <p>Reads the standard Postman JSON export format (<code>importPostmanCollection</code>).</p>
+  <ul>
+    <li>Preserves folder hierarchy</li>
+    <li>Auth: basic, bearer, API key, OAuth 2.0, AWS Signature v4</li>
+    <li>Headers and all body modes: raw, JSON, XML, URL-encoded, form-data, binary, GraphQL</li>
+    <li>Collection and folder variables</li>
+    <li>Unsupported features (pre-request scripts, test scripts, unknown auth types) generate import warnings — the request is still imported without them</li>
+  </ul>
+
+  <h3>Bruno .bru Folders</h3>
+  <p>Reads a directory of <code>.bru</code> files, Bruno's INI-like plain-text format (<code>importBrunoFolder</code>).</p>
+  <ul>
+    <li>Parses <code>method</code> blocks, headers, and auth (bearer, basic)</li>
+    <li>Body modes: JSON, XML, text, URL-encoded, multipart</li>
+    <li>Query params and path params</li>
+    <li>Folder hierarchy mirrors the directory structure on disk</li>
+  </ul>
+
+  <h3>Insomnia v4 JSON</h3>
+  <p>Reads Insomnia v4 export files (<code>importInsomniaExport</code>). The file must have <code>_type: "export"</code> and <code>__export_format: 4</code>.</p>
+  <ul>
+    <li>Walks the resource list by type: <code>request</code>, <code>request_group</code>, <code>environment</code>, <code>cookie_jar</code></li>
+    <li>Rebuilds folder tree from <code>_id</code> / <code>parentId</code> relationships</li>
+    <li>Maps all five Insomnia auth types</li>
+    <li>Cookie jars and workspace resources generate import warnings</li>
+  </ul>
+
+  <h3>HAR 1.2</h3>
+  <p>Reads Chrome DevTools HAR exports (<code>importHar</code>).</p>
+  <ul>
+    <li>Each <code>log.entries[].request</code> becomes one Scrapeman request</li>
+    <li>Handles JSON, XML, form, HTML, and plain-text body types</li>
+    <li>HTTP/2 pseudo-headers (<code>:method</code>, <code>:path</code>, etc.) are automatically skipped</li>
+  </ul>
+
+  <h3>curl</h3>
+  <p>Paste a curl command directly into the import dialog, or import from a <code>.sh</code> file.</p>
+  <p>Parsed flags:</p>
+  <ul>
+    <li><code>-X</code> / <code>--request</code> — HTTP method</li>
+    <li><code>-H</code> / <code>--header</code> — request headers</li>
+    <li><code>-d</code> / <code>--data</code> / <code>--data-raw</code> / <code>--data-binary</code> — request body</li>
+    <li><code>-u</code> / <code>--user</code> — basic auth</li>
+    <li><code>--cookie</code> — cookie header</li>
+    <li><code>-F</code> / <code>--form</code> — multipart form fields</li>
+    <li><code>--proxy</code> — proxy URL</li>
+  </ul>
+
+  <h2>Export Formats</h2>
+
+  <h3>HAR 1.2</h3>
+  <p>Exports history entries as a standard HAR file (<code>exportHar</code>).</p>
+  <ul>
+    <li>Maps request, response, timings, and query parameters to the HAR schema</li>
+    <li>Round-trip tested: import then export then re-import produces an equivalent collection</li>
+  </ul>
+
+  <h3>Postman v2.1 (planned)</h3>
+  <p>Export the active collection as a Postman v2.1 JSON file. Tracked as T093.</p>
+
+  <h3>.sman Bundle (planned)</h3>
+  <p>A ZIP-based portable bundle containing <code>.req.yaml</code> files, environments, and body sidecars. Designed for sharing a workspace as a single file without requiring a git repository. Tracked as T097/T098.</p>
+</DocsLayout>

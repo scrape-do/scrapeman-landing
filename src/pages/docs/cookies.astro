@@ -1,0 +1,33 @@
+---
+import DocsLayout from '@/layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Cookie Jar" description="RFC 6265-compliant cookie management with restart persistence, workspace and environment scoping, and a built-in inspector." section="Cookie Jar">
+  <h2>Cookie Jar</h2>
+  <p>Scrapeman manages cookies using <code>tough-cookie</code>, a fully RFC 6265-compliant cookie library. Cookies are captured automatically from responses, injected automatically into matching requests, and survive app restarts.</p>
+
+  <h2>Automatic Capture and Injection</h2>
+  <ul>
+    <li><strong>Set-Cookie response headers</strong> are automatically parsed and stored in the jar whenever a response is received.</li>
+    <li><strong>Cookie request headers</strong> are automatically assembled from the jar and injected into every outgoing request where the domain and path match.</li>
+  </ul>
+  <p>No manual configuration is required. The jar behaves the same way a browser does for cookie matching, expiry, and the <code>Secure</code> / <code>HttpOnly</code> flags.</p>
+
+  <h2>Restart Persistence</h2>
+  <p>The cookie jar is written to disk on every change. When Scrapeman restarts, the jar is restored from disk. Session cookies (those without an explicit <code>Expires</code> or <code>Max-Age</code>) are cleared on restart, matching browser behaviour.</p>
+
+  <h2>Scoping</h2>
+  <p>Cookies are scoped per <strong>workspace</strong> and <strong>environment</strong>. Switching to a different environment gives you a separate jar, so production and staging cookies do not leak into each other.</p>
+
+  <h2>Cookies Inspector</h2>
+  <p>Open the <strong>Cookies</strong> panel in the sidebar to view and manage all stored cookies.</p>
+  <p>Each row shows:</p>
+  <ul>
+    <li><strong>Domain</strong> — the domain the cookie is scoped to</li>
+    <li><strong>Path</strong> — the path scope</li>
+    <li><strong>Name</strong> and <strong>Value</strong></li>
+    <li><strong>Expiry</strong> — absolute expiration date, or "Session" for session cookies</li>
+    <li><strong>Flags</strong> — <code>Secure</code>, <code>HttpOnly</code>, <code>SameSite</code></li>
+  </ul>
+  <p>You can delete individual cookies or clear the entire jar from the inspector.</p>
+</DocsLayout>

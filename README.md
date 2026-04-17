@@ -15,7 +15,23 @@ Marketing site for [Scrapeman](https://scrapeman.app), the unlimited API client 
 | `/postman-alternative` | The free open source Postman alternative (pricing, paid features) |
 | `/bruno-alternative` | The Bruno alternative that fixes 4 open issues |
 | `/insomnia-alternative` | The local-first Insomnia alternative after Kong's acquisition |
+| `/hoppscotch-alternative` | The desktop Hoppscotch alternative (browser vs native) |
+| `/yaak-alternative` | The Apache 2.0 Yaak alternative (license, load runner) |
 | `/features` | Full feature breakdown |
+| `/docs` | Getting started guide |
+| `/docs/request-building` | URL bar, tabs, key-value table shortcuts, auto-headers |
+| `/docs/environment-variables` | Setup, scope precedence, built-in dynamics, secrets |
+| `/docs/auth-schemes` | Guides for all 6 auth types |
+| `/docs/collections` | YAML format, body sidecars, git sync toggle |
+| `/docs/history` | Template-preserving history, compressed storage |
+| `/docs/response-viewer` | Content detection, view modes, body search |
+| `/docs/code-export` | curl, JS fetch, Python requests, Go generators |
+| `/docs/load-runner` | Config, live metrics, response validator |
+| `/docs/import-export` | Postman, Bruno, Insomnia, HAR, curl import |
+| `/docs/proxy` | Standard proxy + Scrape.do native mode |
+| `/docs/cookies` | Persistent cookie jar, workspace scoped |
+| `/docs/git` | In-app source control panel |
+| `/docs/keyboard-shortcuts` | Full shortcut reference table |
 
 Old `/vs/postman`, `/vs/bruno`, `/vs/insomnia` paths 301-redirect to the new URLs via `public/_redirects` (Cloudflare Pages reads it from the build output root).
 

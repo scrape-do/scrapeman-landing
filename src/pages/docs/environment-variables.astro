@@ -1,0 +1,77 @@
+---
+import DocsLayout from '@/layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Environment Variables" description="Set up environments, understand scope precedence, use built-in dynamic variables, and keep secrets masked in Scrapeman." section="Environment Variables">
+  <h2>Setup</h2>
+  <p>
+    Environments are stored as <code>.env.yaml</code> files under <code>.scrapeman/environments/</code> in your
+    workspace.
+  </p>
+  <pre><code># .scrapeman/environments/dev.env.yaml
+name: Development
+variables:
+  - key: baseUrl
+    value: https://api.example.com
+    secret: false
+  - key: token
+    value: sk-live-abc123
+    secret: true</code></pre>
+
+  <h2>Variable resolution</h2>
+  <p>
+    <code>{"{{var}}"}</code> syntax works across: URL, params, headers, body, auth fields, proxy fields, and
+    Scrape.do fields.
+  </p>
+  <p><strong>Scope precedence</strong> (highest to lowest):</p>
+  <ol>
+    <li>Per-request overrides</li>
+    <li>Active environment</li>
+    <li>Collection-level variables</li>
+    <li>Built-in dynamics</li>
+  </ol>
+
+  <h2>Built-in dynamic variables</h2>
+  <p>These re-resolve on every send:</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Variable</th>
+        <th>Output</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>{"{{random}}"}</code></td>
+        <td>Random 8-char alphanumeric string</td>
+      </tr>
+      <tr>
+        <td><code>{"{{uuid}}"}</code></td>
+        <td>UUID v4</td>
+      </tr>
+      <tr>
+        <td><code>{"{{timestamp}}"}</code></td>
+        <td>Unix timestamp in milliseconds</td>
+      </tr>
+      <tr>
+        <td><code>{"{{timestampSec}}"}</code></td>
+        <td>Unix timestamp in seconds</td>
+      </tr>
+      <tr>
+        <td><code>{"{{isoDate}}"}</code></td>
+        <td>ISO 8601 date string</td>
+      </tr>
+      <tr>
+        <td><code>{"{{randomInt}}"}</code></td>
+        <td>Random integer 0–9999</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Secret variables</h2>
+  <p>
+    Variables with <code>secret: true</code> are masked in the UI (shown as <code>••••••</code>). They resolve
+    normally at send time. History entries preserve the template (<code>{"{{token}}"}</code>) on disk, never the
+    resolved secret value.
+  </p>
+</DocsLayout>

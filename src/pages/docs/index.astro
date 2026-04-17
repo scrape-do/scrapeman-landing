@@ -1,0 +1,34 @@
+---
+import DocsLayout from '@/layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Getting Started" description="Install Scrapeman, send your first request, and save it to a collection." section="Getting Started">
+  <h2>Install</h2>
+
+  <h3>macOS (Homebrew)</h3>
+  <pre><code>brew tap scrape-do/scrapeman && brew install --cask scrapeman</code></pre>
+
+  <h3>Direct download</h3>
+  <p>Pre-built installers for every tagged release:</p>
+  <ul>
+    <li><strong>macOS</strong> <code>.dmg</code> (Apple Silicon + Intel)</li>
+    <li><strong>Windows</strong> <code>.exe</code> NSIS installer (x64)</li>
+    <li><strong>Linux</strong> <code>.AppImage</code> and <code>.deb</code> (x64)</li>
+  </ul>
+  <p>Download from <a href="https://github.com/scrape-do/scrapeman/releases" target="_blank" rel="noopener">github.com/scrape-do/scrapeman/releases</a>.</p>
+
+  <h2>First request</h2>
+  <ol>
+    <li>Open Scrapeman. A new empty tab is ready with the cursor in the URL bar.</li>
+    <li>Paste a URL: <code>https://httpbin.org/get</code></li>
+    <li>Method defaults to <code>GET</code>. Press <code>Cmd+Enter</code> (Mac) or <code>Ctrl+Enter</code> (Win/Linux) to send.</li>
+    <li>The response appears in the right panel: status, headers, body (auto-detected as JSON and rendered in the Pretty view).</li>
+  </ol>
+
+  <h2>Save to collection</h2>
+  <ol>
+    <li>Press <code>Cmd+S</code>. If the request has never been saved, a dialog asks for a name and folder.</li>
+    <li>The file is written to your workspace folder as a <code>.req.yaml</code> file.</li>
+    <li>The request appears in the sidebar collection tree.</li>
+  </ol>
+</DocsLayout>

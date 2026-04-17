@@ -1,0 +1,62 @@
+---
+import DocsLayout from '@/layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Response Viewer" description="Scrapeman auto-detects response content type and offers Raw, Pretty, Tree, and Preview modes with in-body search and full request metrics." section="Response Viewer">
+  <h2>Content detection</h2>
+  <p>
+    Scrapeman auto-detects the response content type: JSON, HTML, XML, image, PDF, text, or binary.
+  </p>
+
+  <h2>View modes per content type</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Content type</th>
+        <th>Available modes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>JSON</td>
+        <td>Raw, Pretty (formatted), Tree (collapsible with JSONPath copy)</td>
+      </tr>
+      <tr>
+        <td>HTML</td>
+        <td>Raw, Pretty, Preview (sandboxed iframe)</td>
+      </tr>
+      <tr>
+        <td>XML</td>
+        <td>Raw, Pretty</td>
+      </tr>
+      <tr>
+        <td>Image</td>
+        <td>Raw (hex), Preview (rendered)</td>
+      </tr>
+      <tr>
+        <td>PDF</td>
+        <td>Raw, Preview (Chromium PDF viewer)</td>
+      </tr>
+      <tr>
+        <td>Text / binary</td>
+        <td>Raw</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>
+    <strong>Lazy parsing</strong>: the default view is Raw. <code>JSON.parse</code> and tree rendering only happen
+    when you switch to Pretty or Tree view.
+  </p>
+
+  <h2>Response body search</h2>
+  <p>
+    Search within the response body with highlight, previous/next navigation. The search persists across sends and
+    auto-re-runs when a new response arrives.
+  </p>
+
+  <h2>Metrics</h2>
+  <p>
+    Every response shows: HTTP status, TTFB (time to first byte), download time, body size, and protocol
+    (HTTP/1.1 or h2).
+  </p>
+</DocsLayout>
