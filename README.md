@@ -102,10 +102,11 @@ scrapeman-landing/
 │   ├── pages/
 │   │   ├── index.astro              # home (assembles the home section components)
 │   │   ├── features.astro           # full feature list grouped by capability
-│   │   └── vs/
-│   │       ├── postman.astro        # pricing + paid-feature comparison
-│   │       ├── bruno.astro          # 4 open-bug evidence cards
-│   │       └── insomnia.astro       # Kong acquisition timeline
+│   │   ├── postman-alternative.astro    # Postman comparison (pricing, paid features)
+│   │   ├── bruno-alternative.astro      # Bruno comparison (4 open-bug evidence)
+│   │   ├── insomnia-alternative.astro   # Insomnia comparison (Kong acquisition)
+│   │   ├── hoppscotch-alternative.astro # Hoppscotch comparison (browser vs desktop)
+│   │   └── yaak-alternative.astro       # Yaak comparison (license, load runner)
 │   │
 │   ├── components/
 │   │   ├── ui/                      # AlignUI primitives (React islands)
@@ -168,6 +169,43 @@ Hosted on Cloudflare Pages. Every push to `main` triggers a deploy automatically
 | Output directory | `dist` |
 | Node version | 20 |
 
+## Adding a new comparison page
+
+1. Copy `src/pages/postman-alternative.astro` as a starting template.
+2. Replace the frontmatter data arrays (`pricingComparison`, `differences`, `honest`) with the new competitor's data.
+3. Update `<Base>` props: `title` (target the `<product> alternative` keyword), `description`, `ogTitle`, and `breadcrumbs`.
+4. Wire the route into three nav files:
+   - `src/components/layout/Header.astro` — add to `navLinks` array
+   - `src/components/layout/Footer.astro` — add `<li>` to the Compare column
+   - `src/components/home/ComparisonTable.astro` — add to the deep-dive links array
+5. Add a 301 redirect in `public/_redirects` if there was an old URL path.
+6. Run `npm run build` to verify the sitemap includes the new page.
+
+## Content update checklist
+
+When editing user-facing copy on any page, verify:
+
+- **Anti-slop rules**: no em-dashes, no "testament to / seamless / leverage", direct copula ("is" not "serves as"), state facts with numbers. Full ruleset in the project memory at `reference_anti_slop.md`.
+- **Brand capitalization**: always `Scrape.do` (capital S) in visible prose. Link href stays lowercase (`https://scrape.do/...`). See `feedback_brand_naming.md`.
+- **UTM on Scrape.do links**: every outbound `https://scrape.do/...` link carries `utm_source=scrapeman&utm_medium=landing&utm_campaign=<location>`.
+- **Astro JSX rule**: `set:html` and `client:*` directives cannot appear inside `{ }` expression contexts (ternaries, `.map()`). Use sub-components (see `FeatureCard.astro` pattern).
+- **Button asChild**: when `<Button asChild>` wraps an `<a>`, the anchor needs `class="inline-flex items-center gap-2"` directly to prevent SVG dropping below text.
+
+## Deploy workflow
+
+**Automatic**: every push to `main` triggers a Cloudflare Pages deploy via git integration. The `wrangler.toml` with `pages_build_output_dir = "dist"` pins the project as Pages (not Workers).
+
+**Manual fallback** (if git integration disconnects):
+
+```bash
+npm run build
+npx wrangler pages deploy dist --project-name scrapeman-landing --branch main
+```
+
+**Preview deploys**: push a feature branch, CF Pages generates a preview URL at `https://<branch>.scrapeman-landing.pages.dev/`. Use this for PR reviews before merging.
+
+**Force Pages flow** (if Cloudflare keeps defaulting to Workers): use the explicit URL `https://dash.cloudflare.com/?to=/:account/workers-and-pages/create/pages/connect-to-git`.
+
 ## License
 
-Apache 2.0, same as the [main app](https://github.com/scrape-do/scrapeman). The Scrapeman name and the orange hook mark are trademarks of scrape-do and are not covered by the license.
+Apache 2.0, same as the [main app](https://github.com/scrape-do/scrapeman). The Scrapeman name and the orange hook mark are trademarks of Scrape.do and are not covered by the license.
