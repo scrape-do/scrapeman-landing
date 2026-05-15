@@ -17,25 +17,66 @@ import DocsLayout from '@/layouts/DocsLayout.astro';
   <ul>
     <li>
       <strong>Params</strong> — key-value table with two-way URL sync. Editing a param updates the URL query string
-      and vice versa.
+      and vice versa. Disabled rows survive saves and reloads.
     </li>
     <li>
-      <strong>Headers</strong> — key-value table. Auto-headers (Content-Type, Accept-Encoding, User-Agent) are shown
-      with a toggle to disable or override each one.
+      <strong>Headers</strong> — key-value table. Auto-headers (<code>Content-Type</code>, <code>Accept-Encoding</code>, <code>User-Agent</code>) are shown
+      with a toggle to disable or override each one. The pencil toggle in the top-right opens a bulk-edit
+      textarea where each line is <code>Key: Value</code> and a <code>//</code> prefix disables the line. Round-trip is
+      lossless. Hover-only grip handles let you drag rows to reorder them.
     </li>
     <li>
-      <strong>Body</strong> — modes: none, raw (JSON, XML, HTML, text, JavaScript), form-urlencoded, multipart
-      form-data, binary file, GraphQL (planned).
+      <strong>Body</strong> — modes: <code>none</code>, raw (<code>JSON</code>, <code>XML</code>, <code>HTML</code>, <code>text</code>, <code>JavaScript</code>),
+      <code>form-urlencoded</code>, <code>multipart form-data</code>, <code>binary file</code>, GraphQL (planned). The editor is CodeMirror with
+      language-aware syntax highlighting, <code>{"{{var}}"}</code> decoration in the accent palette when known and the
+      destructive palette when undefined, and an autocomplete popover that triggers on <code>{"{{"}</code>. JSON bodies
+      get a <strong>Beautify</strong> button (<code>Shift+Cmd+F</code> on macOS, <code>Shift+Ctrl+F</code> on Windows / Linux): strict <code>JSON.parse</code> first,
+      then JSON5 for trailing commas / single quotes / unquoted keys / comments, then a missing-comma repair pass.
+      Inline lint shows a red gutter icon on parse errors.
     </li>
     <li>
       <strong>Auth</strong> — see <a href="/docs/auth-schemes">Auth Schemes</a>.
     </li>
     <li>
-      <strong>Settings</strong> — per-request proxy, timeout, redirect, TLS, HTTP version, and Scrape.do native
-      mode.
+      <strong>Settings</strong> — per-request proxy, timeout, redirect, HTTP version (<code>allowH2</code>),
+      <strong>TLS certificate verification</strong> toggle (off behaves like <code>curl -k</code>; the URL bar shows a red
+      <code>Insecure</code> badge), <strong>cookie jar</strong> opt-out, <strong>raw-body</strong> toggle (sends <code>{"{{var}}"}</code>
+      verbatim instead of resolving), Scrape.do native mode, User-Agent preset picker, rate limit, and rotating
+      proxy. See <a href="/docs/proxy">Proxy &amp; Scrape.do</a>.
+    </li>
+    <li>
+      <strong>Scripts</strong> — pre-request and post-response JavaScript in a Node <code>vm</code> sandbox. The <code>req</code>
+      proxy mutates the outgoing request, <code>res</code> reads the response (auto-parsed JSON), and <code>bru</code> reads / writes
+      variables across folder, collection, environment, and global scopes. <code>test()</code> / <code>expect()</code> assertions
+      render in the Scripts response tab.
     </li>
     <li>
       <strong>Code</strong> — see <a href="/docs/code-export">Code Export</a>.
+    </li>
+    <li>
+      <strong>WebSocket</strong> — bidirectional WebSocket client. Connect to a <code>ws://</code> or <code>wss://</code> URL,
+      send messages, watch the timeline with direction arrows, ping latency, and JSON expand. Per-connection
+      proxy, including Scrape.do WS endpoints. Switching tabs leaves the socket open.
+    </li>
+    <li>
+      <strong>Load</strong> — see <a href="/docs/load-runner">Load Runner</a>.
+    </li>
+  </ul>
+
+  <h3>URL bar shortcuts</h3>
+  <ul>
+    <li>
+      <strong>Cmd+Enter</strong> — send (or cancel an in-flight send).
+    </li>
+    <li>
+      <strong>Cmd+R</strong> — parallel send. Each press fires another request without cancelling the in-flight one.
+      A live HUD in the bottom-right tracks every fired request with status, HTTP code, and elapsed duration.
+      Holding the key fires at the OS key-repeat rate, capped at 32 simultaneous parallel sends per tab.
+    </li>
+    <li>
+      Variables that resolve to a full URL (e.g. <code>{"{{base_url}}"}</code> →
+      <code>https://api.example.com</code>) are left alone by the URL normalizer; the actual scheme is decided after
+      variable resolution.
     </li>
   </ul>
 
@@ -50,6 +91,28 @@ import DocsLayout from '@/layouts/DocsLayout.astro';
       automatically. No need to click "Add row."
     </li>
   </ul>
+
+  <h2>Right-click string transforms</h2>
+  <p>
+    The URL bar, header / param cells, and other text inputs expose a right-click menu with these transforms:
+  </p>
+  <ul>
+    <li>
+      <strong>URL encode / decode</strong> — <code>encodeURIComponent</code> / <code>decodeURIComponent</code>.
+    </li>
+    <li>
+      <strong>Base64 encode / decode</strong> — UTF-8 safe; works with multi-byte characters that pure
+      <code>btoa</code> would reject.
+    </li>
+    <li>
+      <strong>Stringify / Destringify</strong> — escape and unescape for embedding inside a JSON string literal.
+      Stringifying <code>say "hi"</code> produces <code>say \"hi\"</code>.
+    </li>
+  </ul>
+  <p>
+    When a selection is present in the focused input, transforms apply to that selection only. With no selection
+    they apply to the whole field. Malformed inputs leave the field untouched.
+  </p>
 
   <h2>Auto-headers</h2>
   <p>Scrapeman automatically sets three headers based on the request:</p>

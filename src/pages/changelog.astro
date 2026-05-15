@@ -1,0 +1,463 @@
+---
+import Base from '@/layouts/Base.astro';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+
+// Auto-link issue refs like (#86) to the GitHub tracker.
+// Keeps surrounding parens intact: "(#86)" -> "(<a href=...>#86</a>)".
+function linkIssues(html: string): string {
+  return html.replace(
+    /#(\d+)/g,
+    '<a href="https://github.com/scrape-do/scrapeman/issues/$1" target="_blank" rel="noopener">#$1</a>',
+  );
+}
+
+type Section = { kind: 'Added' | 'Changed' | 'Fixed' | 'Notes' | 'Tests'; items: string[] };
+type Release = {
+  version: string;
+  date: string;
+  summary: string;
+  sections: Section[];
+};
+
+// Each item is a short HTML fragment. Inline <code>, <strong>, and links are
+// preserved from the source CHANGELOG. (#NN) refs get auto-linked at render
+// time, so they appear as plain text here.
+const releases: Release[] = [
+  {
+    version: '0.6.5',
+    date: '2026-05-11',
+    summary: 'Patch release. Two bug fixes.',
+    sections: [
+      {
+        kind: 'Fixed',
+        items: [
+          `<strong>Compressed <code>text/event-stream</code> responses rendered as garbled bytes.</strong> The SSE branch in the executor consumed the response stream directly without decompressing first, so an upstream sending <code>Content-Encoding: gzip</code> / <code>br</code> / <code>deflate</code> (Cloudflare, OpenAI's <code>/v1/chat/completions</code>, anti-bot CDNs) showed up as garbage in the Raw mode and produced zero events in the Events view. The fix reads the body bytes through <code>readBodyCapped</code> and runs them through the same <code>decodeBody</code> path the non-SSE branch uses, then hands the decompressed buffer to the SSE parser. Postman handled this transparently; we now match. 4 regression tests cover identity / gzip / brotli / deflate paths.`,
+          `<strong>A nested URL as a query parameter value exploded into separate rows</strong> (#88). Typing <code>?url=https://target.com?a=1&amp;b=2</code> parsed the inner <code>&amp;</code> as a top-level param separator, producing three rows where the user wanted one. <code>paramsFromUrl</code> now greedy-merges: when the previous chunk's value already contains a <code>?</code>, subsequent <code>&amp;</code>-split chunks fold back into that value. Falls back to the standard split the moment a clean (non-<code>?</code>) value appears, so plain <code>?foo=bar&amp;baz=qux</code> still parses to two rows. Matches the Scrape.do convention of pasting the target URL raw. 5 regression tests cover the nested URL, plain params, URL-typed value without inner query, empty query, and valueless keys.`,
+        ],
+      },
+    ],
+  },
+  {
+    version: '0.6.4',
+    date: '2026-05-07',
+    summary:
+      'Patch release. Bigger than the version number suggests — body editor got rebuilt on top of CodeMirror, three polish items, two bug fixes.',
+    sections: [
+      {
+        kind: 'Added',
+        items: [
+          `<strong>Request body editor — CodeMirror with syntax highlighting + <code>{{var}}</code> decoration + autocomplete.</strong> Replaces the plain textarea. JSON / XML / HTML / JavaScript bodies get language-aware syntax colouring (key / string / number palette, like the response viewer's pretty mode); <code>{{var}}</code> placeholders render in the accent palette when known, destructive palette when undefined, regardless of language. Typing <code>{{</code> opens a popover listing every active environment variable plus the built-in dynamics (<code>random</code>, <code>uuid</code>, <code>timestamp</code>, <code>timestampSec</code>, <code>isoDate</code>, <code>randomInt</code>); selecting an option closes the braces automatically so the user doesn't have to type <code>}}</code>. Popover styling matches the URL bar's variable picker — same "Variables" header, font, accent colour, "built-in" badge.`,
+          `<strong>Lenient JSON beautify with auto-fix.</strong> <code>Shift+Cmd+F</code> (and the Beautify button) now run a three-stage parse: strict <code>JSON.parse</code> first, then JSON5 (trailing commas, single-quoted strings, unquoted keys, comments) on failure, then a missing-comma repair pass that reads the V8 parser's error position and inserts a comma there, retrying up to 30 times. So <code>{ "a": 1\\n  "b": 2 }</code> formats to valid JSON in one click. When auto-fix kicks in a "Fixed common JSON issues" toast appears so the user knows their bytes were touched beyond indentation. 7 new tests cover the lenient paths.`,
+          `<strong>Inline JSON lint gutter.</strong> When body type is JSON, parse errors render as a red icon in the gutter and a single squiggle at the offending position — VSCode-style. Lint suppresses while a <code>{{var}}</code> is in the body so the resolver-time braces don't false-positive.`,
+        ],
+      },
+      {
+        kind: 'Fixed',
+        items: [
+          `<strong><code>{{var}}</code> in the URL host segment broke the request</strong> (#86). When the user typed <code>{{base_url}}/users</code> and <code>base_url</code> resolved to a full URL like <code>https://api.example.com</code>, the renderer's <code>normalizeUrlSchema</code> saw an unrecognised scheme prefix and prepended its own <code>http://</code>, producing <code>http://https://api.example.com/users</code>. undici then refused to parse the result. The renderer now leaves any URL that starts with <code>{{</code> alone — the actual scheme is decided after variable resolution in the main process. 5 regression tests cover the placeholder, mid-URL placeholder, and existing-scheme cases.`,
+          `<strong>HTML preview rendered without styles or images.</strong> Two issues compounded: the parent renderer's CSP only allowed <code>'self'</code> for <code>style-src</code> / <code>img-src</code> / <code>font-src</code>, blocking every external resource the scraped page tried to load; and the iframe ran with <code>srcDoc</code>'s <code>about:srcdoc</code> origin, so relative URLs (<code>&lt;link href="/assets/main.css"&gt;</code>) had no server to resolve against. Fix: relaxed the prod CSP to allow <code>https:</code> and <code>http:</code> for those three media types (<code>script-src</code> and <code>connect-src</code> stay locked down — the iframe still runs with <code>sandbox=""</code> so no scripts execute), and inject <code>&lt;base href="&lt;final URL&gt;"&gt;</code> at the top of <code>&lt;head&gt;</code> so relative URLs resolve to the originating server. The base href prefers the last redirect destination, falls back to the executor's <code>sentUrl</code>, then the URL the user typed. 7 unit tests cover the injection paths.`,
+          `<strong>Post-update changelog modal</strong>: H3 section names (<code>Added</code>, <code>Fixed</code>, <code>Notes</code>, <code>Tests</code>) are no longer force-uppercased — they render in sentence case as written in the source. Bullet glyphs switched from CSS list-disc to a small dot for tighter alignment. Inline links (<code>[text](url)</code>) now render as actual links, and bare issue references like <code>(#79)</code> auto-link to the GitHub issue tracker. Body text bumped from 12px to 13px for readability.`,
+        ],
+      },
+      {
+        kind: 'Notes',
+        items: [
+          `#87 (request body JSON formatting) closed as already-shipped — the Beautify button + <code>Shift+Cmd+F</code> shortcut have lived on the body type bar since v0.5.x. The lenient + auto-fix work above lifts the same path well past what #87 explicitly asked for.`,
+        ],
+      },
+      {
+        kind: 'Tests',
+        items: [
+          `582 passing in <code>http-core</code>, 81 in <code>apps/desktop</code> (+5 normalizeUrlSchema, +7 injectBaseHref, +7 lenient JSON formatting). 7 skipped. Typecheck clean across all three packages.`,
+        ],
+      },
+    ],
+  },
+  {
+    version: '0.6.3',
+    date: '2026-05-06',
+    summary: 'Patch release. One bug fix.',
+    sections: [
+      {
+        kind: 'Fixed',
+        items: [
+          `<strong>Params tab kept stale rows after the URL bar was cleared.</strong> When the user cut or otherwise removed the query string from the URL, enabled rows in the Params tab survived because the sync logic short-circuited on URLs without <code>?</code>. Now every <code>setUrl</code> call merges against the freshly parsed URL params: enabled rows whose key disappeared from the URL drop out (matching the in-<code>?</code>-query branch's behaviour), disabled rows stay untouched. 3 new tests in <code>store.test.ts</code> cover URL-cleared, query-stripped, and disabled-row-preserved cases.`,
+        ],
+      },
+    ],
+  },
+  {
+    version: '0.6.2',
+    date: '2026-05-06',
+    summary: 'Patch release. One bug fix.',
+    sections: [
+      {
+        kind: 'Fixed',
+        items: [
+          `<strong>Tabs sometimes lost on app restart.</strong> The boot path went through an intermediate <code>tabs: []</code> set before reading the saved snapshot — and the persistence subscriber's <code>requestAnimationFrame</code> could fire during that window, overwriting the saved snapshot with the empty placeholder before <code>openWorkspace</code> finished reading it. The race was visible on slower disks / slower IPC, where the seven <code>await get().loadX()</code> calls between the empty-set and the snapshot read gave the RAF enough time to flush. Now <code>openWorkspace</code> reads the snapshot synchronously and seeds the initial set with the restored tabs directly, so the store never goes through an empty state. <code>activeEnvironment</code> restore is still deferred to after <code>loadEnvironments</code> (it needs the env list to validate against).`,
+        ],
+      },
+    ],
+  },
+  {
+    version: '0.6.1',
+    date: '2026-05-06',
+    summary:
+      'Patch release. Splits the global string-utilities ask (#81) into three follow-ups; lands two of them.',
+    sections: [
+      {
+        kind: 'Added',
+        items: [
+          `<strong>Per-request raw-body toggle</strong> (#83). New <code>Settings → Body</code> toggle: when on, <code>{{var}}</code> placeholders inside the request body ship verbatim instead of resolving from the active environment. URL, headers, params, auth still resolve. Use case: server-side template proxies and placeholder-validation endpoints that expect literal <code>{{...}}</code> syntax. Default off, so existing requests keep the previous behaviour. Persisted as <code>options.rawBody: true</code> in the <code>.sman</code> YAML.`,
+          `<strong>Right-click string transforms — Stringify / Destringify + selection-aware mode</strong> (#84). The cell context menu already had URL encode/decode and base64 encode/decode; now it also has Stringify (escape for embedding in a JSON string literal) and Destringify (the inverse). All six transforms apply to the current selection when the focused input has one; otherwise to the whole field. The transformed range is re-selected so a user can round-trip with another menu pick. Copy / paste also honour the selection.`,
+        ],
+      },
+      {
+        kind: 'Notes',
+        items: [
+          `#81 closed and split into three issues: #83 (raw-body, shipped), #84 (transforms, shipped), #85 (plugin system, parked for discussion). #85 is added to the roadmap parking lot until concrete user demand surfaces a transform that doesn't fit as a built-in.`,
+        ],
+      },
+      {
+        kind: 'Tests',
+        items: [
+          `582 passing in <code>http-core</code> (+4 new — 2 resolver rawBody, 2 format round-trip), 59 in <code>apps/desktop</code> (+12 new transform helpers). 7 skipped. Typecheck clean.`,
+        ],
+      },
+    ],
+  },
+  {
+    version: '0.6.0',
+    date: '2026-05-06',
+    summary:
+      'Minor release. Four open issues land — three real friction points in the scraping use case (TLS verification toggle, restart restore, parallel-send crash fix) and a small polish on top of the existing auto-update banner.',
+    sections: [
+      {
+        kind: 'Added',
+        items: [
+          `<strong>TLS certificate verification toggle</strong> (#80). The data model and per-request UI toggle existed since v0.2.0 but the executor never actually read the value, so the switch was a no-op — every request went through with verification on. Now the toggle wires through to undici's <code>connect.rejectUnauthorized</code> for both the direct <code>Agent</code> and the <code>ProxyAgent</code>. Behaviour matches curl's <code>-k</code> / <code>--insecure</code>. The URL bar shows a red <code>Insecure</code> badge while the toggle is on, and the per-request Settings tab renders a destructive-styled warning banner. New "Network" tab in Settings holds the global default that new tabs/requests start at, persisted to localStorage. Hermetic regression test spins up an HTTPS server with an OpenSSL-generated self-signed cert.`,
+          `<strong>Restore unsaved tabs on restart</strong> (#71, #82). Per-workspace tab snapshots already existed in memory for the workspace-switch flow. Now they persist to localStorage so a full app restart doesn't lose unsaved drafts. Builder state (URL, headers, params, body, auth, settings, scripts) and tab metadata round-trip; transient runtime — execution responses, websocket connections, load test runs, parallel-burst HUD — is stripped before saving so a stale "sending…" banner never resurfaces. Writes are coalesced to one per animation frame.`,
+          `<strong>Post-update changelog popup</strong> (#72). The first time you launch a new build, a dialog renders the matching CHANGELOG section(s) for everything between the last-launched version and the current one. CHANGELOG.md is bundled into the renderer at build time so it works offline. "View on GitHub" link in the corner deep-links to the release tag. Skipped on first install.`,
+        ],
+      },
+      {
+        kind: 'Fixed',
+        items: [
+          `<strong>App crash when holding Cmd+R for several seconds.</strong> OS key-repeat at ~30 Hz queued hundreds of concurrent IPC executes — each pinning a full ExecutedResponse with body data in main and triggering a history write on completion. The main process eventually OOMed and the renderer lost its IPC link. Now capped at 32 simultaneous parallel sends per tab; excess keystrokes are silently dropped. A 1–2 s burst still fans out fully (the common case for flakiness probes), worst-case memory stays bounded.`,
+        ],
+      },
+      {
+        kind: 'Tests',
+        items: [
+          `578 passing in <code>http-core</code> (3 new TLS), 47 in <code>apps/desktop</code> (3 new snapshot persistence + 9 new changelog parser). 7 skipped. Typecheck clean across all three packages.`,
+        ],
+      },
+      {
+        kind: 'Notes',
+        items: [
+          `Auto-update infrastructure (4-hour GitHub Releases poll, dismissable banner) was already shipped in v0.4.x. This release builds on top with the post-update dialog (#72) but does not yet add automatic background download — that's tracked under #35 for a future release.`,
+          `Collection / folder / global-with-precedence inheritance for the SSL toggle is deferred — this release covers per-request and global default. Common scraping flows (self-signed proxies, mitmproxy debug, expired-cert legacy targets) are unblocked.`,
+        ],
+      },
+    ],
+  },
+  {
+    version: '0.5.2',
+    date: '2026-05-05',
+    summary:
+      'Patch release. Two new shortcuts, a curl-import rewrite, scraping-targeted infrastructure fixes, and a layout default flip.',
+    sections: [
+      {
+        kind: 'Added',
+        items: [
+          `<strong>Cmd+R parallel send</strong> (Insomnia parity). Each press fires another request without cancelling the in-flight one; the response panel shows whichever parallel send finishes last. Holding Cmd+R fires at the OS key-repeat rate, so a one-second hold = ~30 RPS micro burst — useful for flakiness probes or warming up an endpoint before a load run. The existing Cmd+Enter (send-or-cancel) is unchanged.`,
+          `<strong>Live HUD for parallel sends.</strong> A floating panel in the bottom-right tracks every fired Cmd+R request with a status dot (pending → success / 4xx / error), HTTP status, and elapsed duration. Header summarises totals (<code>in flight / ok / err</code>). Stays open after the burst settles; × button dismisses. Bounded to the last 50 entries so a long Cmd+R hold doesn't bloat the DOM.`,
+          `<strong>Keyboard shortcut cheat sheet in Settings.</strong> New "Keyboard shortcuts" tab in the Settings dialog lists every binding grouped by Request / Tabs / Navigation / Git, sourced from a static registry kept in sync with the actual handlers.`,
+          `<strong>Run-parameters pills in the load test panel.</strong> While a run is live the metrics block now shows <code>total · concurrency · delay · status · body ⊃ "..."</code> pills so the user can confirm what's actually being executed at a glance.`,
+          `<strong>Top/bottom split is the new default.</strong> Fresh installs land with the request above the response. Existing users keep their stored preference. The split-orientation toggle in the status bar is also now disabled (greyed) on the load test and websocket panes since the response panel is hidden in those views.`,
+          `<strong>Larger status bar icons</strong> (~+20%): SVG 14 → 17 px, button hit area 20 → 24 px, bar height 22 → 26 px.`,
+        ],
+      },
+      {
+        kind: 'Changed',
+        items: [
+          `<strong>Curl import rewritten on top of <code>@scrape-do/curl-parser</code></strong>. Standard surface (URL, method, basic auth, user-agent, cookies, boolean flags, multipart, urlencoded body) goes through the upstream package; we extract <code>-d</code> / <code>-H</code> / <code>-F</code> values, proxy/referer flags, and ANSI-C <code>$'...'</code> quoting ourselves before handing off, since upstream loses backslashes inside single quotes and escaped double quotes inside double quotes. 4 new tests on top of the existing 22.`,
+        ],
+      },
+      {
+        kind: 'Fixed',
+        items: [
+          `<strong>Headers Overflow Error on scrape.do responses.</strong> <code>undici</code>'s default <code>maxHeaderSize</code> of 16 KiB rejected legitimate Cloudflare-fronted and anti-bot responses (rotating cookies, signed proof-of-work tokens, debug trailers). Bumped to 256 KiB on both the direct <code>Agent</code> and <code>ProxyAgent</code> paths. <code>HeadersOverflowError</code> now surfaces as a clear <code>protocol</code>-kind ExecutorError with a descriptive message instead of a raw undici stack. 2 new regression tests (32 KiB and 128 KiB Set-Cookie).`,
+          `<strong>Load test events log auto-scroll missed the "Done in …" summary line.</strong> The scroll effect only fired on <code>events.length</code> changes, so the trailing summary that renders after the last event ended up below the visible window. Added <code>progress?.done</code> to the dependency list.`,
+          `<strong>Watched-header toast covered the column titles.</strong> The "added to watched headers" toast in the Response Headers tab was sticky-top-0, stacking on top of the Name / Value column labels. Now floats as a small pill in the top-right corner with <code>pointer-events:none</code>.`,
+          `<strong>Cmd+R was reloading the page.</strong> Custom application menu drops the <code>Cmd/Ctrl+R</code> accelerator from "Reload" so the renderer's Cmd+R shortcut is reachable. Force Reload keeps <code>Cmd/Ctrl+Shift+R</code> for dev refreshes.`,
+        ],
+      },
+      {
+        kind: 'Tests',
+        items: [
+          `575 passing in <code>http-core</code> (4 new curl, 2 new headers-overflow), 35 in <code>apps/desktop</code>. 7 skipped. Typecheck clean across all three packages.`,
+        ],
+      },
+    ],
+  },
+  {
+    version: '0.5.1',
+    date: '2026-04-29',
+    summary: 'Patch release. Bug fixes from dogfooding plus two small additions on top of 0.5.0.',
+    sections: [
+      {
+        kind: 'Added',
+        items: [
+          `<strong>Watched response headers in load runs</strong> (#79). Track up to 10 response headers (e.g. <code>Scrape.do-Rotations</code>) and see their value distribution per status code. Lives at three levels: workspace default in <code>.scrapeman/collection.yaml</code>, per-run override in the load test config, and a click-to-add <code>+</code> button on the Response Headers tab. <code>Scrape.do-*</code> headers auto-track by default. Numeric headers get min/max/avg/p50/p95/p99 stats when at least 95% parse and at least 5 samples land. 15 new tests cover the aggregator, status stratification, numeric mode threshold, and chip cap.`,
+          `<strong>Per-request cookie jar toggle</strong> (#23 follow-up). Settings tab now has a "Use cookie jar" checkbox so a single request can opt out of the workspace jar without disabling it globally. Matches Postman's per-request override.`,
+        ],
+      },
+      {
+        kind: 'Fixed',
+        items: [
+          `<strong>Load test auto-scroll, empty number inputs, failed-body capture</strong> (#74 #77 #78). The events log now sticks to the bottom while a run is live and lets the user scroll up to pause it. Number inputs (Total / Concurrency / Delay) accept empty values during edit and clamp on blur. Failed iteration bodies can be saved into a ring buffer (cap 1 to 1000) and exported as JSON for offline triage.`,
+          `<strong>Screenshot modal vs global shortcuts</strong> (#75). Closing the screenshot preview no longer fires the global Cmd+W tab-close shortcut.`,
+          `<strong>Workspace rename keeps the open tab in sync</strong> (#76). Renaming a request in the sidebar updates the matching tab's path so subsequent saves write to the new location.`,
+        ],
+      },
+      {
+        kind: 'Tests',
+        items: [
+          `569 passing in <code>http-core</code> (15 new for watched headers), 35 in <code>apps/desktop</code>. 7 skipped. Typecheck clean across all three packages.`,
+        ],
+      },
+    ],
+  },
+  {
+    version: '0.5.0',
+    date: '2026-04-26',
+    summary: 'Big-feature release. Eleven previously-open issues land in this cut.',
+    sections: [
+      {
+        kind: 'Added',
+        items: [
+          `<strong>WebSocket client</strong> (#24). New <code>WebSocketPanel</code> mounted as a builder pane: URL bar, status dot, connect/disconnect, message timeline with ↓ / ↑ / ● / ○ row badges, JSON expand, send box, auto-scroll toggle, export timeline as JSON. Core wraps undici's WebSocket with reconnect, ping latency, per-connection proxy, and a shared timeline. Per-tab <code>Tab.websocket</code> state survives tab switches.`,
+          `<strong>Collection runner</strong> (#21). New <code>RunnerPanel</code> (Radix dialog, opened from sidebar folder context-menu "Run folder…"). Sequential or parallel modes with concurrency, per-request delay, optional iterations, CSV-driven iteration. Live pass/fail rows with expand-for-details, abort mid-run. Export the run as JSON, CSV, or HTML.`,
+          `<strong>Cookie manager UI</strong> (#23). Domain filter, manual add / inline edit, httpOnly value masking with reveal toggle, JSON + Netscape exports, paste-import that accepts both <code>document.cookie</code> strings and Netscape <code>cookies.txt</code> bodies. New <code>cookies:set</code> IPC backed by <code>WorkspaceCookieJar.setCookie</code>.`,
+          `<strong>OpenAPI / Swagger import</strong> (#27). Parse OpenAPI 3.0.x / 3.1.x and Swagger 2.0 from file or URL. Tags become folders, paths/methods become requests, security schemes become auth, server URLs go to <code>{{base_url}}</code>. Local <code>$ref</code> resolved one hop. New <code>ImportOpenApiDialog</code> and command-palette entry.`,
+          `<strong>Pre-request / post-response scripts</strong> (#20). Node <code>vm</code> sandbox with a <code>bru</code> API (<code>getVar</code> / <code>setVar</code> / <code>getEnvVar</code> / <code>setEnvVar</code> / <code>sendRequest</code> / built-in dynamics), <code>req</code> mutable proxy, <code>res</code> read-only proxy with auto-JSON body parse, captured <code>console.*</code>, minimal <code>test()</code> / <code>expect().toBe()</code>. New Scripts pane with two CodeMirror editors and a Scripts response tab that renders the console + assertion failures. Scripts round-trip through <code>.sman</code> as YAML literal blocks.`,
+          `<strong>Multi-workspace Phase 1</strong> (#61). <code>WorkspaceSwitcher</code> dropdown above the sidebar tab strip lists every open workspace with active check and per-row close. Switching snapshots the previous workspace's UI state (tabs, activeTabId, closedTabStack, activeEnvironment, responseSearch) and restores the destination's snapshot. <code>openWorkspaces</code> and <code>lastActiveWorkspace</code> persist to localStorage.`,
+          `<strong>Dev Tools panel</strong> (#28). New response tab next to Body / Headers: timing waterfall (DNS / TCP / TLS / TTFB / Download), the actual sent URL and headers (post variable resolve, scrape-do compose, auth), redirect chain with statuses + Location, TLS peer cert (subject CN, issuer CN, validFrom / validTo, fingerprint256), remote IP / port, HTTP version, compressed vs decoded size. Script console section reads <code>ExecutedResponse.scriptConsole</code>.`,
+          `<strong>OAuth 2.0 + OpenID Connect</strong> (#37). Authorization Code and Authorization Code + PKCE in addition to client_credentials. Refresh-token flow with proactive 30s-before-expiry refresh. Loopback callback listener via Electron's <code>net</code> module, <code>state</code> and PKCE <code>code_verifier</code> verified on callback. OIDC discovery via <code>.well-known/openid-configuration</code> auto-fills endpoints + scopes. <code>accessTokenPlacement</code> chooses between <code>Authorization</code> header, query param, or form body. JWT inspector decodes the access token and id_token header + payload (display only) with a live <code>exp</code> countdown.`,
+          `<strong>Scraping-first features</strong> (#31). Per-request <code>rateLimit</code> (fixed delay + optional jitter min/max) honoured by Collection Runner and Load Runner. UA preset picker (Scrapeman default, Chrome / Firefox / Safari / Mobile Safari / Googlebot / curl). Anti-bot signal detection (Cloudflare, 429, CAPTCHA, bot-block) populates <code>ExecutedResponse.antiBotSignal</code>; renderer shows a dismissable banner above the body. Rotating proxy: <code>ProxyConfig.rotate.{ urls, strategy }</code> with round-robin or random selection.`,
+          `<strong>Scoped variables + folder-level auth inheritance</strong> (#30). Resolution order Request &gt; Folder &gt; Collection &gt; Environment &gt; Global. New file format files: <code>.scrapeman/globals.yaml</code>, <code>.scrapeman/collection.yaml</code>, <code>_folder.yaml</code> per folder. Folder + collection settings dialogs (Variables / Auth tabs); <code>AuthTab</code> shows <code>Inherited from /&lt;folder&gt;</code> when a request inherits.`,
+          `<strong>SSE Events mode</strong> in response viewer (#25). Detects <code>text/event-stream</code> (or <code>sseEvents</code> populated) and adds an Events mode that renders one block per event with id / event / retry pills and the <code>data</code> field as JSON tree (when JSON) or monospace. Export as JSON.`,
+          `<strong>Path-in-name save</strong> (#69). The save dialog accepts <code>api/users/list</code>-style names; missing folders are auto-created under the workspace root. <code>..</code> and <code>.</code> segments are rejected; the final path goes through <code>resolveSafe</code>.`,
+          `<strong>Response viewer polish</strong>: HTML pretty mode now actually indents the output (new <code>formatHtml</code> tag-aware printer); default mode for JSON / HTML / XML / JS / CSS / image / pdf flips to the structured view (Tree / Pretty / Preview) when the user has not pinned a mode; raw stays one click away.`,
+        ],
+      },
+      {
+        kind: 'Fixed',
+        items: [
+          `<strong>bash ANSI-C curl import</strong>. <code>curl ... --data-raw $'[{"q":"\\u0021"}]'</code> (Chrome's "Copy as cURL (bash)") now expands <code>!</code> → <code>!</code>, <code>\\n</code> → newline, <code>\\t</code> → tab, <code>\\xHH</code>, <code>\\NNN</code> octal, <code>\\\\</code> <code>\\'</code> <code>\\"</code>. Previously the body landed with a stray <code>$</code> prefix and unresolved escapes, so GraphQL servers rejected it with a parse error. Two regression tests cover the GraphQL-style and mixed-escape cases.`,
+        ],
+      },
+      {
+        kind: 'Tests',
+        items: [
+          `548 passing in <code>http-core</code>, 35 in <code>apps/desktop</code>. 7 skipped. Typecheck clean across all three packages.`,
+        ],
+      },
+    ],
+  },
+  {
+    version: '0.4.1',
+    date: '2026-04-22',
+    summary: '',
+    sections: [
+      {
+        kind: 'Added',
+        items: [
+          `<strong>Syntax highlighting for every pretty-mode response kind.</strong> JSON, XML, JavaScript and CSS responses now render through the same read-only CodeMirror viewer HTML has been using. <code>HtmlEditor</code> became the general <code>CodeMirrorViewer</code> behind the scenes; each kind pulls its <code>@codemirror/lang-*</code> pack and the <code>oneDark</code> theme in dark mode. Search navigation (Enter / Shift+Enter) scrolls and selects the active match inside the editor for all five kinds; the 500 KB large-body warning banner now fires for all of them too.`,
+          `<strong>Command palette "Add URL parameter"</strong> (cmd+k, View section). Switches the active request tab to the Params pane and focuses the first empty Key cell, appending a new row when every existing one is already filled.`,
+          `<strong>Tab-to-create in the Params table.</strong> When the table is empty and you tab into it, a new row is appended and the cursor lands in the Key cell. Matches Postman's behaviour. Existing Shift+Enter (insert below) and Tab-from-last-row (append) shortcuts unchanged.`,
+        ],
+      },
+      {
+        kind: 'Fixed',
+        items: [
+          `Regression coverage for the load runner. A new integration test file asserts that <code>{{random}}</code>, <code>{{uuid}}</code>, <code>{{timestamp}}</code> and <code>{{isoDate}}</code> resolve fresh every iteration (100 <code>{{random}}</code> iterations produce ≥ 95 distinct URLs), and that <code>normalizeUrl</code> runs per iteration so scheme-less, port-only and empty-host URLs reach the server the same way they do for a single-shot send.`,
+        ],
+      },
+      {
+        kind: 'Tests',
+        items: [
+          `338 tests pass across <code>http-core</code> and <code>desktop</code>; 7 skipped. Typecheck clean in all three packages.`,
+        ],
+      },
+    ],
+  },
+  {
+    version: '0.4.0',
+    date: '2026-04-22',
+    summary: '',
+    sections: [
+      {
+        kind: 'Added',
+        items: [
+          `Screenshot capture button in the request header. Hides the sidebar, tab bar and action buttons, then opens a modal with the PNG and a copy-to-clipboard button that uses Electron's native <code>clipboard.writeImage</code>. A "Tested with Scrapeman" watermark sits in the bottom-right of the captured frame.`,
+          `Git pull now prompts on diverged branches instead of aborting. Dialog offers Rebase, Merge commit, or Cancel; the pick is passed through IPC to <code>git pull --rebase</code> or <code>git pull --no-rebase --no-ff</code>. Auth, network, and merge-conflict errors render as plain English banners. A three-second inline badge confirms the pull strategy that ran.`,
+          `Drag-to-reorder rows in Params and Headers. Hover-only grip handle on the left; a two-pixel accent line appears above or below the hovered row based on cursor position, and the drop lands at that edge.`,
+          `Bulk header edit. Pencil toggle at the top-right of the Headers table opens a textarea where each line is <code>Key: Value</code>; a <code>//</code> prefix disables that line. Round-trip between table and textarea is lossless, <code>{{var}}</code> placeholders preserved.`,
+          `JSON body beautify. Button shows up when body mode is <code>json</code>; Shift+Cmd+F (macOS) or Shift+Ctrl+F (Windows/Linux) runs the same format from inside the editor. Body containing unresolved <code>{{var}}</code> is skipped with a toast.`,
+          `Response body search runs over a <code>@tanstack/react-virtual</code> pipeline: 150ms debounce, line-indexed match table, and only the visible rows hit the DOM. A 5 MB body stays under 30 ms per keystroke. HTML responses now have a CodeMirror pretty view with one-dark in dark mode and a size warning above 500 KB.`,
+          `<code>normalizeUrl(raw)</code> in <code>http-core</code> handles scheme-less URLs (<code>localhost/api</code>), port-only (<code>:80/path</code>), and empty host (<code>:/path</code>) by prepending <code>http://</code> and defaulting the host to <code>0.0.0.0</code>. Runs after variable resolution so <code>{{host}}</code> still works.`,
+          `<code>.sman</code> is now the primary file extension. Legacy <code>.req.yaml</code> files are read as-is; the first save rewrites them to <code>.sman</code> and deletes the old path. Collisions resolve to <code>.sman</code>. Parser accepts <code>scrapeman: "1.0"</code> and <code>scrapeman: "2.0"</code>; the writer always emits <code>2.0</code>.`,
+          `Per-tab sub-pane memory. Each request tab remembers whether it was on Params, Headers, Body, Auth, Settings, Code or Load when you left it.`,
+          `Response body validator. Settings tab has an "Expected text" input; when set, the response status bar shows a green check or red cross chip reporting whether the decoded body contains the substring. <code>{{var}}</code> supported.`,
+          `Load runs land in history with a <code>LoadRunSummary</code> (sent, succeeded, failed, validationFailures, elapsedMs, rps, p50, p95, p99, min, max, statusHistogram, errorKinds).`,
+          `Load test shows the active validation rules while the run is live: <code>status = 2xx</code> and <code>body ⊃ "success"</code> chips appear next to the progress bar and on the initial spinner screen.`,
+          `Hover descriptions on every load-test metric: RPS, p50, p95, p99, min, max, Inflight, Success rate, Failed, Validation fail.`,
+        ],
+      },
+      {
+        kind: 'Fixed',
+        items: [
+          `Response body and execution state no longer leak between tabs when you switch tabs before the response lands. The store captures the target tab id at send time and writes back via a new <code>mutateById</code> helper instead of whichever tab happens to be active.`,
+          `Load test state is now per-tab. Config, run id, progress snapshot, and event log live on <code>Tab.loadTest</code> in the store; tab switches and sidebar toggles preserve them. Closing a tab aborts its running load run so the main process does not keep firing events at a dead tab id.`,
+          `Response viewer toolbars (status metrics bar, body/headers switcher) and the Headers panel column header are now opaque and sticky. Virtualized body text no longer bleeds into the chrome when restoring from history or retrying.`,
+          `Virtualized rows in raw and pretty no longer overlap. The inner <code>&lt;pre&gt;</code> used <code>whitespace-pre-wrap break-words</code> while the outer height was pinned to 18 px, so long lines wrapped visually and drew over the next row. Flattened to a single <code>whitespace-pre</code> div and widened the slab to <code>max-content</code>; long lines now scroll horizontally inside the <code>overflow-auto</code> parent.`,
+          `Active search match is centered both vertically and horizontally. Vertical scroll goes through the virtualizer; horizontal scroll is computed from the mark's <code>getBoundingClientRect()</code> and applied to <code>parent.scrollLeft</code>, which sidesteps the <code>contain: strict</code> + absolute-positioned slab combination that broke <code>scrollIntoView</code>.`,
+          `HTML pretty mode follows search navigation. Enter / Shift+Enter map the active match into a CodeMirror <code>SelectionRange</code> and dispatch <code>scrollIntoView(range, { y: 'center', x: 'center' })</code>; the read-only selection highlight doubles as the active-match cue.`,
+          `Executor and scrape.do composer stopped re-appending <code>request.params</code> onto URLs. The URL bar is now the single source of truth for the outgoing URL; <code>request.params</code> stays in the file format for round-tripping disabled rows but never reaches the wire. Fixes duplicated <code>token=</code> in the scrape.do envelope (<code>"Wrong query parameter. You are sending multiple value via same parameter('token')"</code>) and <code>{{var}}</code> going through unresolved.`,
+          `Disabled URL params survive tab switches, disk saves, and reloads. Added <code>disabledParams: string[]</code> to the file format; all params round-trip with their enabled flag.`,
+          `Params row order is preserved when toggling the enabled checkbox. Previously <code>[disabled..., enabled...]</code> regrouping reshuffled the list on reload.`,
+          `<code>HeadersEditor</code> no longer imports from <code>@scrapeman/http-core</code>. The top-level export dragged <code>undici</code> into the renderer bundle and the browser crashed with <code>process is not defined</code>. The bulk helpers moved to <code>apps/desktop/src/renderer/src/utils/header-bulk.ts</code>.`,
+          `<code>git pull --ff-only</code> no longer fatals on diverged branches (see Added).`,
+        ],
+      },
+      {
+        kind: 'Changed',
+        items: [
+          `Request execution contract: <code>request.url</code> is canonical. <code>request.params</code> is metadata for the file format only and is not appended to the URL by the executor or by <code>composeScrapeDoRequest</code>.`,
+        ],
+      },
+      {
+        kind: 'Tests',
+        items: [
+          `Test files: 22 passed in <code>http-core</code>, 2 in <code>apps/desktop</code>.`,
+          `Total: 332 tests pass, 7 skipped.`,
+          `<code>pnpm -r typecheck</code> clean in all three packages.`,
+        ],
+      },
+    ],
+  },
+];
+---
+
+<Base
+  title="Changelog — Scrapeman"
+  description="Every shipped Scrapeman release, version by version. Added, fixed, notes, and test counts straight from the source CHANGELOG."
+  breadcrumbs={[{ name: 'Changelog', path: '/changelog' }]}
+>
+  <Header />
+  <main class="max-w-3xl mx-auto px-6 py-12">
+    <header class="mb-12">
+      <h1 class="text-4xl font-bold tracking-tighter text-[var(--text-strong-950)] mb-4">Changelog</h1>
+      <p class="text-[var(--text-sub-600)] leading-relaxed">
+        Every shipped release of Scrapeman. Format follows
+        <a href="https://keepachangelog.com/en/1.1.0/" target="_blank" rel="noopener" class="text-[var(--primary-light)] hover:underline">Keep a Changelog</a>;
+        versions follow <a href="https://semver.org/" target="_blank" rel="noopener" class="text-[var(--primary-light)] hover:underline">SemVer</a>.
+        Newest first. Issue references link to the GitHub tracker.
+      </p>
+    </header>
+
+    <article class="changelog">
+      {releases.map((release) => (
+        <section class="release">
+          <h2 id={`v${release.version}`}>
+            <a href={`#v${release.version}`} class="anchor">v{release.version}</a>
+            <span class="dash"> — </span>
+            <time datetime={release.date}>{release.date}</time>
+          </h2>
+          {release.summary && <p class="summary">{release.summary}</p>}
+          {release.sections.map((section) => (
+            <div class="section">
+              <h3>{section.kind}</h3>
+              <ul>
+                {section.items.map((item) => (
+                  <li set:html={linkIssues(item)}></li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </section>
+      ))}
+
+      <section class="release earlier">
+        <h2 id="v0.3.2">v0.3.2 and earlier</h2>
+        <p class="summary">
+          Run <code>git log --grep='release:'</code> in the
+          <a href="https://github.com/scrape-do/scrapeman" target="_blank" rel="noopener">scrapeman repo</a>
+          for prior version notes.
+        </p>
+      </section>
+    </article>
+  </main>
+  <Footer />
+</Base>
+
+<style is:global>
+  .changelog .release {
+    @apply mb-16;
+  }
+  .changelog .release:last-child {
+    @apply mb-0;
+  }
+  .changelog h2 {
+    @apply text-2xl font-bold tracking-tighter text-[var(--text-strong-950)] mt-0 mb-3 pb-2 border-b border-[var(--stroke-soft-200)];
+    scroll-margin-top: 5rem;
+  }
+  .changelog h2 .anchor {
+    @apply text-[var(--text-strong-950)] no-underline;
+  }
+  .changelog h2 .anchor:hover {
+    @apply text-[var(--primary-light)];
+  }
+  .changelog h2 .dash {
+    @apply text-[var(--text-soft-400)] font-normal;
+  }
+  .changelog h2 time {
+    @apply text-[var(--text-soft-400)] font-normal text-base;
+  }
+  .changelog .summary {
+    @apply text-[var(--text-sub-600)] leading-relaxed mb-6;
+  }
+  .changelog .section {
+    @apply mb-6;
+  }
+  .changelog .section:last-child {
+    @apply mb-0;
+  }
+  .changelog h3 {
+    @apply text-base font-semibold text-[var(--text-strong-950)] mt-6 mb-3;
+  }
+  .changelog ul {
+    @apply text-[var(--text-sub-600)] leading-relaxed pl-6 list-disc;
+  }
+  .changelog li {
+    @apply mb-3;
+  }
+  .changelog li:last-child {
+    @apply mb-0;
+  }
+  .changelog code {
+    @apply font-mono text-[var(--primary-light)] text-sm bg-[var(--bg-soft-200)] px-1.5 py-0.5 rounded;
+  }
+  .changelog strong {
+    @apply text-[var(--text-strong-950)] font-semibold;
+  }
+  .changelog a {
+    @apply text-[var(--primary-light)] hover:underline;
+  }
+  .changelog .earlier .summary code {
+    /* keep the inline code chip on the same baseline as surrounding text */
+  }
+</style>

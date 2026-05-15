@@ -1,101 +1,216 @@
 ---
 import DocsLayout from '@/layouts/DocsLayout.astro';
+
+// Source of truth: apps/desktop/src/renderer/src/shortcutsRegistry.ts
+// Keep this list in sync with the registry in the desktop app.
+type Shortcut = { combo: string; description: string };
+type Group = { group: string; shortcuts: Shortcut[] };
+
+const groups: Group[] = [
+  {
+    group: 'Request',
+    shortcuts: [
+      { combo: 'mod+enter', description: 'Send request, or cancel if one is in flight' },
+      {
+        combo: 'mod+r',
+        description:
+          'Send request in parallel — does not cancel the in-flight one. Response panel reflects whichever finishes last.',
+      },
+      { combo: 'mod+s', description: 'Save request' },
+      { combo: 'mod+l', description: 'Focus the URL bar' },
+      { combo: 'mod+f', description: 'Find in response (when a response is loaded)' },
+    ],
+  },
+  {
+    group: 'Tabs',
+    shortcuts: [
+      { combo: 'mod+t', description: 'New tab' },
+      { combo: 'mod+n', description: 'New tab (alternative)' },
+      { combo: 'mod+w', description: 'Close active tab' },
+      { combo: 'mod+shift+w', description: 'Close all tabs' },
+      { combo: 'mod+shift+t', description: 'Reopen the last closed tab' },
+      { combo: 'mod+d', description: 'Duplicate active tab' },
+      { combo: 'mod+1', description: 'Switch to tab 1 (1–9 supported)' },
+    ],
+  },
+  {
+    group: 'Navigation',
+    shortcuts: [
+      { combo: 'mod+k', description: 'Open / close the command palette' },
+      { combo: 'mod+b', description: 'Toggle the sidebar' },
+      { combo: 'mod+shift+f', description: 'Focus the collection search' },
+    ],
+  },
+  {
+    group: 'Git (when the workspace is a repo)',
+    shortcuts: [
+      { combo: 'mod+shift+h', description: 'Toggle "sync with git" for the active request' },
+    ],
+  },
+];
+
+// Render a combo string ("mod+shift+t") as an array of macOS-style key labels.
+// "mod" is rendered as ⌘. Windows / Linux users substitute Ctrl — see the note
+// at the top of the page.
+function renderKeys(combo: string): string[] {
+  const map: Record<string, string> = {
+    mod: '⌘',
+    cmd: '⌘',
+    ctrl: '⌃',
+    shift: '⇧',
+    alt: '⌥',
+    enter: '↵',
+  };
+  return combo.split('+').map((part) => {
+    const key = part.toLowerCase();
+    if (map[key]) return map[key];
+    return part.length === 1 ? part.toUpperCase() : part.charAt(0).toUpperCase() + part.slice(1);
+  });
+}
 ---
 
-<DocsLayout title="Keyboard Shortcuts" description="Complete keyboard shortcut reference for Scrapeman: global actions, tab management, header and param tables, and the dirty tab guard." section="Keyboard Shortcuts">
-  <h2>Keyboard Shortcuts</h2>
-  <p>All shortcuts use <code>Cmd</code> on macOS and <code>Ctrl</code> on Windows and Linux.</p>
+<DocsLayout
+  title="Keyboard shortcuts"
+  description="Every keyboard shortcut Scrapeman binds: request, tabs, navigation, and git. Cross-platform combos with macOS symbols."
+  section="Keyboard Shortcuts"
+>
+  <h2>Keyboard shortcuts</h2>
+  <p>
+    The combos below show macOS symbols. On Windows and Linux, use <code>Ctrl</code> wherever you see <kbd class="kbd">⌘</kbd>.
+    Scrapeman picks the right modifier at runtime based on the platform.
+  </p>
+  <p>
+    The full list also lives inside the app: open the Settings dialog and switch to the
+    <strong>Shortcuts</strong> tab.
+  </p>
 
-  <h2>Global</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Shortcut</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><code>Cmd+N</code></td>
-        <td>New tab — auto-focuses the URL bar</td>
-      </tr>
-      <tr>
-        <td><code>Cmd+T</code></td>
-        <td>New tab</td>
-      </tr>
-      <tr>
-        <td><code>Cmd+W</code></td>
-        <td>Close active tab (with dirty guard)</td>
-      </tr>
-      <tr>
-        <td><code>Cmd+Shift+W</code></td>
-        <td>Close all tabs (with dirty guard)</td>
-      </tr>
-      <tr>
-        <td><code>Cmd+Enter</code></td>
-        <td>Send request</td>
-      </tr>
-      <tr>
-        <td><code>Cmd+S</code></td>
-        <td>Save request</td>
-      </tr>
-      <tr>
-        <td><code>Cmd+Shift+F</code></td>
-        <td>Focus collection search</td>
-      </tr>
-      <tr>
-        <td><code>Cmd+Shift+H</code></td>
-        <td>Toggle git sync on active request</td>
-      </tr>
-    </tbody>
-  </table>
+  {groups.map((g) => (
+    <section>
+      <h3>{g.group}</h3>
+      <table>
+        <thead>
+          <tr>
+            <th class="w-48">Shortcut</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {g.shortcuts.map((s) => (
+            <tr>
+              <td>
+                <span class="kbd-row">
+                  {renderKeys(s.combo).map((k, i) => (
+                    <>
+                      {i > 0 && <span class="kbd-plus">+</span>}
+                      <kbd class="kbd">{k}</kbd>
+                    </>
+                  ))}
+                </span>
+              </td>
+              <td>{s.description}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </section>
+  ))}
 
-  <h2>Tab Management</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Shortcut</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Middle-click on tab</td>
-        <td>Close tab (with dirty guard)</td>
-      </tr>
-      <tr>
-        <td><code>Cmd+1</code> through <code>Cmd+9</code></td>
-        <td>Switch to tab N</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <h2>Headers / Params Table</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Shortcut</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><code>Shift+Enter</code></td>
-        <td>Insert new row below current row, focus moves to the new Key cell</td>
-      </tr>
-      <tr>
-        <td><code>Tab</code> (from last row Key cell, when non-empty)</td>
-        <td>Auto-append a new empty row</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <h2>Dirty Tab Guard</h2>
-  <p>When you attempt to close a tab that has unsaved changes — via any close method (<code>Cmd+W</code>, middle-click, the close button, the context menu, or <code>Cmd+Shift+W</code>) — a confirmation dialog appears showing the tab name and three options:</p>
+  <h2>Send vs. parallel send</h2>
+  <p>
+    <kbd class="kbd">⌘</kbd> <span class="kbd-plus">+</span> <kbd class="kbd">↵</kbd> and
+    <kbd class="kbd">⌘</kbd> <span class="kbd-plus">+</span> <kbd class="kbd">R</kbd>
+    look similar but behave differently:
+  </p>
   <ul>
-    <li><strong>Save</strong> — saves the request then closes the tab</li>
-    <li><strong>Discard</strong> — closes the tab without saving</li>
-    <li><strong>Cancel</strong> — dismisses the dialog and returns to the tab</li>
+    <li>
+      <strong><kbd class="kbd">⌘</kbd> <span class="kbd-plus">+</span> <kbd class="kbd">↵</kbd></strong> sends the request. If
+      a request is already in flight, it cancels that one first. Use this when you are iterating on a single call.
+    </li>
+    <li>
+      <strong><kbd class="kbd">⌘</kbd> <span class="kbd-plus">+</span> <kbd class="kbd">R</kbd></strong> sends a parallel
+      request. The in-flight request is not cancelled. The response panel shows whichever request finishes last, so the
+      slower one wins the screen. Use this to fire-and-forget while keeping the previous response visible until the new
+      one resolves.
+    </li>
   </ul>
-  <p>The dialog includes a <strong>"Don't ask again for this session"</strong> checkbox. When checked, subsequent dirty tab closes during the same session will discard changes immediately without showing the dialog again. This setting resets when the app restarts.</p>
+
+  <h2>Tab close confirmation</h2>
+  <p>
+    Closing a tab with unsaved changes — via <kbd class="kbd">⌘</kbd> <span class="kbd-plus">+</span> <kbd class="kbd">W</kbd>,
+    middle-click, the close button, the context menu, or <kbd class="kbd">⌘</kbd> <span class="kbd-plus">+</span>
+    <kbd class="kbd">⇧</kbd> <span class="kbd-plus">+</span> <kbd class="kbd">W</kbd> — opens a dialog with three options:
+  </p>
+  <ul>
+    <li><strong>Save</strong> — saves the request, then closes the tab.</li>
+    <li><strong>Discard</strong> — closes the tab without saving.</li>
+    <li><strong>Cancel</strong> — dismisses the dialog and returns to the tab.</li>
+  </ul>
+  <p>
+    The dialog has a <strong>Don't ask again for this session</strong> checkbox. When checked, further dirty closes in the
+    same session discard changes immediately. The setting resets when the app restarts.
+  </p>
+
+  <h2>Key-value table shortcuts</h2>
+  <p>
+    Inside Headers and Params tables:
+  </p>
+  <table>
+    <thead>
+      <tr>
+        <th class="w-48">Shortcut</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <span class="kbd-row">
+            <kbd class="kbd">⇧</kbd>
+            <span class="kbd-plus">+</span>
+            <kbd class="kbd">↵</kbd>
+          </span>
+        </td>
+        <td>Insert a new row below the current row, focus moves to the new Key cell</td>
+      </tr>
+      <tr>
+        <td>
+          <span class="kbd-row">
+            <kbd class="kbd">Tab</kbd>
+          </span>
+        </td>
+        <td>From the last row's Key cell (when non-empty), append a new empty row</td>
+      </tr>
+    </tbody>
+  </table>
 </DocsLayout>
+
+<style is:global>
+  .prose-docs .kbd {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.75rem;
+    height: 1.75rem;
+    padding: 0 0.4rem;
+    border-radius: 0.375rem;
+    border: 1px solid var(--stroke-soft-200);
+    background: var(--bg-soft-200);
+    color: var(--text-strong-950);
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 0.78rem;
+    font-weight: 600;
+    line-height: 1;
+    box-shadow: 0 1px 0 var(--stroke-soft-200);
+  }
+  .prose-docs .kbd-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  .prose-docs .kbd-plus {
+    color: var(--text-soft-400);
+    font-size: 0.75rem;
+  }
+</style>
+</content>
+</invoke>

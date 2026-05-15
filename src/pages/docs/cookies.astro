@@ -20,7 +20,7 @@ import DocsLayout from '@/layouts/DocsLayout.astro';
   <p>Cookies are scoped per <strong>workspace</strong> and <strong>environment</strong>. Switching to a different environment gives you a separate jar, so production and staging cookies do not leak into each other.</p>
 
   <h2>Cookies Inspector</h2>
-  <p>Open the <strong>Cookies</strong> panel in the sidebar to view and manage all stored cookies.</p>
+  <p>Open the <strong>Cookies</strong> panel in the sidebar to view, edit, import, and export the jar for the current workspace and environment.</p>
   <p>Each row shows:</p>
   <ul>
     <li><strong>Domain</strong> — the domain the cookie is scoped to</li>
@@ -29,5 +29,44 @@ import DocsLayout from '@/layouts/DocsLayout.astro';
     <li><strong>Expiry</strong> — absolute expiration date, or "Session" for session cookies</li>
     <li><strong>Flags</strong> — <code>Secure</code>, <code>HttpOnly</code>, <code>SameSite</code></li>
   </ul>
-  <p>You can delete individual cookies or clear the entire jar from the inspector.</p>
+
+  <h3>Filter</h3>
+  <p>Type in the domain filter at the top to narrow the list. Clearing it restores all domains.</p>
+
+  <h3>Add and edit manually</h3>
+  <p>
+    Click <strong>+ Add</strong> to open an inline form: name, value, domain, path (default <code>/</code>),
+    expires (ISO date or blank for session), <code>httpOnly</code>, <code>Secure</code>, <code>SameSite</code>.
+    Saving inserts the cookie immediately. Click any existing row to open the same form pre-filled and edit it.
+  </p>
+
+  <h3><code>httpOnly</code> masking</h3>
+  <p>
+    Cookies with <code>httpOnly: true</code> show <code>••••••••</code> for the value by default. Click the eye
+    icon to reveal the real value.
+  </p>
+
+  <h3>Export</h3>
+  <ul>
+    <li><strong>Export JSON</strong> — exports the visible cookies (respecting the domain filter) as a pretty-printed JSON array. Shape matches Scrapeman's <code>CookieEntry</code> type.</li>
+    <li><strong>Export Netscape</strong> — exports cookies in tab-separated <code>cookies.txt</code> format. Compatible with Playwright, Selenium, and curl (<code>--cookie cookies.txt</code>).</li>
+  </ul>
+
+  <h3>Import</h3>
+  <p>Click <strong>Import</strong> and paste either:</p>
+  <ul>
+    <li>A <code>document.cookie</code> string: <code>name1=val1; name2=val2</code>. You also enter the domain these cookies belong to.</li>
+    <li>A Netscape <code>cookies.txt</code> body. Domain is read from each line; the domain field is ignored.</li>
+  </ul>
+  <p>The format is detected automatically from the presence of tabs.</p>
+
+  <h3>Per-request cookie jar toggle</h3>
+  <p>
+    The Settings tab has a <strong>Use cookie jar</strong> checkbox. Disable it on a single request to bypass the
+    workspace jar without touching it globally — no <code>Cookie</code> header on send and no
+    <code>Set-Cookie</code> capture for that request.
+  </p>
+
+  <h3>Delete and clear</h3>
+  <p>Delete individual cookies via the <code>×</code> button on hover, or clear the entire jar from the inspector.</p>
 </DocsLayout>

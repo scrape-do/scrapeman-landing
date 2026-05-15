@@ -27,8 +27,36 @@ import DocsLayout from '@/layouts/DocsLayout.astro';
 
   <h2>Save to collection</h2>
   <ol>
-    <li>Press <code>Cmd+S</code>. If the request has never been saved, a dialog asks for a name and folder.</li>
-    <li>The file is written to your workspace folder as a <code>.req.yaml</code> file.</li>
+    <li>Press <code>Cmd+S</code>. If the request has never been saved, a dialog asks for a name and folder. The name accepts <code>api/users/list</code>-style paths and missing folders are auto-created.</li>
+    <li>The file is written to your workspace folder as a <code>.sman</code> file. Legacy <code>.req.yaml</code> files from earlier versions still read fine and migrate to <code>.sman</code> on the next save.</li>
     <li>The request appears in the sidebar collection tree.</li>
   </ol>
+
+  <h2>Next steps</h2>
+  <ul>
+    <li><a href="/docs/request-building">Request building</a> — methods, headers, params, body editor with <code>{'{{var}}'}</code> autocomplete and lenient JSON beautify.</li>
+    <li><a href="/docs/keyboard-shortcuts">Keyboard shortcuts</a> — every binding Scrapeman ships with.</li>
+    <li><a href="/docs/environment-variables">Environment variables</a> — <code>{'{{var}}'}</code> autocomplete, scope precedence, built-in dynamics.</li>
+    <li><a href="/docs/auth-schemes">Auth schemes</a> — Basic, Bearer, API Key, OAuth 2.0 (client credentials, code, PKCE, OIDC), AWS SigV4.</li>
+    <li><a href="/docs/load-runner">Load runner</a> — concurrency, watched response headers, response validator, save failed bodies.</li>
+    <li><a href="/docs/proxy">Proxy and Scrape.do</a> — native mode, rotating proxy lists, UA presets, anti-bot detection, rate limiting.</li>
+  </ul>
+
+  {/*
+    TODO: shipped features that don't have a dedicated docs/* page yet.
+    Source: scrapeman/CHANGELOG.md and scrapeman/DOCS.md as of v0.6.4.
+    Don't auto-create — discuss scope first to avoid sidebar bloat.
+
+    - WebSocket client (DOCS.md "WebSocket")
+    - Collection Runner (DOCS.md "Collection Runner")
+    - Pre and post-request scripts (DOCS.md "Scripts")
+    - Scoped variables + folder auth inheritance (DOCS.md "Scoped Variables and Auth Inheritance")
+    - Multi-workspace switching (currently a sub-section under Collections)
+    - Scraping-first features summary page — UA presets, anti-bot detection,
+      rate limit, rotating proxy (today these are folded into Proxy & Scrape.do)
+    - Right-click string transforms — Stringify / Destringify, URL / Base64 encode-decode
+    - Dev Tools response tab — timing waterfall, sent URL/headers, redirect chain, TLS cert
+    - SSE Events response mode (currently inside Response Viewer)
+    - TLS verification toggle, raw-body toggle, Settings → Network global defaults
+  */}
 </DocsLayout>

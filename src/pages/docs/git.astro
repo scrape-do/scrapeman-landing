@@ -4,7 +4,7 @@ import DocsLayout from '@/layouts/DocsLayout.astro';
 
 <DocsLayout title="Git Integration" description="VS Code-style in-app git panel for staging, committing, pushing, pulling, and diffing your request collection." section="Git Integration">
   <h2>In-App Git Integration</h2>
-  <p>Scrapeman includes a VS Code-style git panel built on <code>simple-git</code>. Because every request is a plain <code>.req.yaml</code> file in your workspace folder, your entire collection is a git repository — no export step needed.</p>
+  <p>Scrapeman includes a VS Code-style git panel built on <code>simple-git</code>. Because every request is a plain <code>.sman</code> YAML file in your workspace folder, your entire collection is a git repository — no export step needed.</p>
 
   <h2>Status Bar</h2>
   <p>The current branch name is shown in the status bar at the bottom of the window at all times. Click it to open the Source Control panel.</p>
@@ -24,6 +24,15 @@ import DocsLayout from '@/layouts/DocsLayout.astro';
 
   <h2>Push and Pull</h2>
   <p>Push and Pull buttons appear in the panel header. Both operations use the OS credential store (Keychain on macOS, Windows Credential Manager on Windows), so there is no SSH key management UI inside Scrapeman.</p>
+
+  <h3>Diverged-branch dialog</h3>
+  <p>
+    Pull defaults to fast-forward. If local and remote branches have diverged, a dialog prompts you to choose
+    <strong>Rebase</strong>, <strong>Merge commit</strong>, or <strong>Cancel</strong> before proceeding. The
+    pick is forwarded to <code>git pull --rebase</code> or <code>git pull --no-rebase --no-ff</code>.
+    Auth, network, and merge-conflict errors render as plain English banners. A three-second inline badge
+    confirms which strategy ran.
+  </p>
 
   <h2>Diff Viewer</h2>
   <p>Click any changed file in the Source Control panel to open a line-by-line diff view. Added lines are highlighted green, removed lines red — the same visual style as VS Code's built-in diff editor.</p>

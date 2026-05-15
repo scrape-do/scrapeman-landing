@@ -30,7 +30,7 @@ import { Badge } from '@/components/ui/Badge';
 
     <!-- Subheadline -->
     <p class="text-center text-lg sm:text-xl text-[var(--text-sub-600)] max-w-3xl mx-auto leading-relaxed mb-10" style="animation: fade-up 0.6s ease-out 0.2s both;">
-      Unlimited history, unlimited environment variables, unlimited collection runs, built-in load testing, and <code class="font-mono text-[var(--primary-light)] text-base">{'{{var}}'}</code> autocomplete everywhere.
+      Unlimited history, unlimited environment variables, unlimited collection runs, built-in load testing, a WebSocket client, pre and post-request scripts, and <code class="font-mono text-[var(--primary-light)] text-base">{'{{var}}'}</code> autocomplete everywhere.
       <br class="hidden sm:block" />
       Everything Postman locks behind $19 a seat, shipped free in an Electron app you can read on GitHub. Plus a first-class <a href="https://scrape.do/?utm_source=scrapeman&utm_medium=landing&utm_campaign=hero_sub" target="_blank" rel="noopener" class="text-[var(--primary-light)] hover:underline">Scrape.do</a> proxy mode for when you are hitting real-world sites.
     </p>
@@ -112,7 +112,7 @@ import { Badge } from '@/components/ui/Badge';
           <div class="flex flex-col">
             <!-- Response tabs -->
             <div class="flex items-center gap-0 border-b border-[var(--stroke-soft-200)] px-4 pt-2">
-              {['Body', 'Headers', 'Cookies', 'Timeline'].map((tab, i) => (
+              {['Body', 'Headers', 'Dev Tools', 'Scripts'].map((tab, i) => (
                 <button class:list={[
                   'px-4 py-2 text-xs font-sans font-medium border-b-2 -mb-px transition-colors',
                   i === 0
@@ -150,7 +150,7 @@ import { Badge } from '@/components/ui/Badge';
       {[
         'Unlimited history',
         'No account required',
-        'Local YAML + SQLite',
+        'Git-friendly .sman YAML',
         'Apache 2.0 on GitHub',
       ].map(label => (
         <span class="flex items-center gap-1.5">

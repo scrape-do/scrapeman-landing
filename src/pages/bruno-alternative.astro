@@ -57,7 +57,11 @@ const comparisons = [
   { feature: 'OAuth2 token dedup', scrapeman: true, bruno: false },
   { feature: 'Auto-set Content-Type header', scrapeman: true, bruno: false },
   { feature: 'AWS SigV4 auth', scrapeman: true, bruno: true },
-  { feature: 'Pre-request scripts (JS)', scrapeman: false, bruno: true },
+  { feature: 'Pre and post-request scripts (JS vm sandbox)', scrapeman: true, bruno: true },
+  { feature: 'WebSocket client', scrapeman: true, bruno: false },
+  { feature: 'OAuth 2.0 + PKCE + OIDC discovery', scrapeman: true, bruno: true },
+  { feature: 'OpenAPI / Swagger import', scrapeman: true, bruno: false },
+  { feature: 'Per-request TLS verify toggle', scrapeman: true, bruno: true },
   { feature: 'GraphQL editor', scrapeman: false, bruno: true },
   { feature: 'Free forever', scrapeman: true, bruno: true },
   { feature: 'Open source', scrapeman: true, bruno: true },
@@ -65,8 +69,8 @@ const comparisons = [
 
 const honest = [
   'Bruno started the local-first, git-friendly API client niche. The .bru file format has years of community adoption and tutorials.',
-  'Pre-request and post-request scripts in JavaScript, plus the Bruno CLI for CI runners. Scrapeman has no scripting sandbox today.',
-  'Built-in GraphQL editor with introspection. Scrapeman is HTTP/HTTPS only for now — GraphQL is on the roadmap (M12).',
+  'Bruno CLI for CI runners. Scrapeman has pre and post-request scripts with a bru API and a vm sandbox, but no headless CLI runner yet.',
+  'Built-in GraphQL editor with introspection. Scrapeman is HTTP / HTTPS / WebSocket only for now. GraphQL is on the roadmap (M12).',
   'Pure community open source, MIT, no company-backed angle to worry about. Some teams prefer that funding model.',
 ];
 ---
@@ -85,11 +89,8 @@ const honest = [
         <div class="flex items-center justify-center gap-4 mb-10" style="animation: fade-up 0.5s ease-out both;">
           <!-- Scrapeman logo -->
           <div class="flex items-center gap-2">
-            <div class="w-10 h-10 rounded-xl bg-accent flex items-center justify-center">
-              <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
-                <circle cx="8" cy="8" r="3" fill="white" opacity="0.9"/>
-                <path d="M8 1L8 3M8 13L8 15M1 8L3 8M13 8L15 8M3.05 3.05L4.46 4.46M11.54 11.54L12.95 12.95M12.95 3.05L11.54 4.46M4.46 11.54L3.05 12.95" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
-              </svg>
+            <div class="w-10 h-10 rounded-xl bg-[var(--primary-alpha-20)] border border-[var(--primary-alpha-20)] flex items-center justify-center">
+              <img src="/scrapeman-mark.svg" alt="" aria-hidden="true" width="22" height="22" class="w-[22px] h-[22px]" />
             </div>
             <span class="font-bold text-xl text-[var(--text-strong-950)]">Scrapeman</span>
           </div>
@@ -238,7 +239,7 @@ const honest = [
           ))}
         </ul>
         <p class="text-xs text-[var(--text-soft-400)] text-center mt-6">
-          If JS scripting or GraphQL is your hard requirement today, stay with Bruno. If you also need SSE that does not hang, large responses without crashes, persistent cookies, and a load runner, try Scrapeman.
+          If GraphQL or the Bruno CLI is your hard requirement, stay with Bruno. If you also need SSE that does not hang, large responses without crashes, persistent cookies, a load runner with watched headers, and a WebSocket client, try Scrapeman.
         </p>
       </div>
     </section>

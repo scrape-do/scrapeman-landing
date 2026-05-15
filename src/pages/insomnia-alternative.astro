@@ -18,10 +18,16 @@ const comparisons = [
   { feature: 'Local-first (no cloud required)', scrapeman: true, insomnia: 'Partially restored', good: true },
   { feature: 'No account required', scrapeman: true, insomnia: false, good: false },
   { feature: 'Auto-decompress gzip/brotli', scrapeman: true, insomnia: false, good: false },
-  { feature: 'Persistent cookie jar', scrapeman: true, insomnia: true, good: true },
+  { feature: 'Persistent cookie jar with inspector UI', scrapeman: true, insomnia: true, good: true },
   { feature: 'SSE event streaming', scrapeman: true, insomnia: false, good: false },
-  { feature: '2MB+ response + save to disk', scrapeman: true, insomnia: false, good: false },
+  { feature: 'WebSocket client', scrapeman: true, insomnia: true, good: true },
+  { feature: 'Single-request load runner', scrapeman: true, insomnia: false, good: false },
+  { feature: 'Native Scrape.do proxy mode', scrapeman: true, insomnia: false, good: false },
+  { feature: '200 MB response + save to disk', scrapeman: true, insomnia: false, good: false },
+  { feature: 'OAuth 2.0 + PKCE + OIDC discovery', scrapeman: true, insomnia: true, good: true },
   { feature: 'AWS SigV4 auth', scrapeman: true, insomnia: true, good: true },
+  { feature: 'OpenAPI / Swagger import', scrapeman: true, insomnia: true, good: true },
+  { feature: 'Pre and post-request scripts', scrapeman: true, insomnia: true, good: true },
   { feature: 'GraphQL support', scrapeman: false, insomnia: true, good: true },
   { feature: 'Open source', scrapeman: true, insomnia: 'Partially (core only)', good: false },
   { feature: 'Community-owned roadmap', scrapeman: true, insomnia: false, good: false },
@@ -29,7 +35,7 @@ const comparisons = [
 ];
 
 const honest = [
-  'Insomnia ships GraphQL and gRPC out of the box. Scrapeman is HTTP/HTTPS only today (GraphQL is on the M12 roadmap).',
+  'Insomnia ships GraphQL and gRPC out of the box. Scrapeman is HTTP / HTTPS / WebSocket today. GraphQL is on the M12 roadmap.',
   'Plugin ecosystem with community-built plugins for custom auth, response transforms, and integrations. Scrapeman has no plugin layer yet.',
   'Built-in code generation in many languages via insomnia-codegen. Scrapeman ships hand-written generators for curl, JS fetch, Python, and Go only.',
   'Insomnia has years of polish behind it, originally designed by Greg Schier (who now builds Yaak). Scrapeman is younger and smaller.',
@@ -49,11 +55,8 @@ const honest = [
       <div class="max-w-4xl mx-auto px-6 text-center">
         <div class="flex items-center justify-center gap-4 mb-10" style="animation: fade-up 0.5s ease-out both;">
           <div class="flex items-center gap-2">
-            <div class="w-10 h-10 rounded-xl bg-accent flex items-center justify-center">
-              <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
-                <circle cx="8" cy="8" r="3" fill="white" opacity="0.9"/>
-                <path d="M8 1L8 3M8 13L8 15M1 8L3 8M13 8L15 8M3.05 3.05L4.46 4.46M11.54 11.54L12.95 12.95M12.95 3.05L11.54 4.46M4.46 11.54L3.05 12.95" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
-              </svg>
+            <div class="w-10 h-10 rounded-xl bg-[var(--primary-alpha-20)] border border-[var(--primary-alpha-20)] flex items-center justify-center">
+              <img src="/scrapeman-mark.svg" alt="" aria-hidden="true" width="22" height="22" class="w-[22px] h-[22px]" />
             </div>
             <span class="font-bold text-xl text-[var(--text-strong-950)]">Scrapeman</span>
           </div>

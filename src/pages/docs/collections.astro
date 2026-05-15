@@ -2,16 +2,17 @@
 import DocsLayout from '@/layouts/DocsLayout.astro';
 ---
 
-<DocsLayout title="Collections &amp; File Format" description="Understand the .req.yaml file structure, body sidecars, workspace layout, and per-request git sync in Scrapeman." section="Collections & File Format">
+<DocsLayout title="Collections &amp; File Format" description="Understand the .sman file structure, body sidecars, workspace layout, multi-workspace support, restart restore, and per-request git sync in Scrapeman." section="Collections & File Format">
   <h2>File structure</h2>
-  <p>Every request is one <code>.req.yaml</code> file:</p>
-  <pre><code># products/list.req.yaml
+  <p>Every request is one <code>.sman</code> file (YAML content, custom extension):</p>
+  <pre><code># products/list.sman
+scrapeman: "2.0"
+meta:
+  name: List products
 method: GET
 url: "https://api.example.com/products?page=&#123;&#123;page&#125;&#125;"
 headers:
-  - key: Accept
-    value: application/json
-    enabled: true
+  Accept: application/json
 auth:
   type: bearer
   token: "&#123;&#123;token&#125;&#125;"</code></pre>
@@ -19,11 +20,19 @@ auth:
     Key order is stable (deterministic serializer), so git diffs are clean and human-readable.
   </p>
 
+  <h3><code>.req.yaml</code> compatibility (pre-0.4 workspaces)</h3>
+  <p>
+    Files saved by earlier versions used <code>.req.yaml</code> with <code>scrapeman: "1.0"</code>. Scrapeman
+    still reads those files transparently. When you save one it is rewritten as <code>.sman</code> next to the
+    old file and the <code>.req.yaml</code> is removed. If both extensions exist with the same stem, the
+    <code>.sman</code> wins and the <code>.req.yaml</code> is hidden from the sidebar.
+  </p>
+
   <h2>Body sidecars</h2>
   <p>
     Payloads 4 KB or larger are automatically promoted to a sidecar file under
-    <code>files/&lt;slug&gt;.body.&lt;ext&gt;</code>. The <code>.req.yaml</code> references the sidecar by path.
-    This keeps YAML files small and diffs focused on metadata changes.
+    <code>files/&lt;slug&gt;.body.&lt;ext&gt;</code>. The <code>.sman</code> file references the sidecar by path.
+    This keeps the main file small and diffs focused on metadata changes.
   </p>
 
   <h2>Workspace folder</h2>
@@ -32,10 +41,42 @@ auth:
     directory, never the workspace. The workspace is safe to commit to git.
   </p>
 
+  <h2>Path-in-name save</h2>
+  <p>
+    The save dialog accepts <code>api/users/list</code>-style names. Missing folders are auto-created under the
+    workspace root. <code>..</code> and <code>.</code> segments are rejected; the final path is resolved safely.
+  </p>
+
+  <h2>Multiple workspaces</h2>
+  <p>
+    Open more than one workspace in the same window and switch between them from the sidebar header. Click the
+    workspace name (just above the Files / Git tab strip) to drop down a list of every workspace you have opened
+    this session.
+  </p>
+  <p>The dropdown lets you:</p>
+  <ul>
+    <li>Switch to another open workspace. The current workspace's open tabs, active environment, and sidebar view get snapshotted in memory and restored when you switch back.</li>
+    <li>Open another workspace folder via the standard picker.</li>
+    <li>Close the current workspace, or close any other open workspace from its row.</li>
+  </ul>
+  <p>
+    The list of open workspaces and the last-active path persist to localStorage, so the same set reopens on next
+    launch. Per-workspace UI snapshots also persist as of v0.6.0.
+  </p>
+
+  <h2>Restore unsaved tabs on restart</h2>
+  <p>
+    Builder state — URL, headers, params, body, auth, settings, scripts — round-trips through localStorage so a
+    full app restart does not lose unsaved drafts. Live runtime state (in-flight executions, websocket
+    connections, load test runs, parallel-burst HUD) is stripped before saving so a stale "sending…" banner never
+    resurfaces after restart.
+  </p>
+
   <h2>Per-request git sync toggle</h2>
   <p>
     Right-click a request in the sidebar and select <strong>"Stop syncing to git"</strong> to exclude it from
     version control. Backed by <code>.git/info/exclude</code> (never pushed to remote). Shortcut:
-    <code>Cmd+Shift+H</code> on the active tab. A crossed-eye icon marks unsynced requests.
+    <code>Cmd+Shift+H</code> on the active tab. A crossed-eye icon marks unsynced requests. If you later
+    <code>git add</code> the file yourself, Scrapeman notices and the icon clears automatically.
   </p>
 </DocsLayout>

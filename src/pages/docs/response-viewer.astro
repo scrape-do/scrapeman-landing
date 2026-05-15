@@ -5,7 +5,8 @@ import DocsLayout from '@/layouts/DocsLayout.astro';
 <DocsLayout title="Response Viewer" description="Scrapeman auto-detects response content type and offers Raw, Pretty, Tree, and Preview modes with in-body search and full request metrics." section="Response Viewer">
   <h2>Content detection</h2>
   <p>
-    Scrapeman auto-detects the response content type: JSON, HTML, XML, image, PDF, text, or binary.
+    Scrapeman auto-detects the response content type: JSON, HTML, XML, JavaScript, CSS, image, PDF, text, or
+    binary.
   </p>
 
   <h2>View modes per content type</h2>
@@ -18,16 +19,28 @@ import DocsLayout from '@/layouts/DocsLayout.astro';
     </thead>
     <tbody>
       <tr>
+        <td>SSE (<code>text/event-stream</code>)</td>
+        <td>Events (default), Raw</td>
+      </tr>
+      <tr>
         <td>JSON</td>
-        <td>Raw, Pretty (formatted), Tree (collapsible with JSONPath copy)</td>
+        <td>Raw, Pretty (CodeMirror syntax-highlighted), Tree (collapsible with JSONPath copy)</td>
       </tr>
       <tr>
         <td>HTML</td>
-        <td>Raw, Pretty, Preview (sandboxed iframe)</td>
+        <td>Raw, Pretty (CodeMirror syntax-highlighted), Preview (sandboxed iframe)</td>
       </tr>
       <tr>
         <td>XML</td>
-        <td>Raw, Pretty</td>
+        <td>Raw, Pretty (CodeMirror syntax-highlighted, indented)</td>
+      </tr>
+      <tr>
+        <td>JavaScript</td>
+        <td>Raw, Pretty (CodeMirror syntax-highlighted)</td>
+      </tr>
+      <tr>
+        <td>CSS</td>
+        <td>Raw, Pretty (CodeMirror syntax-highlighted)</td>
       </tr>
       <tr>
         <td>Image</td>
@@ -44,15 +57,61 @@ import DocsLayout from '@/layouts/DocsLayout.astro';
     </tbody>
   </table>
   <p>
-    <strong>Lazy parsing</strong>: the default view is Raw. <code>JSON.parse</code> and tree rendering only happen
-    when you switch to Pretty or Tree view.
+    Pretty mode runs CodeMirror with the one-dark theme in dark mode. Syntax coloring follows the language
+    grammar. The default view for JSON, HTML, XML, JavaScript, CSS, image, and PDF is the structured view (Tree /
+    Pretty / Preview); Raw stays one click away.
+  </p>
+  <p>
+    <strong>Lazy parsing</strong>: <code>JSON.parse</code> and tree rendering only fire when you switch to Pretty
+    or Tree view.
+  </p>
+
+  <h2>HTML preview</h2>
+  <p>
+    The Preview mode for HTML runs the response inside a sandboxed iframe with no script execution. External CSS,
+    images, and fonts load (the prod CSP allows <code>https:</code> and <code>http:</code> for style, image, and
+    font sources). A <code>&lt;base href&gt;</code> is injected so relative URLs (<code>/assets/main.css</code>)
+    resolve to the originating server. The base href prefers the last redirect destination, then the executor's
+    sent URL, then the URL the user typed.
+  </p>
+
+  <h2>SSE Events mode</h2>
+  <p>
+    When the response is <code>text/event-stream</code> (or the executor populates <code>sseEvents</code>) the
+    viewer defaults to <strong>Events</strong> mode. Each event is shown in its own block with <code>id</code>,
+    <code>event</code>, <code>retry</code> in the header row and the <code>data</code> body below. Valid JSON
+    data renders as a collapsible JSON tree; otherwise it shows as monospace text.
+  </p>
+  <p>
+    <strong>Auto-scroll</strong>: the list follows new events as they arrive. Click <strong>Scroll: off</strong>
+    to pause; click again to resume. <strong>Export JSON</strong> saves the full <code>sseEvents</code> array.
   </p>
 
   <h2>Response body search</h2>
+  <p>Search within the response body with highlight and previous/next navigation.</p>
+  <ul>
+    <li><strong>Debounced input</strong> — the match scan runs 150 ms after you stop typing, so keystrokes feel instant on large bodies.</li>
+    <li><strong>Virtualized rendering</strong> — Raw views render only the visible lines; 5 MB bodies scroll and search without jank.</li>
+    <li><strong>Enter / Shift+Enter</strong> — jump to next / previous match; the viewport scrolls to centre the active match.</li>
+    <li><strong>Large body warning</strong> — switching to Pretty mode on a body over 500 KB shows a banner suggesting Raw for best performance. Applies to all syntax-highlighted kinds.</li>
+    <li>The search query persists across sends and auto re-runs when a new response arrives.</li>
+  </ul>
+
+  <h2>Save response to file</h2>
+  <p>The toolbar has a <strong>Save</strong> button that writes the decoded body to a file you choose, using the system save dialog.</p>
+
+  <h2>Dev Tools tab</h2>
   <p>
-    Search within the response body with highlight, previous/next navigation. The search persists across sends and
-    auto-re-runs when a new response arrives.
+    The Dev Tools tab appears next to Body and Headers after every response.
   </p>
+  <ul>
+    <li><strong>Timing waterfall</strong> — DNS lookup, TCP connect, TLS handshake, TTFB, and download. Each segment is proportional to its share of total time and labelled with its exact millisecond value.</li>
+    <li><strong>Sent URL and headers</strong> — the actual URL and headers on the wire, after variable resolution, Scrape.do composition, and auth injection.</li>
+    <li><strong>Redirect chain</strong> — each 3xx hop with status and Location.</li>
+    <li><strong>TLS certificate</strong> — subject CN, issuer CN, validity dates, SHA-256 fingerprint. Days-remaining warning when fewer than 30 days remain.</li>
+    <li><strong>Remote address</strong> — IP and port of the server that answered, plus HTTP version and compressed-vs-decoded size.</li>
+    <li><strong>Script console</strong> — output from pre and post-request scripts.</li>
+  </ul>
 
   <h2>Metrics</h2>
   <p>

@@ -43,4 +43,74 @@ import DocsLayout from '@/layouts/DocsLayout.astro';
     <li><strong>Yellow</strong> — request completed but failed the response validator check.</li>
     <li><strong>Red</strong> — network-level error (timeout, refused, TLS failure, etc.).</li>
   </ul>
+
+  <h2>Tab isolation</h2>
+  <p>
+    Load test state — config, run id, progress snapshot, event log — lives on the tab in the application state.
+    A run started in tab A continues when you switch to tab B; coming back to tab A shows the live progress.
+    Closing a tab aborts its running load run.
+  </p>
+
+  <h2>Number input editing</h2>
+  <p>
+    The Total requests, Concurrency, and Per-iteration delay fields accept free-form editing. Clear the entire
+    value and type a new number without the field snapping back to 1 mid-edit. Values clamp (minimum 1 for counts,
+    0 for delay) when you leave the field or press Start.
+  </p>
+
+  <h2>Event log scroll</h2>
+  <p>
+    The event log has a fixed-height scroll area so the metrics row above it stays visible. <strong>Auto-scroll</strong>
+    is on by default. Scrolling up manually pauses it. Click <strong>Auto-scroll</strong> to resume anchoring to
+    the bottom.
+  </p>
+
+  <h2>Watched response headers</h2>
+  <p>
+    Track up to 10 response headers across all iterations and see per-header statistics after the run.
+  </p>
+  <ul>
+    <li>
+      <strong>Workspace-level config</strong> — open Collection Settings, go to the Load test tab. Add header
+      names to the watched list and toggle <strong>Auto-track <code>Scrape.do-*</code> headers</strong> (on by
+      default). Saved to <code>.scrapeman/collection.yaml</code>.
+    </li>
+    <li>
+      <strong>Per-run override</strong> — the Load Test panel has a <strong>Watched headers</strong> chip input
+      above the config form. Anything added there replaces the workspace list for that run only.
+    </li>
+    <li>
+      <strong>Click-to-add from a response</strong> — hover any row in the response Headers tab. A <code>+</code>
+      icon appears on the right; click it to append that header to the workspace watched list.
+    </li>
+  </ul>
+  <p>
+    After the first tick with stats, a <strong>Watched headers</strong> section appears below the metrics grid.
+    Each card shows the header name, total times seen, percentage of total iterations, status pills (All, 200,
+    429, …), the top 5 unique values as a bar chart, and numeric stats (min / max / avg / p50 / p95 / p99) when
+    at least 95% of seen values parse as numbers and at least 5 values have been collected.
+  </p>
+
+  <h2>Save failed responses</h2>
+  <p>
+    Enable <strong>Save failed responses</strong> in the config form before starting a run. The runner captures
+    the response body of every failed iteration (validation failures and network errors). Bodies are truncated to
+    64 KB before being stored in memory.
+  </p>
+  <p>
+    The <strong>Limit</strong> field caps how many bodies are kept (1 to 1000, default 50). When the limit is
+    reached, older entries drop as new failures arrive.
+  </p>
+  <p>
+    After the run, a <strong>Failures</strong> panel appears below the event log. Each row shows iteration
+    number, status code, duration, and a brief reason; click to expand and view the raw body (JSON is
+    pretty-printed). <strong>Export JSON</strong> saves all captured failures to a file. The ring buffer is
+    in-memory only; failures do not persist across app restarts.
+  </p>
+
+  <h2>Run-parameters pills</h2>
+  <p>
+    While a run is live, the metrics block shows <code>total · concurrency · delay · status · body ⊃ "..."</code>
+    pills so you can confirm what is actually being executed at a glance.
+  </p>
 </DocsLayout>

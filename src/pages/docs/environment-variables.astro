@@ -23,13 +23,46 @@ variables:
     <code>{"{{var}}"}</code> syntax works across: URL, params, headers, body, auth fields, proxy fields, and
     Scrape.do fields.
   </p>
-  <p><strong>Scope precedence</strong> (highest to lowest):</p>
+  <p><strong>Scope precedence</strong> (highest wins):</p>
   <ol>
-    <li>Per-request overrides</li>
+    <li>Folder chain (deepest folder overrides shallower)</li>
     <li>Active environment</li>
-    <li>Collection-level variables</li>
+    <li>Collection variables</li>
+    <li>Global variables</li>
     <li>Built-in dynamics</li>
   </ol>
+
+  <h3>Global variables</h3>
+  <p>
+    Stored at <code>.scrapeman/globals.yaml</code>. Available to every request in the workspace, across all
+    environments. Lowest precedence. Edit via the workspace settings gear icon in the sidebar.
+  </p>
+  <pre><code># .scrapeman/globals.yaml
+scrapeman: "2.0"
+variables:
+  - key: COMPANY_ID
+    value: acme
+    enabled: true
+    secret: false</code></pre>
+
+  <h3>Collection variables</h3>
+  <p>
+    Stored at <code>.scrapeman/collection.yaml</code>. Apply to all requests, lower precedence than the active
+    environment. The same file can also hold a collection-level default auth block.
+  </p>
+
+  <h3>Folder variables and auth inheritance</h3>
+  <p>
+    Each folder can have a <code>_folder.yaml</code> with its own variables and an optional auth block. Folder
+    variables from ancestor folders merge first (root to leaf), so a deeper folder's variable wins over a
+    shallower one's.
+  </p>
+  <p>
+    When a request's Auth tab is set to <strong>None</strong> (or the Inherit option), Scrapeman walks the folder
+    chain up to the workspace root. The first ancestor with an <code>auth</code> block in its
+    <code>_folder.yaml</code> is used. If no folder defines auth, the collection default auth applies. The Auth
+    tab shows an <strong>Inherited from /path</strong> label when inheritance is active.
+  </p>
 
   <h2>Built-in dynamic variables</h2>
   <p>These re-resolve on every send:</p>

@@ -25,9 +25,9 @@ const differences = [
     scrapeman: 'Scrapeman has a per-request Scrape.do toggle. The main process rewrites the URL to api.scrape.do, forwards residential rotation, JS rendering, and geo targeting fields, and handles retries for you.',
   },
   {
-    title: 'Built-in load runner',
+    title: 'Built-in load runner with watched headers',
     yaak: 'Yaak focuses on single requests and scripting. Stress testing a single endpoint means reaching for a separate tool like k6, vegeta, or hey.',
-    scrapeman: 'Scrapeman ships a load runner in the request view. Bounded concurrency, live p50/p95/p99, status histogram, response validator for status code and body-contains, abortable mid-run.',
+    scrapeman: 'Scrapeman ships a load runner in the request view. Bounded concurrency, live p50/p95/p99, status histogram, response validator, abortable mid-run. Track up to 10 response headers per run with per-status value distribution and numeric stats. Save failed bodies into a ring buffer (1 to 1000) for offline triage.',
   },
   {
     title: 'Backed by a scraping company',
@@ -50,11 +50,8 @@ const differences = [
       <div class="max-w-4xl mx-auto px-6 text-center">
         <div class="flex items-center justify-center gap-4 mb-10" style="animation: fade-up 0.5s ease-out both;">
           <div class="flex items-center gap-2">
-            <div class="w-10 h-10 rounded-xl bg-accent flex items-center justify-center">
-              <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
-                <circle cx="8" cy="8" r="3" fill="white" opacity="0.9"/>
-                <path d="M8 1L8 3M8 13L8 15M1 8L3 8M13 8L15 8M3.05 3.05L4.46 4.46M11.54 11.54L12.95 12.95M12.95 3.05L11.54 4.46M4.46 11.54L3.05 12.95" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
-              </svg>
+            <div class="w-10 h-10 rounded-xl bg-[var(--primary-alpha-20)] border border-[var(--primary-alpha-20)] flex items-center justify-center">
+              <img src="/scrapeman-mark.svg" alt="" aria-hidden="true" width="22" height="22" class="w-[22px] h-[22px]" />
             </div>
             <span class="font-bold text-xl text-[var(--text-strong-950)]">Scrapeman</span>
           </div>

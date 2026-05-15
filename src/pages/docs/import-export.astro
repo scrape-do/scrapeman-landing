@@ -4,9 +4,23 @@ import DocsLayout from '@/layouts/DocsLayout.astro';
 
 <DocsLayout title="Import & Export" description="Import collections from Postman, Bruno, Insomnia, HAR, and curl. Export history as HAR." section="Import & Export">
   <h2>Import and Export</h2>
-  <p>Scrapeman reads collections from four external formats and exports history as HAR. Two more export targets are planned.</p>
+  <p>Scrapeman reads collections from five external formats and exports history as HAR. Two more export targets are planned.</p>
 
   <h2>Import Formats</h2>
+
+  <h3>OpenAPI 3.0.x / 3.1.x and Swagger 2.0</h3>
+  <p>Parse OpenAPI 3.0.x / 3.1.x and Swagger 2.0 from a URL or pasted text (<code>importOpenApiSpec</code>). Format is auto-detected (JSON or YAML).</p>
+  <ul>
+    <li>Each <code>paths[*][method]</code> operation becomes one request.</li>
+    <li>Operation name is <code>operationId</code>, then <code>summary</code>, then <code>METHOD /path</code>.</li>
+    <li>Operations group by <code>tags[0]</code> into folders. Untagged operations go to the workspace root.</li>
+    <li>Server URL is written to a <code>base_url</code> environment variable; request URLs become <code>&#123;&#123;base_url&#125;&#125;/path</code>.</li>
+    <li>Parameters: <code>in: query</code> to params, <code>in: header</code> to headers, <code>in: path</code> substituted as <code>&#123;&#123;paramName&#125;&#125;</code> in the URL.</li>
+    <li>Body: prefers <code>application/json</code>, falls back through <code>application/xml</code>, <code>text/plain</code>, <code>application/x-www-form-urlencoded</code>, <code>multipart/form-data</code>. Uses <code>example</code> / <code>examples</code> when present, otherwise generates a minimal example from the schema (max depth 5).</li>
+    <li>Local <code>$ref</code> resolved one hop. Remote URL refs are skipped with a warning.</li>
+    <li>Auth schemes (<code>http:bearer</code>, <code>http:basic</code>, <code>apiKey</code>, <code>oauth2</code>) map to request auth; secrets are written as <code>&#123;&#123;VAR_NAME&#125;&#125;</code> placeholders in a generated environment.</li>
+    <li>The Import OpenAPI / Swagger dialog shows endpoint count, tag list, and detected auth types in a preview before import.</li>
+  </ul>
 
   <h3>Postman Collection v2.1</h3>
   <p>Reads the standard Postman JSON export format (<code>importPostmanCollection</code>).</p>
@@ -45,16 +59,22 @@ import DocsLayout from '@/layouts/DocsLayout.astro';
   </ul>
 
   <h3>curl</h3>
-  <p>Paste a curl command directly into the import dialog, or import from a <code>.sh</code> file.</p>
-  <p>Parsed flags:</p>
+  <p>
+    Paste a curl command directly into the import dialog, or import from a <code>.sh</code> file. Built on top
+    of <code>@scrape-do/curl-parser</code> for the standard surface (URL, method, basic auth, user-agent,
+    cookies, boolean flags, multipart, urlencoded body). Scrapeman extracts <code>-d</code> / <code>-H</code> /
+    <code>-F</code> values, proxy / referer flags, and ANSI-C <code>$'...'</code> quoting before handing off,
+    so escaped sequences inside Chrome's <strong>Copy as cURL (bash)</strong> output round-trip cleanly.
+  </p>
+  <p>Parsed flags include:</p>
   <ul>
     <li><code>-X</code> / <code>--request</code> — HTTP method</li>
     <li><code>-H</code> / <code>--header</code> — request headers</li>
-    <li><code>-d</code> / <code>--data</code> / <code>--data-raw</code> / <code>--data-binary</code> — request body</li>
+    <li><code>-d</code> / <code>--data</code> / <code>--data-raw</code> / <code>--data-binary</code> — request body, with ANSI-C escape expansion (<code>\n</code>, <code>\t</code>, <code>\xHH</code>, <code>\NNN</code>, <code>\\</code>, <code>\'</code>, <code>\"</code>)</li>
     <li><code>-u</code> / <code>--user</code> — basic auth</li>
     <li><code>--cookie</code> — cookie header</li>
     <li><code>-F</code> / <code>--form</code> — multipart form fields</li>
-    <li><code>--proxy</code> — proxy URL</li>
+    <li><code>--proxy</code>, <code>--referer</code>, <code>-A</code> / <code>--user-agent</code></li>
   </ul>
 
   <h2>Export Formats</h2>
@@ -70,5 +90,5 @@ import DocsLayout from '@/layouts/DocsLayout.astro';
   <p>Export the active collection as a Postman v2.1 JSON file. Tracked as T093.</p>
 
   <h3>.sman Bundle (planned)</h3>
-  <p>A ZIP-based portable bundle containing <code>.req.yaml</code> files, environments, and body sidecars. Designed for sharing a workspace as a single file without requiring a git repository. Tracked as T097/T098.</p>
+  <p>A ZIP-based portable bundle containing <code>.sman</code> files, environments, and body sidecars. Designed for sharing a workspace as a single file without requiring a git repository. Tracked as T097/T098.</p>
 </DocsLayout>

@@ -6,15 +6,15 @@ import { Button } from '@/components/ui/Button';
 
 const honest = [
   'Open it in any browser, no install, no download. Scrapeman needs a desktop binary.',
-  'Pre-request scripts and post-request tests in JavaScript, Postman-compatible. Scrapeman has no scripting layer today.',
-  'WebSocket, Server-Sent Events, GraphQL, MQTT, and Socket.IO out of the box. Scrapeman is HTTP/HTTPS only for now.',
-  'OIDC PKCE auth and SSO on the enterprise tier. Scrapeman ships OAuth2 client credentials, not the full code flow yet.',
+  'Postman-compatible script API (pm.* namespace) for teams migrating from Postman test scripts. Scrapeman runs scripts in a Node vm sandbox with a bru API instead.',
+  'GraphQL, MQTT, and Socket.IO out of the box. Scrapeman ships HTTP, HTTPS, and a WebSocket client today. SSE responses get a dedicated Events mode in the response viewer.',
+  'SSO and team workspaces on the Hoppscotch Cloud enterprise tier. Scrapeman is local-first and routes collaboration through git.',
   'Five million monthly users and a wider plugin ecosystem. Scrapeman is younger and smaller.',
 ];
 
 const pricingComparison = [
   { tier: 'Runtime', hoppscotch: 'Browser PWA (IndexedDB)', scrapeman: 'Native desktop (Electron)' },
-  { tier: 'Collections storage', hoppscotch: 'Browser storage, wiped on clear site data', scrapeman: 'YAML files in a folder you pick' },
+  { tier: 'Collections storage', hoppscotch: 'Browser storage, wiped on clear site data', scrapeman: '.sman YAML files in a folder you pick' },
   { tier: 'Team sync / SSO / audit log', hoppscotch: 'Hoppscotch Cloud paid plans', scrapeman: 'Use git, no plan needed' },
   { tier: 'Account required', hoppscotch: 'Yes for sync across devices', scrapeman: 'No' },
   { tier: 'License', hoppscotch: 'MIT (open source)', scrapeman: 'Apache 2.0 (open source)' },
@@ -29,7 +29,7 @@ const differences = [
   {
     title: 'Local files vs IndexedDB',
     hoppscotch: 'Free collections live in the browser IndexedDB for that profile. Clearing site data, switching browsers, or using a second machine loses them unless you sign in to Hoppscotch Cloud.',
-    scrapeman: 'Every request is one .req.yaml file in a workspace folder you choose. Commit it to git, share it on a drive, diff it in review. The file is the source of truth.',
+    scrapeman: 'Every request is one .sman YAML file in a workspace folder you choose. Folder, collection, and global variables get their own YAML files. Commit them to git, share them on a drive, diff them in review. The files are the source of truth.',
   },
   {
     title: 'Native proxy and Scrape.do mode',
@@ -39,7 +39,7 @@ const differences = [
   {
     title: 'Load runner and full auth menu',
     hoppscotch: 'No built-in single-request load runner. AWS SigV4 and advanced OAuth2 flows are not part of the free web client.',
-    scrapeman: 'Bounded-concurrency load runner with p50, p95, p99 latency and a response validator. Basic, Bearer, API Key, OAuth2 client credentials, and AWS Signature v4 are all free in the desktop app.',
+    scrapeman: 'Bounded-concurrency load runner with p50, p95, p99 latency, a response validator, watched response headers, CSV-driven iterations, and a save-failed-bodies ring buffer. Basic, Bearer, API Key, OAuth 2.0 (client credentials, authorization code, and code + PKCE), and AWS Signature v4 are all free.',
   },
 ];
 ---
@@ -57,11 +57,8 @@ const differences = [
       <div class="max-w-4xl mx-auto px-6 text-center">
         <div class="flex items-center justify-center gap-4 mb-10" style="animation: fade-up 0.5s ease-out both;">
           <div class="flex items-center gap-2">
-            <div class="w-10 h-10 rounded-xl bg-accent flex items-center justify-center">
-              <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
-                <circle cx="8" cy="8" r="3" fill="white" opacity="0.9"/>
-                <path d="M8 1L8 3M8 13L8 15M1 8L3 8M13 8L15 8M3.05 3.05L4.46 4.46M11.54 11.54L12.95 12.95M12.95 3.05L11.54 4.46M4.46 11.54L3.05 12.95" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
-              </svg>
+            <div class="w-10 h-10 rounded-xl bg-[var(--primary-alpha-20)] border border-[var(--primary-alpha-20)] flex items-center justify-center">
+              <img src="/scrapeman-mark.svg" alt="" aria-hidden="true" width="22" height="22" class="w-[22px] h-[22px]" />
             </div>
             <span class="font-bold text-xl text-[var(--text-strong-950)]">Scrapeman</span>
           </div>
@@ -162,7 +159,7 @@ const differences = [
           ))}
         </ul>
         <p class="text-xs text-[var(--text-soft-400)] text-center mt-6">
-          If a JS scripting sandbox or WebSocket support is your hard requirement today, try Hoppscotch. If native proxy plus Scrape.do mode and a built-in load runner matter more, stick with Scrapeman.
+          If GraphQL, MQTT, or Socket.IO is a hard requirement, try Hoppscotch. If native proxy plus Scrape.do mode, a load runner with watched headers, OAuth 2.0 PKCE, and git-friendly .sman files matter more, stick with Scrapeman.
         </p>
       </div>
     </section>
