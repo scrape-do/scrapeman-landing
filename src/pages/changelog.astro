@@ -25,6 +25,78 @@ type Release = {
 // time, so they appear as plain text here.
 const releases: Release[] = [
   {
+    version: '0.6.7',
+    date: '2026-06-04',
+    summary:
+      'First release since 0.6.5. Crash and correctness fixes for request history, a memory audit that bounds several structures that grew over long sessions, and UI polish. Bundles the prepared-but-untagged 0.6.6 work.',
+    sections: [
+      {
+        kind: 'Fixed',
+        items: [
+          `<strong>History could crash the app on boot.</strong> The store eagerly read, parsed, and decompressed every entry on open. On a large workspace (4692 entries, a 284&nbsp;MB file) the renderer heap passed 3.8&nbsp;GB and crashed at ~8&nbsp;s. The store now reads only the tail of the file in 256&nbsp;KB chunks (O(window), not O(file)) and decompresses a full body only when an entry is opened. Retention stays unlimited and the existing file is read untouched. UTF-8 characters that straddle a chunk boundary are rejoined at the byte level.`,
+          `<strong>Older history needed a manual "Load older" click.</strong> The infinite-scroll observer attached once on mount, but the sentinel only renders after history loads, so it observed nothing and never fired. The observer now re-attaches when the sentinel appears, scopes to the scroll container, and prefetches ~600&nbsp;px ahead. The button is gone; older days stream in on scroll.`,
+          `<strong>A trailing Scrape.do option was swallowed into the nested URL value.</strong> Pasting <code>?token={{token}}&amp;url=https://site/?a=1&amp;b=2&amp;super=true</code> folded <code>&amp;super=true</code> into the <code>url</code> value instead of giving it its own param row, because the nested-URL fold never terminated. The fold now ends when a chunk's key is a known Scrape.do option (on Scrape.do hosts); generic proxy hosts keep folding.`,
+          `<strong>URL caret drifted onto the letters after a <code>{{var}}</code>.</strong> The <code>{{var}}</code> highlight overlay used padding and a heavier font weight, so the overlaid token was wider than the real input text and the native caret slid past every variable. Highlights are now width-neutral (colour and background only). Affects every highlighted input — URL bar, params, headers, auth.`,
+          `<strong>Active tab stayed off-screen when the tab strip overflowed.</strong> Switching tabs (click, Cmd+W, keyboard, boot restore) now scrolls the active tab into view. File-backed tab ids are escaped so paths with selector-special characters do not throw.`,
+          `<strong>Modal dialogs flashed off-center before snapping to the middle.</strong> The shared entrance keyframe set <code>transform: translateY(...)</code>, which overrode each centered dialog's <code>translate(-50%, -50%)</code> while the animation ran, so the dialog painted off-center for a frame then jumped. Centered dialogs now fade in, leaving their centering transform intact. Popovers and menus keep the slide.`,
+        ],
+      },
+      {
+        kind: 'Added',
+        items: [
+          `<strong>Large history bodies offload to per-entry sidecar blobs.</strong> A request or response body over 64&nbsp;KB is written to a sidecar file (<code>history/blobs/&lt;hash&gt;/&lt;id&gt;.{body,resp}.gz</code>); the index keeps only a reference and size, so list and tail reads stay small. The full body is read from the sidecar on entry open. Backward compatible: inline entries still read and the on-disk file is never rewritten.`,
+        ],
+      },
+      {
+        kind: 'Changed',
+        items: [
+          `<strong>Memory audit — bounded several structures that grew during long sessions.</strong> History windows are capped (the in-memory cache and the rendered list, older entries stay on disk and remain searchable). WebSocket message timelines are capped on both sides, each connection's <code>ProxyAgent</code> is closed on reconnect, and closing a WebSocket tab now disconnects it. The HTTP engine reuses undici dispatchers instead of creating one per request. The load runner caps its latency and header samples and recomputes percentiles at most every 100&nbsp;ms (the final result stays exact). Collection-run results and per-tab response bodies are bounded too.`,
+        ],
+      },
+      {
+        kind: 'Tests',
+        items: [
+          `606 passing in <code>http-core</code> (+6 sidecar), 105 in <code>apps/desktop</code> (+5 nested-URL parse). 7 skipped. Typecheck clean.`,
+        ],
+      },
+    ],
+  },
+  {
+    version: '0.6.6',
+    date: '2026-05-16',
+    summary:
+      'Settings panel surfaces the auto-updater; load test gets two live charts and a graceful Stop. Prepared as 0.6.6 and shipped within v0.6.7.',
+    sections: [
+      {
+        kind: 'Added',
+        items: [
+          `<strong>Settings → Updates panel</strong> (subset of #35). Shows the installed version, the latest version on GitHub Releases, when the last check happened, and a <code>Check now</code> button that forces a fresh poll without waiting for the four-hour interval. An auto-check toggle silences the upgrade banner; the preference persists across restarts. When newer, an "Open release page" button deep-links to the GitHub tag.`,
+          `<strong>Load test latency + status charts</strong> (M11 follow-up). The metrics block now ends with two inline SVG charts: a latency-over-time polyline with P50 / P95 reference lines, and a status-code histogram colour-coding 2xx / 3xx / 4xx / 5xx / network-error buckets. Both update on every iteration. Runs over 300 iterations down-sample the latency series so the path stays under ~300 vertices.`,
+          `<strong>First-launch welcome dialog</strong> (M10 polish). Shown once per machine on the first run: three quick-start cards (open URL bar / pick a workspace / pick from recent), a six-shortcut crib sheet, and a "Read the docs" link. A localStorage flag suppresses it on every subsequent launch.`,
+        ],
+      },
+      {
+        kind: 'Changed',
+        items: [
+          `<strong>Load test Stop is now a soft drain.</strong> Hitting Stop used to abort everything — in-flight requests were cancelled mid-handshake, so the metrics ended with synthetic <code>status: 0</code> entries. The runner now takes a hard-abort signal (app quit / window close) and a soft-drain signal (the user-facing Stop). Drain stops workers from pulling new iterations but lets every in-flight request finish, so the final metrics reflect actual server outcomes.`,
+          `<strong>Zoom level persists across launches.</strong> <code>⌘+</code> / <code>⌘-</code> / <code>⌘0</code> saves the new zoom level; the next launch restores it once the renderer finishes loading. Bounded to Electron's accepted range.`,
+        ],
+      },
+      {
+        kind: 'Notes',
+        items: [
+          `Automatic background download + one-click install (the rest of #35) is still pending and tracked in the roadmap.`,
+        ],
+      },
+      {
+        kind: 'Tests',
+        items: [
+          `589 passing in <code>http-core</code> (+3 graceful-drain), 100 in <code>apps/desktop</code> (+14 chart helpers). 7 skipped. Typecheck clean.`,
+        ],
+      },
+    ],
+  },
+  {
     version: '0.6.5',
     date: '2026-05-11',
     summary: 'Patch release. Two bug fixes.',
