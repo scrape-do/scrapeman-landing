@@ -1,0 +1,37 @@
+name: Deploy to Cloudflare Pages
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      # setup node.js
+      - uses: actions/setup-node@v6
+        with:
+          # sürüm vermezsek bir sonraki adımda şu hatayı alıyoruz: Error: Cannot find module '../lib/cli.js'
+          # sürüm verme fikrini şuradan edindim: https://github.com/pnpm/action-setup/issues/251#issuecomment-4432937894
+          node-version: 26
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: build
+        run: npm run build
+
+      - name: Deploy
+        uses: cloudflare/wrangler-action@v4
+        with:
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
